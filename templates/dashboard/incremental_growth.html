@@ -1,0 +1,791 @@
+{% extends "base.html" %}
+{% block title %}Incremental Growth Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ══ KEYFRAMES ══════════════════════════════════════ */
+    @keyframes fadeUp {
+        from { opacity:0; transform:translateY(28px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes popIn {
+        from { opacity:0; transform:scale(0.88) translateY(20px); }
+        to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+    @keyframes cardFlip {
+        from { opacity:0; transform:perspective(600px) rotateX(-12deg) translateY(20px); }
+        to   { opacity:1; transform:perspective(600px) rotateX(0deg) translateY(0); }
+    }
+    @keyframes barGrow { to { width: var(--w, 80%); } }
+    @keyframes floatOrb {
+        0%,100% { transform:translate(0,0) scale(1); }
+        50%      { transform:translate(12px,16px) scale(1.06); }
+    }
+    @keyframes shimmerSlide {
+        from { transform:translateX(-100%) rotate(12deg); }
+        to   { transform:translateX(280%) rotate(12deg); }
+    }
+    @keyframes countUp {
+        from { opacity:0; transform:translateY(10px) scale(.9); }
+        to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+    @keyframes trendIn {
+        from { opacity:0; transform:scale(0.7); }
+        to   { opacity:1; transform:scale(1); }
+    }
+
+    /* ── UTILITY ────────────────────────────────────── */
+    .anim-fade { opacity:0; animation:fadeUp .55s ease forwards; }
+    .anim-pop  { opacity:0; animation:popIn .5s cubic-bezier(.34,1.4,.64,1) forwards; }
+    .anim-flip { opacity:0; animation:cardFlip .55s cubic-bezier(.34,1.4,.64,1) forwards; }
+
+    .d1{animation-delay:.05s} .d2{animation-delay:.12s} .d3{animation-delay:.19s}
+    .d4{animation-delay:.26s} .d5{animation-delay:.33s} .d6{animation-delay:.40s}
+    .d7{animation-delay:.47s} .d8{animation-delay:.54s}
+
+    /* ── LIFT ───────────────────────────────────────── */
+    .lift {
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+    }
+    .lift:hover { transform:translateY(-5px); box-shadow:0 28px 52px rgba(22,40,80,.14); }
+
+    /* ── GRADIENT TEXT ──────────────────────────────── */
+    .gt-red  { background:linear-gradient(135deg,#E14D2A,#c0391c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-navy { background:linear-gradient(135deg,#162850,#1d3d72); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-grn  { background:linear-gradient(135deg,#10B981,#047857); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-amb  { background:linear-gradient(135deg,#F59E0B,#d97706); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── ACC BAR ────────────────────────────────────── */
+    .acc-bar {
+        height:4px; width:0; border-radius:4px;
+        animation:barGrow .8s cubic-bezier(.4,0,.2,1) .2s forwards;
+    }
+
+    /* ── FLOAT ORB ──────────────────────────────────── */
+    .float-orb {
+        position:absolute; border-radius:50%;
+        filter:blur(55px); pointer-events:none; opacity:.18;
+        animation:floatOrb 8s ease-in-out infinite;
+    }
+
+    /* ── SECTION LABEL ──────────────────────────────── */
+    .sec-label {
+        display:inline-flex; align-items:center; gap:6px;
+        font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+        padding:4px 12px; border-radius:999px;
+        background:rgba(225,77,42,.1); border:1px solid rgba(225,77,42,.22); color:#E14D2A;
+        margin-bottom:.5rem;
+    }
+    .sec-label-navy {
+        background:rgba(22,40,80,.08); border-color:rgba(22,40,80,.2); color:#162850;
+    }
+
+    /* ── DEGREE BADGE ───────────────────────────────── */
+    .degree-badge {
+        display:inline-flex; align-items:center; gap:8px;
+        padding:6px 18px 6px 8px; border-radius:999px;
+        font-size:.75rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+    }
+    .degree-badge .dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.9rem; }
+
+    /* ── KPI CARD ───────────────────────────────────── */
+    .kpi-card {
+        position:relative; overflow:hidden;
+        border-radius:26px;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        padding:1.75rem;
+        box-shadow:0 8px 28px rgba(22,40,80,.08);
+        cursor:default;
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+    }
+    .kpi-card:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 28px 52px rgba(22,40,80,.15); }
+    .kpi-card .k-bar {
+        position:absolute; bottom:0; left:0; right:0; height:3px;
+        border-radius:0 0 26px 26px;
+        transform:scaleX(0); transform-origin:left;
+        transition:transform .35s cubic-bezier(.34,1.4,.64,1);
+    }
+    .kpi-card:hover .k-bar { transform:scaleX(1); }
+    .kpi-card .k-shine {
+        position:absolute; inset:0;
+        background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
+        transform:translateX(-100%) rotate(12deg); pointer-events:none;
+    }
+    .kpi-card:hover .k-shine { animation:shimmerSlide .6s ease forwards; }
+    .kpi-card .k-num {
+        display:inline-block;
+        animation:countUp .6s cubic-bezier(.34,1.4,.64,1) .3s both;
+        transition:transform .2s;
+    }
+    .kpi-card:hover .k-num { transform:scale(1.08); }
+
+    /* ── CHART CARD ─────────────────────────────────── */
+    .chart-card {
+        position:relative; overflow:hidden;
+        border-radius:26px;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        padding:2rem;
+        box-shadow:0 8px 28px rgba(22,40,80,.08);
+        transition:box-shadow .25s ease;
+        animation:cardFlip .55s cubic-bezier(.34,1.4,.64,1) forwards; opacity:0;
+    }
+    .chart-card:hover { box-shadow:0 22px 48px rgba(22,40,80,.12); }
+    .chart-accent-bar {
+        width:5px; border-radius:4px; flex-shrink:0; align-self:stretch; min-height:36px;
+        background:linear-gradient(180deg,#E14D2A 0%,#162850 100%);
+    }
+
+    /* ── TABLE ──────────────────────────────────────── */
+    .data-table {
+        border-radius:26px; overflow:hidden;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        box-shadow:0 8px 28px rgba(22,40,80,.08);
+    }
+    .data-table table { width:100%; font-size:.82rem; border-collapse:collapse; }
+    .data-table thead tr { background:rgba(22,40,80,.06); }
+    .data-table thead th {
+        padding:.85rem 1.1rem; text-align:center;
+        font-size:.7rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+        color:#475569; white-space:nowrap;
+    }
+    .data-table thead th:first-child { text-align:left; }
+    .data-table tbody tr {
+        border-top:1px solid rgba(22,40,80,.06);
+        transition:background .18s;
+    }
+    .data-table tbody tr:hover { background:rgba(225,77,42,.04); }
+    .data-table tbody td { padding:.8rem 1.1rem; text-align:center; color:#475569; }
+    .data-table tbody td:first-child {
+        text-align:left; font-weight:700; color:#1e293b;
+    }
+    /* zebra */
+    .data-table tbody tr:nth-child(even) { background:rgba(22,40,80,.025); }
+    .data-table tbody tr:nth-child(even):hover { background:rgba(225,77,42,.04); }
+
+    /* ── TREND BADGE ────────────────────────────────── */
+    .trend-badge {
+        display:inline-block; padding:3px 10px; border-radius:999px;
+        font-size:.72rem; font-weight:700;
+        animation:trendIn .4s cubic-bezier(.34,1.4,.64,1) .6s both;
+        white-space:nowrap;
+    }
+    .trend-up   { background:rgba(16,185,129,.12); color:#059669; border:1px solid rgba(16,185,129,.25); }
+    .trend-down { background:rgba(239,68,68,.1);  color:#dc2626; border:1px solid rgba(239,68,68,.2); }
+    .trend-flat { background:rgba(148,163,184,.12); color:#64748b; border:1px solid rgba(148,163,184,.25); }
+
+    /* ── INSIGHT CARD ───────────────────────────────── */
+    .insight-card {
+        border-radius:22px; padding:1.4rem;
+        transition:transform .25s cubic-bezier(.34,1.4,.64,1), box-shadow .22s;
+        cursor:default; position:relative; overflow:hidden;
+    }
+    .insight-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(22,40,80,.13); }
+    .insight-card .ic-num {
+        display:inline-block;
+        transition:transform .2s;
+        animation:countUp .6s cubic-bezier(.34,1.4,.64,1) .4s both; opacity:0;
+    }
+    .insight-card:hover .ic-num { transform:scale(1.1); }
+
+    /* ── TABS ───────────────────────────────────────── */
+    .tab-btn {
+        position:relative; display:flex; align-items:center; gap:7px;
+        padding:10px 24px; border-radius:999px;
+        font-size:.75rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+        border:2px solid transparent; cursor:pointer;
+        background:transparent; color:#64748b;
+        transition:background .22s, color .22s, transform .18s, box-shadow .2s;
+        white-space:nowrap; overflow:hidden;
+    }
+    .tab-btn:hover { background:#f1f5f9; color:#1e293b; transform:translateY(-1px); }
+    .tab-btn.t-bsc.active  { background:#E14D2A; color:#fff; border-color:#E14D2A; box-shadow:0 6px 20px rgba(225,77,42,.35); }
+    .tab-btn.t-msc.active  { background:#162850; color:#fff; border-color:#162850; box-shadow:0 6px 20px rgba(22,40,80,.35); }
+    .panel-enter { animation:fadeUp .4s ease forwards; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ HEADER ═════════════════════════════════════════ -->
+<div class="anim-fade d1 mb-10">
+    <div class="sec-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Curriculum Analytics
+    </div>
+    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-wide text-secondary leading-tight"
+        style="font-family:'DM Serif Display',serif;">
+        Curriculum Evolution &amp;
+        <span class="grad-text">Incremental Growth</span>
+    </h2>
+    <div class="acc-bar mt-3 bg-gradient-to-r from-primary to-secondary" style="--w:36rem;"></div>
+    <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
+        Comparative analysis of curriculum evolution, academic flexibility,
+        employability integration, elective expansion and practical learning
+        growth across B.Sc &amp; M.Sc curriculum revisions.
+    </p>
+</div>
+
+<!-- ══ DEGREE TAB SWITCHER ════════════════════════════ -->
+<div class="anim-fade d2 mb-8">
+    <div class="inline-flex flex-wrap gap-2 bg-white/72 backdrop-blur-xl border border-white/60 rounded-2xl p-2 shadow-lg">
+        <button id="btn-bsc" class="tab-btn t-bsc active" onclick="switchDegree('bsc')">
+            🎓 B.Sc Computer Science
+        </button>
+        <button id="btn-msc" class="tab-btn t-msc" onclick="switchDegree('msc')">
+            🏛️ M.Sc Computer Science
+        </button>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ══ B.SC PANEL ════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="panel-bsc">
+
+    <!-- DEGREE LABEL -->
+    <div class="anim-fade d1 mb-7 flex items-center gap-4">
+        <div class="degree-badge bg-primary/10 text-primary border border-primary/20">
+            <div class="dot bg-primary/20">🎓</div>
+            B.Sc Computer Science
+        </div>
+        <div class="h-px flex-1 bg-gradient-to-r from-primary/30 to-transparent"></div>
+    </div>
+
+    <!-- B.SC KPI CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+        <div class="kpi-card anim-pop d1">
+            <div class="float-orb w-24 h-24 -top-6 -right-6 bg-primary"></div>
+            <div class="k-shine"></div>
+            <div class="w-11 h-11 rounded-2xl bg-primary/10 flex items-center justify-center text-xl mb-5">📚</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">B.Sc</p>
+            <p class="text-xs text-slate-400 mb-3">Total Credits</p>
+            <h2 class="k-num text-6xl font-black gt-red leading-none">{{ summary.total_credits }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-xs font-semibold text-primary">Credit Load</span>
+            </div>
+            <div class="k-bar bg-primary"></div>
+        </div>
+
+        <div class="kpi-card anim-pop d2">
+            <div class="float-orb w-24 h-24 -top-6 -right-6 bg-secondary" style="animation-delay:.5s;"></div>
+            <div class="k-shine"></div>
+            <div class="w-11 h-11 rounded-2xl bg-secondary/10 flex items-center justify-center text-xl mb-5">📋</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">B.Sc</p>
+            <p class="text-xs text-slate-400 mb-3">Total Courses</p>
+            <h2 class="k-num text-6xl font-black gt-navy leading-none">{{ summary.total_courses }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                <span class="text-xs font-semibold text-secondary">Course Count</span>
+            </div>
+            <div class="k-bar bg-secondary"></div>
+        </div>
+
+        <div class="kpi-card anim-pop d3">
+            <div class="float-orb w-24 h-24 -top-6 -right-6 bg-green-400" style="animation-delay:1s;"></div>
+            <div class="k-shine"></div>
+            <div class="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center text-xl mb-5">💻</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">B.Sc</p>
+            <p class="text-xs text-slate-400 mb-3">Core CS Credits</p>
+            <h2 class="k-num text-6xl font-black gt-grn leading-none">{{ summary.core_cs_credits }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-xs font-semibold text-green-600">CS Core</span>
+            </div>
+            <div class="k-bar bg-green-500"></div>
+        </div>
+
+        <div class="kpi-card anim-pop d4 !bg-gradient-to-br !from-secondary !to-secondary/80 text-white" style="border:none;">
+            <div class="float-orb w-24 h-24 -top-5 -right-5 bg-white" style="opacity:.08;filter:none;animation-delay:1.5s;"></div>
+            <div class="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center text-xl mb-5">🔀</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">B.Sc</p>
+            <p class="text-xs text-white/40 mb-3">Elective Variety</p>
+            <h2 class="k-num text-6xl font-black text-white leading-none">{{ summary.elective_variety }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span class="text-xs font-semibold text-amber-300">Flexibility</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- B.SC EVOLUTION MATRIX -->
+    <div class="mt-12 anim-fade d1 mb-5">
+        <div class="sec-label">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+            B.Sc Evolution
+        </div>
+        <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+            style="font-family:'DM Serif Display',serif;">
+            B.Sc CS Curriculum Evolution Matrix
+        </h3>
+        <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:22rem;"></div>
+    </div>
+
+    <div class="data-table anim-flip d2 overflow-x-auto">
+        <table>
+            <thead>
+                <tr>
+                    <th>Dimension</th>
+                    {% for item in bsc_metrics %}
+                    <th>{{ item.year }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Credits</td>
+                    {% for item in bsc_metrics %}<td>{{ item.total_credits }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Total Courses</td>
+                    {% for item in bsc_metrics %}<td>{{ item.total_courses }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Core CS Credits</td>
+                    {% for item in bsc_metrics %}<td>{{ item.core_cs_credits }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Internship Credits</td>
+                    {% for item in bsc_metrics %}<td>{{ item.internship_credits }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Elective Variety</td>
+                    {% for item in bsc_metrics %}<td>{{ item.elective_variety }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>AI / ML Courses</td>
+                    {% for item in bsc_metrics %}<td>{{ item.ai_ml_courses }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>HSS / Value Credits</td>
+                    {% for item in bsc_metrics %}<td>{{ item.hss_value_credits }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Multi-disciplinary</td>
+                    {% for item in bsc_metrics %}<td>{{ item.multidisciplinary }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Cloud / Cyber Courses</td>
+                    {% for item in bsc_metrics %}<td>{{ item.cloud_cyber_courses }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Theory Hrs / Week</td>
+                    {% for item in bsc_metrics %}<td>{{ item.theory_hours }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Practical Hrs / Week</td>
+                    {% for item in bsc_metrics %}<td>{{ item.practical_hours }}</td>{% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- B.SC CHARTS -->
+    <div class="mt-12 anim-fade d1 mb-5">
+        <div class="sec-label">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+            B.Sc Trends
+        </div>
+        <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+            style="font-family:'DM Serif Display',serif;">
+            B.Sc Growth Charts
+        </h3>
+        <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:14rem;"></div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-7">
+
+        <div class="chart-card d2">
+            <div class="flex items-start gap-3 mb-6">
+                <div class="chart-accent-bar"></div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">B.Sc · Credits</p>
+                    <h3 class="text-base font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">Curriculum Credits Growth</h3>
+                    <div class="mt-1.5 h-0.5 w-40 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+                </div>
+            </div>
+            <div style="position:relative;height:280px;"><canvas id="creditsChart"></canvas></div>
+        </div>
+
+        <div class="chart-card d3">
+            <div class="flex items-start gap-3 mb-6">
+                <div class="chart-accent-bar"></div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">B.Sc · Courses</p>
+                    <h3 class="text-base font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">Total Courses Growth</h3>
+                    <div class="mt-1.5 h-0.5 w-40 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+                </div>
+            </div>
+            <div style="position:relative;height:280px;"><canvas id="coursesChart"></canvas></div>
+        </div>
+
+        <div class="chart-card d4">
+            <div class="flex items-start gap-3 mb-6">
+                <div class="chart-accent-bar"></div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">B.Sc · Hours</p>
+                    <h3 class="text-base font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">Theory vs Practical Hours</h3>
+                    <div class="mt-1.5 h-0.5 w-40 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+                </div>
+            </div>
+            <div style="position:relative;height:280px;"><canvas id="hoursChart"></canvas></div>
+        </div>
+
+        <div class="chart-card d5">
+            <div class="flex items-start gap-3 mb-6">
+                <div class="chart-accent-bar"></div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">B.Sc · Internship</p>
+                    <h3 class="text-base font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">Internship Credits Growth</h3>
+                    <div class="mt-1.5 h-0.5 w-40 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+                </div>
+            </div>
+            <div style="position:relative;height:280px;"><canvas id="internshipChart"></canvas></div>
+        </div>
+
+    </div>
+
+</div><!-- end panel-bsc -->
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ══ M.SC PANEL ════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="panel-msc" style="display:none;">
+
+    <!-- DEGREE LABEL -->
+    <div class="anim-fade d1 mb-7 flex items-center gap-4">
+        <div class="degree-badge bg-secondary/10 text-secondary border border-secondary/20">
+            <div class="dot bg-secondary/20">🏛️</div>
+            M.Sc Computer Science
+        </div>
+        <div class="h-px flex-1 bg-gradient-to-r from-secondary/30 to-transparent"></div>
+    </div>
+
+    <!-- M.SC KPI CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+        <div class="kpi-card anim-pop d1">
+            <div class="float-orb w-24 h-24 -top-6 -right-6 bg-secondary"></div>
+            <div class="k-shine"></div>
+            <div class="w-11 h-11 rounded-2xl bg-secondary/10 flex items-center justify-center text-xl mb-5">📚</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">M.Sc</p>
+            <p class="text-xs text-slate-400 mb-3">Credits (2025)</p>
+            <h2 class="k-num text-6xl font-black gt-navy leading-none">{{ msc_summary.total_credits }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                <span class="text-xs font-semibold text-secondary">Credit Load</span>
+            </div>
+            <div class="k-bar bg-secondary"></div>
+        </div>
+
+        <div class="kpi-card anim-pop d2">
+            <div class="float-orb w-24 h-24 -top-6 -right-6 bg-primary" style="animation-delay:.5s;"></div>
+            <div class="k-shine"></div>
+            <div class="w-11 h-11 rounded-2xl bg-primary/10 flex items-center justify-center text-xl mb-5">📋</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">M.Sc</p>
+            <p class="text-xs text-slate-400 mb-3">Courses</p>
+            <h2 class="k-num text-6xl font-black gt-red leading-none">{{ msc_summary.total_courses }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-xs font-semibold text-primary">Course Count</span>
+            </div>
+            <div class="k-bar bg-primary"></div>
+        </div>
+
+        <div class="kpi-card anim-pop d3">
+            <div class="float-orb w-24 h-24 -top-6 -right-6 bg-green-400" style="animation-delay:1s;"></div>
+            <div class="k-shine"></div>
+            <div class="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center text-xl mb-5">🤖</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">M.Sc</p>
+            <p class="text-xs text-slate-400 mb-3">AI / ML Courses</p>
+            <h2 class="k-num text-6xl font-black gt-grn leading-none">{{ msc_summary.ai_ml_courses }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-xs font-semibold text-green-600">AI Readiness</span>
+            </div>
+            <div class="k-bar bg-green-500"></div>
+        </div>
+
+        <div class="kpi-card anim-pop d4 !bg-gradient-to-br !from-secondary !to-secondary/80 text-white" style="border:none;">
+            <div class="float-orb w-24 h-24 -top-5 -right-5 bg-white" style="opacity:.08;filter:none;animation-delay:1.5s;"></div>
+            <div class="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center text-xl mb-5">☁️</div>
+            <p class="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">M.Sc</p>
+            <p class="text-xs text-white/40 mb-3">Cloud / Cyber</p>
+            <h2 class="k-num text-6xl font-black text-white leading-none">{{ msc_summary.cloud_cyber }}</h2>
+            <div class="mt-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span class="text-xs font-semibold text-amber-300">Tech Alignment</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- M.SC ANALYSIS TABLE -->
+    <div class="mt-12 anim-fade d1 mb-5">
+        <div class="sec-label sec-label-navy">
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span>
+            M.Sc Analysis
+        </div>
+        <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+            style="font-family:'DM Serif Display',serif;">
+            M.Sc CS Curriculum Growth Analysis
+        </h3>
+        <div class="acc-bar mt-2 bg-gradient-to-r from-secondary to-primary" style="--w:22rem;"></div>
+        <p class="mt-2 text-slate-500 text-sm">Comparative analysis across 2021, 2024 and 2025 revisions.</p>
+    </div>
+
+    <div class="data-table anim-flip d2 overflow-x-auto">
+        <table>
+            <thead>
+                <tr>
+                    <th>Dimension</th>
+                    <th>2021</th>
+                    <th>2024</th>
+                    <th>2025</th>
+                    <th>Trend</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in msc_analysis %}
+                <tr>
+                    <td>{{ item.dimension }}</td>
+                    <td>{{ item.value_2021 }}</td>
+                    <td>{{ item.value_2024 }}</td>
+                    <td>{{ item.value_2025 }}</td>
+                    <td>
+                        {% if "+" in item.trend %}
+                            <span class="trend-badge trend-up">▲ {{ item.trend }}</span>
+                        {% elif "-" in item.trend %}
+                            <span class="trend-badge trend-down">▼ {{ item.trend }}</span>
+                        {% else %}
+                            <span class="trend-badge trend-flat">— {{ item.trend }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if msc_insights %}
+    <!-- M.SC INSIGHT CARDS -->
+    <div class="mt-10 anim-fade d1 mb-5">
+        <div class="sec-label sec-label-navy">
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span>
+            Key Insights
+        </div>
+        <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+            style="font-family:'DM Serif Display',serif;">
+            M.Sc Notable Changes
+        </h3>
+        <div class="acc-bar mt-2 bg-gradient-to-r from-secondary to-primary" style="--w:16rem;"></div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        {% for item in msc_insights %}
+        <div class="insight-card anim-pop
+            {% if item.type == 'positive' %}bg-green-50 border border-green-200
+            {% elif item.type == 'negative' %}bg-red-50 border border-red-200
+            {% elif item.type == 'info' %}bg-blue-50 border border-blue-200
+            {% else %}bg-amber-50 border border-amber-200{% endif %}"
+             style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
+            <div class="text-2xl mb-3">
+                {% if item.type == 'positive' %}📈
+                {% elif item.type == 'negative' %}📉
+                {% elif item.type == 'info' %}📊
+                {% else %}🔀{% endif %}
+            </div>
+            <h4 class="font-black text-sm
+                {% if item.type == 'positive' %}text-green-700
+                {% elif item.type == 'negative' %}text-red-700
+                {% elif item.type == 'info' %}text-blue-700
+                {% else %}text-amber-700{% endif %}">
+                {{ item.title }}
+            </h4>
+            <p class="mt-2 text-sm font-semibold
+                {% if item.type == 'positive' %}text-green-600
+                {% elif item.type == 'negative' %}text-red-600
+                {% elif item.type == 'info' %}text-blue-600
+                {% else %}text-amber-600{% endif %}">
+                {{ item.value }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- M.SC CHARTS -->
+    <div class="mt-12 anim-fade d1 mb-5">
+        <div class="sec-label sec-label-navy">
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span>
+            M.Sc Trends
+        </div>
+        <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+            style="font-family:'DM Serif Display',serif;">
+            M.Sc Growth Charts
+        </h3>
+        <div class="acc-bar mt-2 bg-gradient-to-r from-secondary to-primary" style="--w:14rem;"></div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-7">
+
+        <div class="chart-card d2">
+            <div class="flex items-start gap-3 mb-6">
+                <div class="chart-accent-bar" style="background:linear-gradient(180deg,#162850,#E14D2A);"></div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">M.Sc · Credits</p>
+                    <h3 class="text-base font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">M.Sc Credits Growth</h3>
+                    <div class="mt-1.5 h-0.5 w-40 rounded-full bg-gradient-to-r from-secondary to-primary"></div>
+                </div>
+            </div>
+            <div style="position:relative;height:280px;"><canvas id="mscCreditsChart"></canvas></div>
+        </div>
+
+        <div class="chart-card d3">
+            <div class="flex items-start gap-3 mb-6">
+                <div class="chart-accent-bar" style="background:linear-gradient(180deg,#162850,#E14D2A);"></div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">M.Sc · Hours</p>
+                    <h3 class="text-base font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">M.Sc Theory vs Practical</h3>
+                    <div class="mt-1.5 h-0.5 w-40 rounded-full bg-gradient-to-r from-secondary to-primary"></div>
+                </div>
+            </div>
+            <div style="position:relative;height:280px;"><canvas id="mscHoursChart"></canvas></div>
+        </div>
+
+    </div>
+
+</div><!-- end panel-msc -->
+
+<!-- ══ CHART SCRIPTS ══════════════════════════════════ -->
+<script>
+    /* ── SHARED DEFAULTS ────────────────────────────── */
+    const CD = {
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 16, usePointStyle: true, pointStyleWidth: 10,
+                    font: { family:"'DM Sans',sans-serif", size:11, weight:'600' },
+                    color: '#64748b'
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(22,40,80,.92)',
+                titleFont: { family:"'DM Sans',sans-serif", size:12, weight:'700' },
+                bodyFont:  { family:"'DM Sans',sans-serif", size:11 },
+                padding:12, cornerRadius:10,
+                borderColor:'rgba(255,255,255,.1)', borderWidth:1
+            }
+        },
+        animation: { duration:900, easing:'easeOutQuart' },
+        scales: {
+            x: { grid:{display:false}, ticks:{font:{family:"'DM Sans',sans-serif",size:11},color:'#94a3b8'} },
+            y: { grid:{color:'rgba(148,163,184,.12)',drawBorder:false},
+                 ticks:{font:{family:"'DM Sans',sans-serif",size:11},color:'#94a3b8'},
+                 border:{display:false} }
+        }
+    };
+
+    /* ── B.SC CHARTS ────────────────────────────────── */
+    new Chart(document.getElementById('creditsChart'), {
+        type:'line',
+        data:{
+            labels: {{ years|safe }},
+            datasets:[{ label:'Credits', data:{{ credits_data|safe }},
+                borderColor:'#E14D2A', backgroundColor:'rgba(225,77,42,.08)',
+                borderWidth:3, tension:.45, fill:true,
+                pointRadius:5, pointBackgroundColor:'#E14D2A',
+                pointBorderColor:'#fff', pointBorderWidth:2 }]
+        },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:CD.plugins, animation:CD.animation, scales:CD.scales }
+    });
+
+    new Chart(document.getElementById('coursesChart'), {
+        type:'line',
+        data:{
+            labels: {{ years|safe }},
+            datasets:[{ label:'Courses', data:{{ course_data|safe }},
+                borderColor:'#162850', backgroundColor:'rgba(22,40,80,.08)',
+                borderWidth:3, tension:.45, fill:true,
+                pointRadius:5, pointBackgroundColor:'#162850',
+                pointBorderColor:'#fff', pointBorderWidth:2 }]
+        },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:CD.plugins, animation:CD.animation, scales:CD.scales }
+    });
+
+    new Chart(document.getElementById('hoursChart'), {
+        type:'bar',
+        data:{
+            labels: {{ years|safe }},
+            datasets:[
+                { label:'Theory Hours',    data:{{ theory_data|safe }},
+                  backgroundColor:'rgba(22,40,80,.82)', borderRadius:6 },
+                { label:'Practical Hours', data:{{ practical_data|safe }},
+                  backgroundColor:'rgba(225,77,42,.82)', borderRadius:6 }
+            ]
+        },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:CD.plugins, animation:CD.animation, scales:CD.scales }
+    });
+
+    new Chart(document.getElementById('internshipChart'), {
+        type:'bar',
+        data:{
+            labels: {{ years|safe }},
+            datasets:[{ label:'Internship Credits', data:{{ internship_data|safe }},
+                backgroundColor:'rgba(16,185,129,.82)', borderRadius:6 }]
+        },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:CD.plugins, animation:CD.animation, scales:CD.scales }
+    });
+
+    /* ── M.SC CHARTS ────────────────────────────────── */
+    new Chart(document.getElementById('mscCreditsChart'), {
+        type:'line',
+        data:{
+            labels: {{ msc_years|safe }},
+            datasets:[{ label:'Credits', data:{{ msc_credits_data|safe }},
+                borderColor:'#162850', backgroundColor:'rgba(22,40,80,.08)',
+                borderWidth:3, tension:.45, fill:true,
+                pointRadius:5, pointBackgroundColor:'#162850',
+                pointBorderColor:'#fff', pointBorderWidth:2 }]
+        },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:CD.plugins, animation:CD.animation, scales:CD.scales }
+    });
+
+    new Chart(document.getElementById('mscHoursChart'), {
+        type:'bar',
+        data:{
+            labels: {{ msc_years|safe }},
+            datasets:[
+                { label:'Theory',    data:{{ msc_theory_data|safe }},
+                  backgroundColor:'rgba(22,40,80,.82)', borderRadius:6 },
+                { label:'Practical', data:{{ msc_practical_data|safe }},
+                  backgroundColor:'rgba(245,158,11,.82)', borderRadius:6 }
+            ]
+        },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:CD.plugins, animation:CD.animation, scales:CD.scales }
+    });
+
+    /* ── TAB SWITCHER ───────────────────────────────── */
+    function switchDegree(key) {
+        ['bsc','msc'].forEach(function(k) {
+            document.getElementById('panel-' + k).style.display = 'none';
+            document.getElementById('btn-'   + k).classList.remove('active');
+        });
+        var panel = document.getElementById('panel-' + key);
+        panel.style.display = 'block';
+        panel.classList.add('panel-enter');
+        setTimeout(function(){ panel.classList.remove('panel-enter'); }, 500);
+        document.getElementById('btn-' + key).classList.add('active');
+    }
+</script>
+
+{% endblock %}

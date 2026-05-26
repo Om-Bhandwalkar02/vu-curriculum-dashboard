@@ -1,0 +1,611 @@
+{% extends "base.html" %}
+
+{% block title %}Employability, Ethics & Sustainability{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ══ KEYFRAMES ══════════════════════════════════════ */
+    @keyframes fadeUp {
+        from { opacity:0; transform:translateY(28px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes popIn {
+        from { opacity:0; transform:scale(0.88) translateY(20px); }
+        to   { opacity:1; transform:scale(1)    translateY(0); }
+    }
+    @keyframes barGrow {
+        to { width: var(--w, 80%); }
+    }
+    @keyframes slideRight {
+        from { transform: scaleX(0); }
+        to   { transform: scaleX(1); }
+    }
+    @keyframes floatOrb {
+        0%,100% { transform: translate(0,0) scale(1); }
+        50%      { transform: translate(10px,14px) scale(1.05); }
+    }
+    @keyframes glowPulse {
+        0%,100% { box-shadow: 0 0 0 0 var(--glow,rgba(225,77,42,.45)); }
+        50%      { box-shadow: 0 0 0 9px transparent; }
+    }
+    @keyframes countUp {
+        from { opacity:0; transform:translateY(10px) scale(.9); }
+        to   { opacity:1; transform:translateY(0)    scale(1); }
+    }
+    @keyframes shimmerSlide {
+        from { transform: translateX(-100%) rotate(12deg); }
+        to   { transform: translateX(280%)  rotate(12deg); }
+    }
+    @keyframes spinOnce {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+    @keyframes borderDraw {
+        from { stroke-dashoffset: 400; }
+        to   { stroke-dashoffset: 0; }
+    }
+    @keyframes nepPulse {
+        0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+        50%      { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+    }
+    @keyframes tabIndicator {
+        from { opacity:0; transform:scaleX(0); }
+        to   { opacity:1; transform:scaleX(1); }
+    }
+    @keyframes cardFlip {
+        from { opacity:0; transform:perspective(600px) rotateX(-12deg) translateY(20px); }
+        to   { opacity:1; transform:perspective(600px) rotateX(0deg)   translateY(0); }
+    }
+    @keyframes waveIn {
+        0%   { clip-path: inset(0 100% 0 0); }
+        100% { clip-path: inset(0 0% 0 0); }
+    }
+    @keyframes ripple {
+        from { transform:scale(0); opacity:.5; }
+        to   { transform:scale(4); opacity:0; }
+    }
+
+    /* ── UTILITY ────────────────────────────────────── */
+    .anim-fade { opacity:0; animation: fadeUp .55s ease forwards; }
+    .anim-pop  { opacity:0; animation: popIn  .5s  cubic-bezier(.34,1.4,.64,1) forwards; }
+    .anim-flip { opacity:0; animation: cardFlip .55s cubic-bezier(.34,1.4,.64,1) forwards; }
+
+    .d1{animation-delay:.05s} .d2{animation-delay:.12s} .d3{animation-delay:.19s}
+    .d4{animation-delay:.26s} .d5{animation-delay:.33s} .d6{animation-delay:.40s}
+    .d7{animation-delay:.47s} .d8{animation-delay:.54s}
+
+    /* ── LIFT ───────────────────────────────────────── */
+    .lift {
+        transition: transform .28s cubic-bezier(.34,1.4,.64,1),
+                    box-shadow .25s ease;
+    }
+    .lift:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 28px 52px rgba(22,40,80,.14);
+    }
+
+    /* ── GRADIENT TEXT ──────────────────────────────── */
+    .gt-red  { background:linear-gradient(135deg,#E14D2A,#c0391c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-navy { background:linear-gradient(135deg,#162850,#1d3d72); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-grn  { background:linear-gradient(135deg,#10B981,#047857); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── HEADER ACCENT BAR ──────────────────────────── */
+    .acc-bar {
+        height:4px; width:0; border-radius:4px;
+        transform-origin:left;
+        animation: barGrow .8s cubic-bezier(.4,0,.2,1) .2s forwards;
+    }
+
+    /* ── ORB BG (floating) ──────────────────────────── */
+    .float-orb {
+        position:absolute; border-radius:50%;
+        filter:blur(55px); pointer-events:none; opacity:.18;
+        animation: floatOrb 8s ease-in-out infinite;
+    }
+
+    /* ── KPI CARD ───────────────────────────────────── */
+    .kpi-card {
+        position:relative; overflow:hidden;
+        border-radius:26px;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        padding:1.75rem;
+        box-shadow:0 8px 28px rgba(22,40,80,.08);
+        cursor:default;
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1),
+                   box-shadow .25s ease;
+    }
+    .kpi-card:hover {
+        transform:translateY(-6px) scale(1.01);
+        box-shadow:0 28px 52px rgba(22,40,80,.15);
+    }
+    /* bottom accent reveal */
+    .kpi-card .k-bar {
+        position:absolute; bottom:0; left:0; right:0; height:3px;
+        border-radius:0 0 26px 26px;
+        transform:scaleX(0); transform-origin:left;
+        transition:transform .35s cubic-bezier(.34,1.4,.64,1);
+    }
+    .kpi-card:hover .k-bar { transform:scaleX(1); }
+    /* shimmer */
+    .kpi-card .k-shine {
+        position:absolute; inset:0;
+        background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
+        transform:translateX(-100%) rotate(12deg);
+        pointer-events:none;
+    }
+    .kpi-card:hover .k-shine {
+        animation: shimmerSlide .6s ease forwards;
+    }
+    /* big number pop */
+    .kpi-card .k-num {
+        display:inline-block;
+        animation: countUp .6s cubic-bezier(.34,1.4,.64,1) .3s both;
+        transition:transform .2s;
+    }
+    .kpi-card:hover .k-num { transform:scale(1.08); }
+
+    /* ── PILLAR CARD ────────────────────────────────── */
+    .pillar-card {
+        position:relative; overflow:hidden;
+        border-radius:26px;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        padding:2rem;
+        box-shadow:0 8px 28px rgba(22,40,80,.07);
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1),
+                   box-shadow .25s ease;
+    }
+    .pillar-card:hover {
+        transform:translateY(-5px);
+        box-shadow:0 26px 50px rgba(22,40,80,.13);
+    }
+    .pillar-card .p-bar {
+        position:absolute; bottom:0; left:0; right:0; height:3px;
+        border-radius:0 0 26px 26px;
+        transform:scaleX(0); transform-origin:left;
+        transition:transform .35s cubic-bezier(.34,1.4,.64,1);
+    }
+    .pillar-card:hover .p-bar { transform:scaleX(1); }
+    .pillar-card .p-watermark {
+        position:absolute; top:.5rem; right:.75rem;
+        font-size:5rem; line-height:1; opacity:.04;
+        pointer-events:none; select:none;
+        transition:opacity .3s, transform .3s;
+    }
+    .pillar-card:hover .p-watermark { opacity:.08; transform:scale(1.1) rotate(-5deg); }
+
+    /* ── TABS ───────────────────────────────────────── */
+    .tab-btn {
+        position:relative;
+        display:flex; align-items:center; gap:6px;
+        padding:9px 22px;
+        border-radius:999px;
+        font-size:.75rem; font-weight:700;
+        letter-spacing:.06em; text-transform:uppercase;
+        border:2px solid transparent;
+        cursor:pointer;
+        background:transparent; color:#64748b;
+        transition:background .22s, color .22s, transform .18s, box-shadow .2s;
+        white-space:nowrap; overflow:hidden;
+    }
+    .tab-btn:hover { background:#f1f5f9; color:#1e293b; transform:translateY(-1px); }
+    /* ripple on click */
+    .tab-btn .t-ripple {
+        position:absolute; border-radius:50%;
+        width:8px; height:8px;
+        pointer-events:none; display:none;
+    }
+
+    .tab-btn.t-employ.active  { background:#E14D2A; color:#fff; border-color:#E14D2A; box-shadow:0 6px 20px rgba(225,77,42,.35); }
+    .tab-btn.t-ethics.active  { background:#162850; color:#fff; border-color:#162850; box-shadow:0 6px 20px rgba(22,40,80,.35); }
+    .tab-btn.t-sustain.active { background:#10B981; color:#fff; border-color:#10B981; box-shadow:0 6px 20px rgba(16,185,129,.35); }
+
+    /* ── INIT CARD ──────────────────────────────────── */
+    .init-card {
+        position:relative; overflow:hidden;
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1),
+                   box-shadow .25s ease;
+        cursor:default;
+    }
+    .init-card:hover { transform:translateY(-5px) scale(1.02); box-shadow:0 22px 44px rgba(22,40,80,.13); }
+    .init-card .i-shine {
+        position:absolute; inset:0;
+        background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
+        transform:translateX(-100%) rotate(12deg);
+        pointer-events:none;
+    }
+    .init-card:hover .i-shine { animation: shimmerSlide .55s ease forwards; }
+    .init-card .i-bar {
+        position:absolute; bottom:0; left:0; right:0; height:3px;
+        opacity:0; transform:scaleX(0); transform-origin:left;
+        transition:opacity .25s, transform .35s cubic-bezier(.34,1.4,.64,1);
+        border-radius:0 0 20px 20px;
+    }
+    .init-card:hover .i-bar { opacity:1; transform:scaleX(1); }
+    .init-card .i-emoji {
+        display:inline-block; font-size:1.8rem; margin-bottom:.6rem;
+        transition:transform .3s cubic-bezier(.34,1.4,.64,1);
+    }
+    .init-card:hover .i-emoji { transform:scale(1.3) rotate(-8deg); }
+
+    /* ── METER ──────────────────────────────────────── */
+    .meter-track { height:6px; background:#e2e8f0; border-radius:4px; overflow:hidden; }
+    .meter-fill  { height:100%; border-radius:4px; width:0; animation: barGrow .95s cubic-bezier(.4,0,.2,1) .5s forwards; }
+
+    /* ── IMPACT ROW ─────────────────────────────────── */
+    .impact-row {
+        padding:1.25rem 1rem; border-radius:18px;
+        background:rgba(255,255,255,.55);
+        border:1px solid rgba(255,255,255,.75);
+        transition:background .2s, transform .22s;
+    }
+    .impact-row:hover { background:rgba(255,255,255,.88); transform:translateX(4px); }
+
+    /* ── VISION CARD ────────────────────────────────── */
+    .vision-card {
+        position:relative; overflow:hidden;
+        border-radius:32px;
+        background:linear-gradient(125deg,#162850 0%,#1a3068 40%,#E14D2A 115%);
+        color:#fff; padding:3rem;
+        box-shadow:0 28px 64px rgba(22,40,80,.28);
+    }
+    .vision-card::before {
+        content:"";
+        position:absolute; inset:0;
+        background-image:
+            linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+            linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+        background-size:30px 30px;
+        pointer-events:none;
+    }
+    .vision-card .v-orb1 { position:absolute; width:320px; height:320px; top:-80px; right:-60px; background:rgba(245,158,11,.22); border-radius:50%; filter:blur(80px); pointer-events:none; animation:floatOrb 10s ease-in-out infinite; }
+    .vision-card .v-orb2 { position:absolute; width:260px; height:260px; bottom:-60px; left:-40px; background:rgba(16,185,129,.18); border-radius:50%; filter:blur(70px); pointer-events:none; animation:floatOrb 12s ease-in-out infinite reverse; }
+    .vision-card .v-watermark { position:absolute; right:-10px; bottom:-20px; font-size:12rem; opacity:.05; pointer-events:none; line-height:1; }
+
+    /* ── NEP BADGE ──────────────────────────────────── */
+    .nep-badge { animation: nepPulse 2.6s ease-in-out infinite; }
+
+    /* ── SECTION LABEL ──────────────────────────────── */
+    .sec-label {
+        display:inline-flex; align-items:center; gap:6px;
+        font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+        padding:4px 12px; border-radius:999px;
+        background:rgba(225,77,42,.1); border:1px solid rgba(225,77,42,.22); color:#E14D2A;
+        margin-bottom:.5rem;
+    }
+
+    /* panel transition */
+    .panel-enter { animation: fadeUp .4s ease forwards; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ HEADER ═════════════════════════════════════════ -->
+<div class="anim-fade d1 mb-10">
+    <div class="sec-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Curriculum Quality
+    </div>
+    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-wide text-secondary leading-tight"
+        style="font-family:'DM Serif Display',serif;">
+        Employability, Ethics<br class="hidden md:block"> &amp; Sustainability
+    </h2>
+    <div class="acc-bar mt-3 bg-gradient-to-r from-primary to-secondary" style="--w:32rem;"></div>
+    <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
+        Evaluation of curriculum initiatives focused on employability enhancement,
+        ethical computing practices, sustainability awareness and responsible technology adoption.
+    </p>
+</div>
+
+<!-- ══ KPI CARDS ══════════════════════════════════════ -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <!-- EMPLOYABILITY -->
+    <div class="kpi-card anim-pop d1">
+        <div class="float-orb w-24 h-24 -top-6 -right-6 bg-primary"></div>
+        <div class="k-shine"></div>
+        <div class="w-11 h-11 rounded-2xl bg-primary/10 flex items-center justify-center text-xl mb-5">💼</div>
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Employability</p>
+        <p class="text-xs text-slate-400 mb-3">Initiatives</p>
+        <h2 class="k-num text-6xl font-black gt-red leading-none">{{ employability_items|length }}</h2>
+        <div class="mt-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span class="text-xs font-semibold text-green-600">Industry Readiness</span>
+        </div>
+        <div class="k-bar bg-primary"></div>
+    </div>
+
+    <!-- ETHICS -->
+    <div class="kpi-card anim-pop d2">
+        <div class="float-orb w-24 h-24 -top-6 -right-6 bg-secondary" style="animation-delay:.5s;"></div>
+        <div class="k-shine"></div>
+        <div class="w-11 h-11 rounded-2xl bg-secondary/10 flex items-center justify-center text-xl mb-5">⚖️</div>
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Ethics</p>
+        <p class="text-xs text-slate-400 mb-3">Practices</p>
+        <h2 class="k-num text-6xl font-black gt-navy leading-none">{{ ethics_items|length }}</h2>
+        <div class="mt-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            <span class="text-xs font-semibold text-secondary">Responsible Computing</span>
+        </div>
+        <div class="k-bar bg-secondary"></div>
+    </div>
+
+    <!-- SUSTAINABILITY -->
+    <div class="kpi-card anim-pop d3">
+        <div class="float-orb w-24 h-24 -top-6 -right-6 bg-green-400" style="animation-delay:1s;"></div>
+        <div class="k-shine"></div>
+        <div class="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center text-xl mb-5">🌱</div>
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Sustainability</p>
+        <p class="text-xs text-slate-400 mb-3">Areas</p>
+        <h2 class="k-num text-6xl font-black gt-grn leading-none">{{ sustainability_items|length }}</h2>
+        <div class="mt-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span class="text-xs font-semibold text-green-600">Green Technology</span>
+        </div>
+        <div class="k-bar bg-green-500"></div>
+    </div>
+
+    <!-- FUTURE READY -->
+    <div class="kpi-card anim-pop d4 !bg-gradient-to-br !from-secondary !to-secondary/80 text-white border-0" style="border:none;">
+        <div class="float-orb w-24 h-24 -top-5 -right-5 bg-white" style="opacity:.08;animation-delay:1.5s;filter:none;"></div>
+        <div class="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center text-xl mb-5">🎯</div>
+        <p class="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">Curriculum Focus</p>
+        <p class="text-xs text-white/40 mb-3">Alignment</p>
+        <h2 class="k-num text-4xl font-black text-white leading-tight">Future<br>Ready</h2>
+        <div class="mt-5">
+            <span class="nep-badge inline-block px-3 py-1.5 rounded-full bg-green-500/25 text-green-300 text-xs font-bold border border-green-400/40">
+                ✓ NEP Aligned
+            </span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══ THREE PILLARS ══════════════════════════════════ -->
+<div class="mt-12 anim-fade d1 mb-6">
+    <div class="sec-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Core Framework
+    </div>
+    <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Three Pillars
+    </h3>
+    <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:12rem;"></div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-7">
+
+    <div class="pillar-card anim-flip d1">
+        <div class="p-watermark">💼</div>
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-1 self-stretch rounded-full bg-primary"></div>
+            <h3 class="text-base font-black text-primary uppercase tracking-wide">💼 Employability</h3>
+        </div>
+        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.employability_text }}</p>
+        <div class="p-bar bg-primary"></div>
+    </div>
+
+    <div class="pillar-card anim-flip d2">
+        <div class="p-watermark">⚖️</div>
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-1 self-stretch rounded-full bg-secondary"></div>
+            <h3 class="text-base font-black text-secondary uppercase tracking-wide">⚖️ Ethics</h3>
+        </div>
+        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.ethics_text }}</p>
+        <div class="p-bar bg-secondary"></div>
+    </div>
+
+    <div class="pillar-card anim-flip d3">
+        <div class="p-watermark">🌱</div>
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-1 self-stretch rounded-full bg-green-600"></div>
+            <h3 class="text-base font-black text-green-600 uppercase tracking-wide">🌱 Sustainability</h3>
+        </div>
+        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.sustainability_text }}</p>
+        <div class="p-bar bg-green-500"></div>
+    </div>
+
+</div>
+
+<!-- ══ INITIATIVE EXPLORER (TABS) ════════════════════ -->
+<div class="mt-14">
+
+    <div class="anim-fade d1 mb-6">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+            <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Deep Dive</span>
+        </div>
+        <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+            Initiative Explorer
+        </h3>
+        <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:14rem;"></div>
+    </div>
+
+    <!-- TAB BAR -->
+    <div class="anim-fade d2 inline-flex flex-wrap gap-2 bg-white/72 backdrop-blur-xl border border-white/60 rounded-2xl p-2 shadow-lg mb-8">
+        <button id="btn-employ"  class="tab-btn t-employ  active" onclick="switchTab('employ')">
+            <span>💼</span> Employability
+        </button>
+        <button id="btn-ethics"  class="tab-btn t-ethics"         onclick="switchTab('ethics')">
+            <span>⚖️</span> Ethics
+        </button>
+        <button id="btn-sustain" class="tab-btn t-sustain"        onclick="switchTab('sustain')">
+            <span>🌱</span> Sustainability
+        </button>
+    </div>
+
+    <!-- EMPLOYABILITY PANEL -->
+    <div id="panel-employ">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            {% for item in employability_items %}
+            <div class="init-card anim-pop rounded-[20px] bg-white/82 backdrop-blur-xl border border-primary/15 p-6 shadow-lg"
+                 style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
+                <div class="i-shine"></div>
+                <span class="i-emoji">💼</span>
+                <h4 class="font-bold text-slate-800 text-sm leading-snug">{{ item.title }}</h4>
+                <div class="mt-3 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary/50 inline-block"></span>
+                    <span class="text-xs text-slate-400 font-medium">Employability</span>
+                </div>
+                <div class="i-bar bg-gradient-to-r from-primary to-primary/40"></div>
+            </div>
+            {% empty %}
+            <p class="col-span-4 text-center text-slate-400 py-10">No employability items found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ETHICS PANEL (hidden) -->
+    <div id="panel-ethics" style="display:none;">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            {% for item in ethics_items %}
+            <div class="init-card anim-pop rounded-[20px] bg-white/82 backdrop-blur-xl border border-secondary/15 p-6 shadow-lg"
+                 style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
+                <div class="i-shine"></div>
+                <span class="i-emoji">⚖️</span>
+                <h4 class="font-bold text-slate-800 text-sm leading-snug">{{ item.title }}</h4>
+                <div class="mt-3 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-secondary/50 inline-block"></span>
+                    <span class="text-xs text-slate-400 font-medium">Ethics</span>
+                </div>
+                <div class="i-bar bg-gradient-to-r from-secondary to-secondary/40"></div>
+            </div>
+            {% empty %}
+            <p class="col-span-4 text-center text-slate-400 py-10">No ethics items found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- SUSTAINABILITY PANEL (hidden) -->
+    <div id="panel-sustain" style="display:none;">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            {% for item in sustainability_items %}
+            <div class="init-card anim-pop rounded-[20px] bg-white/82 backdrop-blur-xl border border-green-300/40 p-6 shadow-lg"
+                 style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
+                <div class="i-shine"></div>
+                <span class="i-emoji">🌱</span>
+                <h4 class="font-bold text-slate-800 text-sm leading-snug">{{ item.title }}</h4>
+                <div class="mt-3 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-500/50 inline-block"></span>
+                    <span class="text-xs text-slate-400 font-medium">Sustainability</span>
+                </div>
+                <div class="i-bar bg-gradient-to-r from-green-500 to-green-300"></div>
+            </div>
+            {% empty %}
+            <p class="col-span-4 text-center text-slate-400 py-10">No sustainability items found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- ══ IMPACT DASHBOARD ═══════════════════════════════ -->
+{% if impact_items %}
+<div class="mt-14">
+
+    <div class="anim-fade d1 mb-6">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
+            <span class="text-xs font-bold uppercase tracking-widest text-amber-600/80">Outcomes</span>
+        </div>
+        <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+            Curriculum Impact
+        </h3>
+        <div class="acc-bar mt-2 bg-gradient-to-r from-accent to-primary" style="--w:12rem;"></div>
+    </div>
+
+    <div class="lift rounded-[26px] bg-white/82 backdrop-blur-xl border border-white/60 shadow-xl p-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+            {% for item in impact_items %}
+            <div class="anim-fade" style="animation-delay:{{ forloop.counter0 }}00ms;">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-base">
+                        {{ item.icon }}
+                    </div>
+                    <p class="text-xs font-black text-slate-700 uppercase tracking-wide">{{ item.title }}</p>
+                </div>
+                {% if item.percent %}
+                <div class="meter-track">
+                    <div class="meter-fill bg-gradient-to-r from-primary to-primary/50" style="--w:{{ item.percent }}%;"></div>
+                </div>
+                <div class="flex justify-between mt-1.5 mb-2">
+                    <span class="text-xs text-slate-400 font-semibold">Progress</span>
+                    <span class="text-xs font-bold text-primary">{{ item.percent }}%</span>
+                </div>
+                {% endif %}
+                {% if item.description %}
+                <p class="text-xs text-slate-500 leading-relaxed">{{ item.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endif %}
+
+<!-- ══ VISION BANNER ══════════════════════════════════ -->
+<div class="anim-fade d2 vision-card mt-12">
+    <div class="v-orb1"></div>
+    <div class="v-orb2"></div>
+    <div class="v-watermark">🌍</div>
+    <div class="relative z-10">
+        <span class="inline-block px-3 py-1.5 rounded-full bg-white/18 text-white/75 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">
+            Department Vision
+        </span>
+        <h3 class="text-3xl md:text-4xl font-black leading-tight text-white" style="font-family:'DM Serif Display',serif;">
+            Responsible Innovation.<br class="hidden md:block"> Sustainable Future.
+        </h3>
+        <p class="mt-5 text-base leading-relaxed text-white/85 max-w-3xl">
+            {{ summary.vision_statement }}
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">NEP 2020 Compliant</span>
+            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">Industry Aligned</span>
+            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">Future Ready</span>
+            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">Globally Competitive</span>
+        </div>
+    </div>
+</div>
+
+<script>
+function switchTab(key) {
+    var tabs    = ['employ','ethics','sustain'];
+    var colors  = { employ:'#E14D2A', ethics:'#162850', sustain:'#10B981' };
+
+    /* deactivate all */
+    tabs.forEach(function(k) {
+        document.getElementById('panel-' + k).style.display = 'none';
+        var btn = document.getElementById('btn-' + k);
+        btn.classList.remove('active');
+    });
+
+    /* activate chosen */
+    var panel = document.getElementById('panel-' + key);
+    panel.style.display = 'block';
+    panel.classList.add('panel-enter');
+    setTimeout(function(){ panel.classList.remove('panel-enter'); }, 500);
+
+    document.getElementById('btn-' + key).classList.add('active');
+
+    /* re-fire card animations */
+    var cards = panel.querySelectorAll('.init-card');
+    cards.forEach(function(card, i) {
+        card.style.animation = 'none';
+        card.style.opacity   = '0';
+        void card.offsetWidth;
+        card.style.animation = '';
+        card.style.animationName    = 'popIn';
+        card.style.animationDuration = '.5s';
+        card.style.animationTimingFunction = 'cubic-bezier(.34,1.4,.64,1)';
+        card.style.animationFillMode = 'forwards';
+        card.style.animationDelay   = (i * 0.07) + 's';
+    });
+}
+</script>
+
+{% endblock %}

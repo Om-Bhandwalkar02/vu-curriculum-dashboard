@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block title %}Global Benchmarking & International Exposure{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ── STAGGERED REVEALS ───────────────────────────── */
+    .fade-up {
+        opacity: 0;
+        transform: translateY(24px);
+        animation: fadeUpAnim 0.6s cubic-bezier(0.34,1.36,0.64,1) forwards;
+    }
+    .fade-up:nth-child(1) { animation-delay: 0.05s; }
+    .fade-up:nth-child(2) { animation-delay: 0.13s; }
+    .fade-up:nth-child(3) { animation-delay: 0.21s; }
+    .fade-up:nth-child(4) { animation-delay: 0.29s; }
+
+    @keyframes fadeUpAnim {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pillar-card {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeUpAnim 0.55s ease forwards;
+    }
+    .pillar-card:nth-child(1) { animation-delay: 0.1s; }
+    .pillar-card:nth-child(2) { animation-delay: 0.2s; }
+    .pillar-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .partner-card {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+        animation: fadeUpAnim 0.5s ease forwards;
+    }
+
+    /* ── HOVER LIFT ──────────────────────────────────── */
+    .lift {
+        transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+    }
+    .lift:hover {
+        transform: translateY(-6px) scale(1.015);
+        box-shadow: 0 24px 48px rgba(22,40,80,0.14);
+    }
+
+    /* ── KPI STAT NUMBER ─────────────────────────────── */
+    .stat-num {
+        background: linear-gradient(135deg, #E14D2A, #162850);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* ── GLOBE SPIN ──────────────────────────────────── */
+    .globe-spin {
+        display: inline-block;
+        animation: globeSpin 8s linear infinite;
+    }
+    @keyframes globeSpin {
+        0%   { transform: rotate(0deg) scale(1); }
+        50%  { transform: rotate(180deg) scale(1.08); }
+        100% { transform: rotate(360deg) scale(1); }
+    }
+
+    /* ── ACCENT BAR ──────────────────────────────────── */
+    .accent-bar {
+        width: 0;
+        animation: barGrow 0.7s ease 0.2s forwards;
+    }
+    @keyframes barGrow { to { width: 28rem; } }
+
+    /* ── SECTION HEADING SLIDE ───────────────────────── */
+    .section-head {
+        opacity: 0;
+        transform: translateX(-12px);
+        animation: headSlide 0.5s ease forwards;
+    }
+    @keyframes headSlide { to { opacity: 1; transform: translateX(0); } }
+
+    /* ── PARTNER CATEGORY BADGE ──────────────────────── */
+    .cat-badge {
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+    .cat-badge:hover {
+        background: #E14D2A;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    /* ── SPOTLIGHT CARD SHIMMER ──────────────────────── */
+    .spotlight-card {
+        position: relative;
+        overflow: hidden;
+    }
+    .spotlight-card::before {
+        content: "";
+        position: absolute;
+        top: -80%; left: -60%;
+        width: 50%; height: 220%;
+        background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+        animation: shimmerSlide 5s ease-in-out infinite;
+    }
+    @keyframes shimmerSlide {
+        0%   { transform: translateX(-60%) rotate(15deg); }
+        60%, 100% { transform: translateX(350%) rotate(15deg); }
+    }
+
+    /* ── VISION CARD ─────────────────────────────────── */
+    .vision-card {
+        opacity: 0;
+        animation: fadeUpAnim 0.7s ease 0.3s forwards;
+        position: relative;
+        overflow: hidden;
+    }
+    .vision-card::after {
+        content: "🌐";
+        position: absolute;
+        right: -20px; bottom: -20px;
+        font-size: 9rem;
+        opacity: 0.06;
+        line-height: 1;
+    }
+
+    /* ── IMPACT CARD ─────────────────────────────────── */
+    .impact-card {
+        opacity: 0;
+        animation: fadeUpAnim 0.6s ease 0.2s forwards;
+    }
+
+    /* ── CHART CARD ──────────────────────────────────── */
+    .chart-card {
+        opacity: 0;
+        animation: fadeUpAnim 0.6s ease 0.15s forwards;
+    }
+
+    /* ── PARTNER GRID STAGGER ────────────────────────── */
+    {% for i in "123456789" %}
+    .partner-card:nth-child({{ forloop.counter }}) { animation-delay: {{ forloop.counter0 }}00ms; }
+    {% endfor %}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ PAGE HEADER ══ -->
+<div class="mb-10 section-head">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">International</span>
+    </div>
+    <h2 class="text-2xl md:text-4xl font-black uppercase text-secondary leading-tight" style="font-family:'DM Serif Display',serif;">
+        Global Benchmarking &<br class="hidden md:block"> International Exposure
+    </h2>
+    <div class="mt-3 h-1 rounded-full bg-gradient-to-r from-primary to-secondary accent-bar"></div>
+    <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
+        International collaborations, exchange programs, global internships,
+        research partnerships and worldwide academic exposure initiatives.
+    </p>
+</div>
+
+<!-- ══ KPI CARDS ══ -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <!-- GLOBAL PARTNERS -->
+    <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-primary/8 blur-2xl group-hover:bg-primary/14 transition-all duration-500"></div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-4">Global Partners</p>
+        <h2 class="text-6xl font-black stat-num leading-none">{{ partner_count }}</h2>
+        <p class="mt-3 text-xs text-slate-400">Active international institutions</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- COUNTRIES -->
+    <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-secondary/8 blur-2xl group-hover:bg-secondary/14 transition-all duration-500"></div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-4">Countries</p>
+        <h2 class="text-6xl font-black text-secondary leading-none">{{ country_count }}</h2>
+        <p class="mt-3 text-xs text-slate-400">Across continents & regions</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- EXCHANGE STUDENT -->
+    <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-green-400/10 blur-2xl group-hover:bg-green-400/18 transition-all duration-500"></div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-4">Exchange Student</p>
+        <h2 class="text-3xl font-black text-green-600 leading-tight mt-2">Dev Shah</h2>
+        <span class="mt-3 inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">Featured</span>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- VISION -->
+    <div class="fade-up lift relative rounded-[28px] bg-gradient-to-br from-secondary via-secondary to-secondary/80 p-7 shadow-xl overflow-hidden group text-white">
+        <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-white/10 blur-2xl"></div>
+        <p class="uppercase tracking-widest text-xs text-white/50 font-bold mb-4">Vision</p>
+        <h2 class="text-5xl font-black leading-none text-white">Global</h2>
+        <p class="mt-3 text-xs text-white/50">LaunchPad to the world</p>
+        <div class="mt-4 text-3xl globe-spin">🌍</div>
+    </div>
+
+</div>
+
+<!-- ══ ANALYTICS + SPOTLIGHT ══ -->
+<div class="mt-12 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- CHART -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+            <div>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Global Partner Distribution</h3>
+                <p class="text-xs text-slate-400 mt-0.5">By geographic region</p>
+            </div>
+        </div>
+        <div class="relative h-[280px]">
+            <canvas id="partnerChart"></canvas>
+        </div>
+    </div>
+
+    <!-- STUDENT SPOTLIGHT -->
+    <div class="spotlight-card lift rounded-[28px] bg-gradient-to-br from-primary via-primary to-secondary text-white p-8 shadow-2xl"
+         style="opacity:0; animation: fadeUpAnim 0.6s ease 0.25s forwards;">
+        <div class="text-5xl mb-5 globe-spin" style="animation-duration:6s;">🌍</div>
+        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/80 text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">
+            Student Spotlight
+        </span>
+        <h3 class="text-2xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
+            International Achievement
+        </h3>
+        <p class="mt-5 leading-relaxed text-white/85 text-sm">
+            {{ summary.student_achievement }}
+        </p>
+    </div>
+
+</div>
+
+<!-- ══ THREE PILLARS ══ -->
+<div class="mt-10 grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+    <!-- ACADEMIC BENCHMARKING -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-xl mb-5">🏛️</div>
+        <div class="w-1 h-6 rounded-full bg-primary mb-3"></div>
+        <h3 class="text-lg font-black text-primary mb-3 uppercase tracking-wide">Academic Benchmarking</h3>
+        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.benchmarking_text }}</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- EXCHANGE PROGRAMS -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-secondary/10 flex items-center justify-center text-xl mb-5">✈️</div>
+        <div class="w-1 h-6 rounded-full bg-secondary mb-3"></div>
+        <h3 class="text-lg font-black text-secondary mb-3 uppercase tracking-wide">Exchange Programs</h3>
+        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.exchange_program_text }}</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- RESEARCH & INNOVATION -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center text-xl mb-5">🔬</div>
+        <div class="w-1 h-6 rounded-full bg-green-600 mb-3"></div>
+        <h3 class="text-lg font-black text-green-600 mb-3 uppercase tracking-wide">Research & Innovation</h3>
+        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.research_text }}</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+</div>
+
+<!-- ══ INTERNATIONAL COLLABORATIONS ══ -->
+<div class="mt-14 mb-8 section-head" style="animation-delay:0.1s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary/60">Partners</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        International Collaborations
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:16rem;"></div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    {% for partner in partners %}
+    <div class="partner-card lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-lg p-6 overflow-hidden group">
+        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-slate-50 border-b border-l border-slate-100 flex items-center justify-center text-xl opacity-60 group-hover:opacity-100 transition-opacity">
+            🤝
+        </div>
+        <h4 class="font-black text-slate-800 pr-12 text-base leading-tight">{{ partner.name }}</h4>
+        <div class="flex items-center gap-1.5 mt-2">
+            <span class="text-slate-400 text-sm">📍</span>
+            <p class="text-sm text-slate-500 font-medium">{{ partner.country }}</p>
+        </div>
+        <div class="mt-4">
+            <span class="cat-badge inline-block px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 cursor-default">
+                {{ partner.category }}
+            </span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-12 text-slate-400 font-medium">No partner records found.</div>
+    {% endfor %}
+</div>
+
+<!-- ══ GLOBAL IMPACT ══ -->
+<div class="impact-card mt-12 rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-2xl">
+    <div class="flex items-center gap-3 mb-6">
+        <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
+        <div>
+            <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">Global Impact</h3>
+            <p class="text-xs text-slate-400 mt-0.5">Measurable outcomes & achievements</p>
+        </div>
+    </div>
+    <p class="text-slate-600 leading-relaxed text-sm max-w-4xl">{{ summary.impact_text }}</p>
+</div>
+
+<!-- ══ VISION BANNER ══ -->
+<div class="vision-card mt-12 rounded-[32px] bg-gradient-to-r from-primary via-primary/90 to-secondary text-white p-10 shadow-2xl">
+    <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/70 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">
+        Strategic Vision
+    </span>
+    <h3 class="text-3xl md:text-4xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
+        VU – LaunchPad to be Global
+    </h3>
+    <p class="mt-5 text-lg leading-relaxed text-white/85 max-w-3xl">
+        {{ summary.vision_statement }}
+    </p>
+</div>
+
+<script>
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = "#64748b";
+
+new Chart(document.getElementById('partnerChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Asia', 'North America', 'Europe', 'Africa'],
+        datasets: [{
+            data: [7, 3, 2, 1],
+            backgroundColor: ['#162850', '#E14D2A', '#F59E0B', '#10B981'],
+            borderWidth: 0,
+            hoverOffset: 10
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '68%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10 }
+            }
+        },
+        animation: { animateRotate: true, duration: 1000, easing: 'easeOutQuart' }
+    }
+});
+</script>
+
+{% endblock %}

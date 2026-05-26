@@ -1,0 +1,720 @@
+{% extends 'base.html' %}
+
+{% block title %}Curriculum Flexibility{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ══ KEYFRAMES ══════════════════════════════════════ */
+    @keyframes fadeUp {
+        from { opacity:0; transform:translateY(28px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes popIn {
+        from { opacity:0; transform:scale(0.88) translateY(20px); }
+        to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+    @keyframes cardFlip {
+        from { opacity:0; transform:perspective(600px) rotateX(-12deg) translateY(20px); }
+        to   { opacity:1; transform:perspective(600px) rotateX(0deg) translateY(0); }
+    }
+    @keyframes barGrow { to { width: var(--w, 80%); } }
+    @keyframes floatOrb {
+        0%,100% { transform:translate(0,0) scale(1); }
+        50%      { transform:translate(12px,16px) scale(1.06); }
+    }
+    @keyframes shimmerSlide {
+        from { transform:translateX(-100%) rotate(12deg); }
+        to   { transform:translateX(280%) rotate(12deg); }
+    }
+    @keyframes countUp {
+        from { opacity:0; transform:translateY(10px) scale(.9); }
+        to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+    @keyframes timelineIn {
+        from { opacity:0; transform:translateX(-24px); }
+        to   { opacity:1; transform:translateX(0); }
+    }
+    @keyframes dotPop {
+        from { opacity:0; transform:scale(0); }
+        to   { opacity:1; transform:scale(1); }
+    }
+    @keyframes lineGrow {
+        from { height:0; }
+        to   { height:100%; }
+    }
+    @keyframes checkIn {
+        from { opacity:0; transform:scale(0) rotate(-20deg); }
+        to   { opacity:1; transform:scale(1) rotate(0deg); }
+    }
+
+    /* ── UTILITY ────────────────────────────────────── */
+    .anim-fade { opacity:0; animation:fadeUp .55s ease forwards; }
+    .anim-pop  { opacity:0; animation:popIn .5s cubic-bezier(.34,1.4,.64,1) forwards; }
+    .anim-flip { opacity:0; animation:cardFlip .55s cubic-bezier(.34,1.4,.64,1) forwards; }
+
+    .d1{animation-delay:.05s} .d2{animation-delay:.12s} .d3{animation-delay:.19s}
+    .d4{animation-delay:.26s} .d5{animation-delay:.33s} .d6{animation-delay:.40s}
+    .d7{animation-delay:.47s} .d8{animation-delay:.54s}
+
+    /* ── LIFT ───────────────────────────────────────── */
+    .lift {
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+    }
+    .lift:hover { transform:translateY(-5px); box-shadow:0 28px 52px rgba(22,40,80,.14); }
+
+    /* ── GRADIENT TEXT ──────────────────────────────── */
+    .gt-red  { background:linear-gradient(135deg,#E14D2A,#c0391c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-navy { background:linear-gradient(135deg,#162850,#1d3d72); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-grn  { background:linear-gradient(135deg,#10B981,#047857); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gt-vio  { background:linear-gradient(135deg,#8B5CF6,#6d28d9); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── ACC BAR ────────────────────────────────────── */
+    .acc-bar {
+        height:4px; width:0; border-radius:4px;
+        animation:barGrow .8s cubic-bezier(.4,0,.2,1) .2s forwards;
+    }
+
+    /* ── FLOAT ORB ──────────────────────────────────── */
+    .float-orb {
+        position:absolute; border-radius:50%;
+        filter:blur(55px); pointer-events:none; opacity:.18;
+        animation:floatOrb 8s ease-in-out infinite;
+    }
+
+    /* ── SECTION LABEL ──────────────────────────────── */
+    .sec-label {
+        display:inline-flex; align-items:center; gap:6px;
+        font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+        padding:4px 12px; border-radius:999px;
+        background:rgba(225,77,42,.1); border:1px solid rgba(225,77,42,.22); color:#E14D2A;
+        margin-bottom:.5rem;
+    }
+
+    /* ── KPI CARD ───────────────────────────────────── */
+    .kpi-card {
+        position:relative; overflow:hidden;
+        border-radius:26px;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        padding:1.75rem;
+        box-shadow:0 8px 28px rgba(22,40,80,.08);
+        cursor:default;
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+    }
+    .kpi-card:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 28px 52px rgba(22,40,80,.15); }
+    .kpi-card .k-bar {
+        position:absolute; bottom:0; left:0; right:0; height:3px;
+        border-radius:0 0 26px 26px;
+        transform:scaleX(0); transform-origin:left;
+        transition:transform .35s cubic-bezier(.34,1.4,.64,1);
+    }
+    .kpi-card:hover .k-bar { transform:scaleX(1); }
+    .kpi-card .k-shine {
+        position:absolute; inset:0;
+        background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
+        transform:translateX(-100%) rotate(12deg); pointer-events:none;
+    }
+    .kpi-card:hover .k-shine { animation:shimmerSlide .6s ease forwards; }
+    .kpi-card .k-num {
+        display:inline-block;
+        animation:countUp .6s cubic-bezier(.34,1.4,.64,1) .3s both;
+        transition:transform .2s;
+    }
+    .kpi-card:hover .k-num { transform:scale(1.08); }
+
+    /* ── CHART CARD ─────────────────────────────────── */
+    .chart-card {
+        position:relative; overflow:hidden;
+        border-radius:26px;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        padding:2rem;
+        box-shadow:0 8px 28px rgba(22,40,80,.08);
+        transition:box-shadow .25s ease;
+        opacity:0; animation:cardFlip .55s cubic-bezier(.34,1.4,.64,1) forwards;
+    }
+    .chart-card:hover { box-shadow:0 22px 48px rgba(22,40,80,.12); }
+    .chart-accent-bar {
+        width:5px; border-radius:4px; flex-shrink:0; align-self:stretch; min-height:36px;
+        background:linear-gradient(180deg,#E14D2A 0%,#162850 100%);
+    }
+
+    /* ── TABLE ──────────────────────────────────────── */
+    .data-table {
+        border-radius:26px; overflow:hidden;
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        box-shadow:0 8px 28px rgba(22,40,80,.08);
+    }
+    .data-table table { width:100%; font-size:.82rem; border-collapse:collapse; }
+    .data-table thead tr { background:rgba(22,40,80,.06); }
+    .data-table thead th {
+        padding:.85rem 1.2rem; text-align:center;
+        font-size:.7rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+        color:#475569; white-space:nowrap;
+    }
+    .data-table thead th:first-child { text-align:left; }
+    .data-table tbody tr {
+        border-top:1px solid rgba(22,40,80,.055);
+        transition:background .18s;
+    }
+    .data-table tbody tr:hover { background:rgba(225,77,42,.04); }
+    .data-table tbody td { padding:.85rem 1.2rem; text-align:center; color:#475569; }
+    .data-table tbody td:first-child { text-align:left; font-weight:700; color:#1e293b; }
+    .data-table tbody tr:nth-child(even) { background:rgba(22,40,80,.022); }
+    .data-table tbody tr:nth-child(even):hover { background:rgba(225,77,42,.04); }
+
+    /* ── STATUS CELL ────────────────────────────────── */
+    .cell-yes  { color:#059669; font-size:1rem; animation:checkIn .4s cubic-bezier(.34,1.4,.64,1) .5s both; display:inline-block; }
+    .cell-no   { color:#94a3b8; font-size:1rem; }
+    .cell-text {
+        display:inline-block; padding:2px 10px; border-radius:999px;
+        font-size:.7rem; font-weight:700;
+        background:rgba(245,158,11,.12); color:#d97706; border:1px solid rgba(245,158,11,.25);
+    }
+
+    /* ── TIMELINE ───────────────────────────────────── */
+    .timeline-wrap { position:relative; }
+    .timeline-wrap::before {
+        content:""; position:absolute;
+        left:22px; top:0; width:3px;
+        background:linear-gradient(180deg,#E14D2A,#162850);
+        border-radius:4px;
+        animation:lineGrow .9s cubic-bezier(.4,0,.2,1) .2s both;
+        height:0; /* animated to 100% */
+    }
+
+    .timeline-item {
+        position:relative; padding-left:60px; padding-bottom:2rem;
+        opacity:0; animation:timelineIn .5s ease forwards;
+    }
+    .timeline-item:last-child { padding-bottom:0; }
+
+    .timeline-dot {
+        position:absolute; left:12px; top:1.4rem;
+        width:22px; height:22px; border-radius:50%;
+        background:#fff; border:3px solid #E14D2A;
+        box-shadow:0 0 0 4px rgba(225,77,42,.15);
+        animation:dotPop .4s cubic-bezier(.34,1.4,.64,1) forwards; opacity:0;
+        z-index:1;
+    }
+
+    .timeline-card {
+        background:rgba(255,255,255,.82);
+        backdrop-filter:blur(22px) saturate(170%);
+        border:1px solid rgba(255,255,255,.6);
+        border-radius:22px; padding:1.5rem 1.75rem;
+        box-shadow:0 6px 24px rgba(22,40,80,.08);
+        transition:transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s;
+        position:relative; overflow:hidden;
+    }
+    .timeline-card:hover { transform:translateX(6px); box-shadow:0 18px 40px rgba(22,40,80,.13); }
+    .timeline-card .t-bar {
+        position:absolute; top:0; left:0; bottom:0; width:3px;
+        background:linear-gradient(180deg,#E14D2A,#162850);
+        border-radius:4px 0 0 4px;
+        transform:scaleY(0); transform-origin:top;
+        transition:transform .3s cubic-bezier(.34,1.4,.64,1);
+    }
+    .timeline-card:hover .t-bar { transform:scaleY(1); }
+    .timeline-card .tc-shine {
+        position:absolute; inset:0;
+        background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.35) 50%,transparent 62%);
+        transform:translateX(-100%) rotate(12deg); pointer-events:none;
+    }
+    .timeline-card:hover .tc-shine { animation:shimmerSlide .5s ease forwards; }
+
+    /* stagger timeline items */
+    .tl-1{animation-delay:.1s} .tl-2{animation-delay:.22s} .tl-3{animation-delay:.34s}
+    .tl-4{animation-delay:.46s} .tl-5{animation-delay:.58s}
+    .td-1{animation-delay:.12s} .td-2{animation-delay:.24s} .td-3{animation-delay:.36s}
+    .td-4{animation-delay:.48s} .td-5{animation-delay:.60s}
+
+    /* ── FLEX INDEX BADGE ───────────────────────────── */
+    .flex-badge {
+        display:inline-flex; align-items:center; gap:6px;
+        padding:6px 16px; border-radius:999px;
+        font-size:.78rem; font-weight:800;
+        background:rgba(225,77,42,.1); color:#E14D2A;
+        border:1px solid rgba(225,77,42,.22);
+        transition:background .2s, transform .2s;
+    }
+    .timeline-card:hover .flex-badge {
+        background:rgba(225,77,42,.18); transform:scale(1.04);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ HEADER ═════════════════════════════════════════ -->
+<div class="anim-fade d1 mb-10">
+    <div class="sec-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Curriculum Analytics
+    </div>
+    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-wide text-secondary leading-tight"
+        style="font-family:'DM Serif Display',serif;">
+        Curriculum
+        <span class="grad-text">Flexibility Analysis</span>
+    </h2>
+    <div class="acc-bar mt-3 bg-gradient-to-r from-primary to-secondary" style="--w:32rem;"></div>
+    <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
+        Tracking the evolution of academic flexibility, elective expansion,
+        minor tracks, and NEP-aligned learning options across curriculum revisions.
+    </p>
+</div>
+
+<!-- ══ KPI CARDS ══════════════════════════════════════ -->
+{% if kpis %}
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+    {% for kpi in kpis %}
+    <div class="kpi-card anim-pop" style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
+        <div class="float-orb w-24 h-24 -top-6 -right-6
+            {% if forloop.counter == 1 %}bg-primary
+            {% elif forloop.counter == 2 %}bg-secondary
+            {% elif forloop.counter == 3 %}bg-green-400
+            {% else %}bg-violet-400{% endif %}"
+            style="animation-delay:{{ forloop.counter0 }}00ms;"></div>
+        <div class="k-shine"></div>
+        <div class="w-11 h-11 rounded-2xl flex items-center justify-center text-xl mb-5
+            {% if forloop.counter == 1 %}bg-primary/10
+            {% elif forloop.counter == 2 %}bg-secondary/10
+            {% elif forloop.counter == 3 %}bg-green-100
+            {% else %}bg-violet-100{% endif %}">
+            {% if forloop.counter == 1 %}📊
+            {% elif forloop.counter == 2 %}🔀
+            {% elif forloop.counter == 3 %}📖
+            {% else %}✨{% endif %}
+        </div>
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">{{ kpi.title }}</p>
+        <h2 class="k-num text-6xl font-black leading-none
+            {% if forloop.counter == 1 %}gt-red
+            {% elif forloop.counter == 2 %}gt-navy
+            {% elif forloop.counter == 3 %}gt-grn
+            {% else %}gt-vio{% endif %}">{{ kpi.value }}</h2>
+        <div class="mt-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full animate-pulse
+                {% if forloop.counter == 1 %}bg-primary
+                {% elif forloop.counter == 2 %}bg-secondary
+                {% elif forloop.counter == 3 %}bg-green-500
+                {% else %}bg-violet-500{% endif %}"></span>
+            <span class="text-xs font-semibold
+                {% if forloop.counter == 1 %}text-primary
+                {% elif forloop.counter == 2 %}text-secondary
+                {% elif forloop.counter == 3 %}text-green-600
+                {% else %}text-violet-600{% endif %}">{{ kpi.tag }}</span>
+        </div>
+        <div class="k-bar
+            {% if forloop.counter == 1 %}bg-primary
+            {% elif forloop.counter == 2 %}bg-secondary
+            {% elif forloop.counter == 3 %}bg-green-500
+            {% else %}bg-violet-500{% endif %}"></div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- ══ CHARTS ══════════════════════════════════════════ -->
+<div class="mb-6 anim-fade d1">
+    <div class="sec-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Trends
+    </div>
+    <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+        style="font-family:'DM Serif Display',serif;">
+        Visual Analytics
+    </h3>
+    <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:12rem;"></div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-7 mb-12">
+
+    <!-- FLEXIBILITY INDEX LINE CHART -->
+    <div class="chart-card d2">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Growth</p>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700"
+                    style="font-family:'DM Serif Display',serif;">
+                    Flexibility Index Growth
+                </h3>
+                <div class="mt-1.5 h-0.5 w-44 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div style="position:relative;height:300px;"><canvas id="flexibilityChart"></canvas></div>
+    </div>
+
+    <!-- COMPOSITION STACKED BAR CHART -->
+    <div class="chart-card d3">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Breakdown</p>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700"
+                    style="font-family:'DM Serif Display',serif;">
+                    Curriculum Composition
+                </h3>
+                <div class="mt-1.5 h-0.5 w-44 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div style="position:relative;height:300px;"><canvas id="compositionChart"></canvas></div>
+    </div>
+
+    <!-- RADAR: FLEXIBILITY DIMENSIONS -->
+    <div class="chart-card d4">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Dimensions</p>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700"
+                    style="font-family:'DM Serif Display',serif;">
+                    Latest Revision — Component Radar
+                </h3>
+                <div class="mt-1.5 h-0.5 w-44 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div style="position:relative;height:300px;"><canvas id="radarChart"></canvas></div>
+    </div>
+
+    <!-- DOUGHNUT: LATEST COMPOSITION -->
+    <div class="chart-card d5">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Latest Snapshot</p>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700"
+                    style="font-family:'DM Serif Display',serif;">
+                    Credit Distribution (Latest)
+                </h3>
+                <div class="mt-1.5 h-0.5 w-44 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div style="position:relative;height:300px;"><canvas id="doughnutChart"></canvas></div>
+    </div>
+
+</div>
+
+<!-- ══ FLEXIBILITY FEATURES TABLE ════════════════════ -->
+<div class="mb-6 anim-fade d1">
+    <div class="sec-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Comparison
+    </div>
+    <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+        style="font-family:'DM Serif Display',serif;">
+        Flexibility Features Comparison
+    </h3>
+    <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:20rem;"></div>
+</div>
+
+<div class="data-table anim-flip d2 overflow-x-auto mb-12">
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                {% for metric in metrics %}
+                <th>{{ metric.revision.year }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% if feature_rows %}
+                {% for row in feature_rows %}
+                <tr>
+                    <td>{{ row.feature }}</td>
+                    {% for val in row.values %}
+                    <td>
+                        {% if val == "yes" or val == "✅" %}
+                            <span class="cell-yes">✅</span>
+                        {% elif val == "no" or val == "❌" %}
+                            <span class="cell-no">❌</span>
+                        {% else %}
+                            <span class="cell-text">{{ val }}</span>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            {% else %}
+                <!-- fallback: render from metrics fields if feature_rows not provided -->
+                <tr>
+                    <td>Minor Track</td>
+                    {% for metric in metrics %}<td>{% if metric.minor_track > 0 %}<span class="cell-yes">✅</span>{% else %}<span class="cell-no">❌</span>{% endif %}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Open Elective</td>
+                    {% for metric in metrics %}<td>{% if metric.open_elective > 0 %}<span class="cell-yes">✅</span>{% else %}<span class="cell-no">❌</span>{% endif %}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Value Education</td>
+                    {% for metric in metrics %}<td>{% if metric.value_education > 0 %}<span class="cell-yes">✅</span>{% else %}<span class="cell-no">❌</span>{% endif %}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Skill Enhancement</td>
+                    {% for metric in metrics %}<td>{% if metric.skill_enhancement > 0 %}<span class="cell-yes">✅</span>{% else %}<span class="cell-no">❌</span>{% endif %}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Ability Enhancement</td>
+                    {% for metric in metrics %}<td>{% if metric.ability_enhancement > 0 %}<span class="cell-yes">✅</span>{% else %}<span class="cell-no">❌</span>{% endif %}</td>{% endfor %}
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ TIMELINE ═══════════════════════════════════════ -->
+<div class="mb-6 anim-fade d1">
+    <div class="sec-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        History
+    </div>
+    <h3 class="text-xl font-black text-secondary uppercase tracking-wide"
+        style="font-family:'DM Serif Display',serif;">
+        Flexibility Evolution Timeline
+    </h3>
+    <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:20rem;"></div>
+</div>
+
+<div class="timeline-wrap pt-4 pb-2">
+    {% for metric in metrics %}
+    <div class="timeline-item tl-{{ forloop.counter }}">
+
+        <div class="timeline-dot td-{{ forloop.counter }}"
+             style="border-color:{% if forloop.counter == 1 %}#E14D2A{% elif forloop.counter == 2 %}#162850{% elif forloop.counter == 3 %}#10B981{% elif forloop.counter == 4 %}#F59E0B{% else %}#8B5CF6{% endif %};">
+        </div>
+
+        <div class="timeline-card">
+            <div class="t-bar"></div>
+            <div class="tc-shine"></div>
+
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+
+                <!-- LEFT: YEAR + TAGS -->
+                <div class="flex items-start gap-5">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Revision</p>
+                        <h3 class="text-4xl font-black leading-none
+                            {% if forloop.counter == 1 %}gt-red
+                            {% elif forloop.counter == 2 %}gt-navy
+                            {% elif forloop.counter == 3 %}gt-grn
+                            {% elif forloop.counter == 4 %}gt-amb
+                            {% else %}gt-vio{% endif %}"
+                            style="font-family:'DM Serif Display',serif;">
+                            {{ metric.revision.year }}
+                        </h3>
+                        {% if metric.revision.name %}
+                        <p class="mt-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+                            {{ metric.revision.name }}
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    {% if metric.revision.tags %}
+                    <div class="pt-1">
+                        <p class="text-xs text-slate-400 leading-relaxed max-w-xs">
+                            {{ metric.revision.tags }}
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- RIGHT: METRICS CHIPS -->
+                <div class="flex flex-wrap gap-2 items-start">
+                    <span class="flex-badge">
+                        <span class="text-base font-black">{{ metric.flexibility_index }}</span>
+                        Flexibility Index
+                    </span>
+                    {% if metric.core %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/8 text-secondary text-xs font-bold border border-secondary/15">
+                        📚 Core: {{ metric.core }}
+                    </span>
+                    {% endif %}
+                    {% if metric.minor_track %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold border border-green-200">
+                        🔀 Minor: {{ metric.minor_track }}
+                    </span>
+                    {% endif %}
+                    {% if metric.open_elective %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-200">
+                        📖 Elective: {{ metric.open_elective }}
+                    </span>
+                    {% endif %}
+                    {% if metric.skill_enhancement %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-50 text-violet-700 text-xs font-bold border border-violet-200">
+                        ⚡ Skill: {{ metric.skill_enhancement }}
+                    </span>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-slate-400 py-10">No revision data found.</p>
+    {% endfor %}
+</div>
+
+<!-- ══ CHART SCRIPTS ══════════════════════════════════ -->
+<script>
+    /* ── SHARED DEFAULTS ────────────────────────────── */
+    const CD = {
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding:16, usePointStyle:true, pointStyleWidth:10,
+                    font:{ family:"'DM Sans',sans-serif", size:11, weight:'600' },
+                    color:'#64748b'
+                }
+            },
+            tooltip: {
+                backgroundColor:'rgba(22,40,80,.92)',
+                titleFont:{ family:"'DM Sans',sans-serif", size:12, weight:'700' },
+                bodyFont:{ family:"'DM Sans',sans-serif", size:11 },
+                padding:12, cornerRadius:10,
+                borderColor:'rgba(255,255,255,.1)', borderWidth:1
+            }
+        },
+        animation:{ duration:900, easing:'easeOutQuart' },
+        scales: {
+            x:{ grid:{display:false}, ticks:{ font:{family:"'DM Sans',sans-serif",size:11}, color:'#94a3b8' } },
+            y:{ grid:{color:'rgba(148,163,184,.12)',drawBorder:false},
+                ticks:{ font:{family:"'DM Sans',sans-serif",size:11}, color:'#94a3b8' },
+                border:{display:false} }
+        }
+    };
+
+    /* ── BUILD LABELS FROM METRICS ───────────────────── */
+    const labels = [{% for metric in metrics %}"{{ metric.revision.year }}",{% endfor %}];
+
+    /* ── FLEXIBILITY INDEX LINE ──────────────────────── */
+    new Chart(document.getElementById('flexibilityChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Flexibility Index',
+                data: [{% for metric in metrics %}{{ metric.flexibility_index }},{% endfor %}],
+                borderColor: '#E14D2A',
+                backgroundColor: 'rgba(225,77,42,.1)',
+                borderWidth: 3, tension: .45, fill: true,
+                pointRadius: 6, pointBackgroundColor: '#E14D2A',
+                pointBorderColor: '#fff', pointBorderWidth: 2
+            }]
+        },
+        options: { responsive:true, maintainAspectRatio:false, plugins:CD.plugins, animation:CD.animation, scales:CD.scales }
+    });
+
+    /* ── COMPOSITION STACKED BAR ─────────────────────── */
+    new Chart(document.getElementById('compositionChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Core',
+                    data: [{% for metric in metrics %}{{ metric.core }},{% endfor %}],
+                    backgroundColor: 'rgba(22,40,80,.82)', borderRadius: 4
+                },
+                {
+                    label: 'Minor Track',
+                    data: [{% for metric in metrics %}{{ metric.minor_track }},{% endfor %}],
+                    backgroundColor: 'rgba(225,77,42,.82)', borderRadius: 4
+                },
+                {
+                    label: 'Open Elective',
+                    data: [{% for metric in metrics %}{{ metric.open_elective }},{% endfor %}],
+                    backgroundColor: 'rgba(245,158,11,.82)', borderRadius: 4
+                },
+                {
+                    label: 'Skill Enhancement',
+                    data: [{% for metric in metrics %}{{ metric.skill_enhancement }},{% endfor %}],
+                    backgroundColor: 'rgba(139,92,246,.82)', borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive:true, maintainAspectRatio:false,
+            plugins: CD.plugins, animation: CD.animation,
+            scales: { ...CD.scales, x:{ ...CD.scales.x, stacked:false }, y:{ ...CD.scales.y, stacked:false } }
+        }
+    });
+
+    /* ── RADAR: LATEST REVISION ──────────────────────── */
+    {% if latest_metric %}
+    new Chart(document.getElementById('radarChart'), {
+        type: 'radar',
+        data: {
+            labels: ['Core', 'Minor Track', 'Open Elective', 'Skill Enhancement', 'Ability Enhancement', 'Value Education'],
+            datasets: [{
+                label: '{{ latest_metric.revision.year }}',
+                data: [
+                    {{ latest_metric.core }},
+                    {{ latest_metric.minor_track }},
+                    {{ latest_metric.open_elective }},
+                    {{ latest_metric.skill_enhancement }},
+                    {{ latest_metric.ability_enhancement|default:0 }},
+                    {{ latest_metric.value_education|default:0 }}
+                ],
+                borderColor: '#E14D2A',
+                backgroundColor: 'rgba(225,77,42,.15)',
+                pointBackgroundColor: '#E14D2A',
+                pointBorderColor: '#fff', pointBorderWidth: 2,
+                pointRadius: 5, borderWidth: 2.5
+            }]
+        },
+        options: {
+            responsive:true, maintainAspectRatio:false,
+            plugins: CD.plugins, animation: CD.animation,
+            scales: {
+                r: {
+                    ticks: { backdropColor:'transparent', color:'#94a3b8', font:{family:"'DM Sans',sans-serif",size:10} },
+                    grid: { color:'rgba(148,163,184,.2)' },
+                    angleLines: { color:'rgba(148,163,184,.2)' },
+                    pointLabels: { color:'#475569', font:{family:"'DM Sans',sans-serif",size:11,weight:'600'} }
+                }
+            }
+        }
+    });
+    {% endif %}
+
+    /* ── DOUGHNUT: LATEST BREAKDOWN ──────────────────── */
+    {% if latest_metric %}
+    new Chart(document.getElementById('doughnutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Core', 'Minor Track', 'Open Elective', 'Skill Enhancement', 'Ability Enhancement', 'Value Education'],
+            datasets: [{
+                data: [
+                    {{ latest_metric.core }},
+                    {{ latest_metric.minor_track }},
+                    {{ latest_metric.open_elective }},
+                    {{ latest_metric.skill_enhancement }},
+                    {{ latest_metric.ability_enhancement|default:0 }},
+                    {{ latest_metric.value_education|default:0 }}
+                ],
+                backgroundColor: [
+                    'rgba(22,40,80,.82)',
+                    'rgba(225,77,42,.82)',
+                    'rgba(245,158,11,.82)',
+                    'rgba(139,92,246,.82)',
+                    'rgba(236,72,153,.82)',
+                    'rgba(16,185,129,.82)'
+                ],
+                borderColor: '#fff', borderWidth: 3, hoverOffset: 8
+            }]
+        },
+        options: {
+            responsive:true, maintainAspectRatio:false, cutout:'62%',
+            plugins: CD.plugins, animation: CD.animation
+        }
+    });
+    {% endif %}
+</script>
+
+{% endblock %}

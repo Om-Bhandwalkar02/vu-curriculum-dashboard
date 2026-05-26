@@ -1,0 +1,502 @@
+{% extends "base.html" %}
+
+{% block title %}Skill Courses & Certification Ecosystem{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ── STAGGERED KPI REVEALS ───────────────────────── */
+    .kpi-card {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+        animation: popUp 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.14s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.23s; }
+    .kpi-card:nth-child(4) { animation-delay: 0.32s; }
+
+    @keyframes popUp {
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── SECTION HEAD ────────────────────────────────── */
+    .section-head {
+        opacity: 0; transform: translateX(-14px);
+        animation: headIn 0.5s ease forwards;
+    }
+    @keyframes headIn { to { opacity: 1; transform: translateX(0); } }
+
+    /* ── ACCENT BAR ──────────────────────────────────── */
+    .accent-bar { width: 0; animation: barGrow 0.7s ease 0.2s forwards; }
+    @keyframes barGrow { to { width: 30rem; } }
+
+    /* ── HOVER LIFT ──────────────────────────────────── */
+    .lift {
+        transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+                    box-shadow 0.25s ease;
+    }
+    .lift:hover {
+        transform: translateY(-6px) scale(1.015);
+        box-shadow: 0 28px 56px rgba(22,40,80,0.14);
+    }
+
+    /* ── GRADIENT NUMBERS ────────────────────────────── */
+    .num-primary {
+        background: linear-gradient(135deg,#E14D2A,#c23d1f);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .num-secondary {
+        background: linear-gradient(135deg,#162850,#243b6e);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .num-green {
+        background: linear-gradient(135deg,#10B981,#059669);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .num-accent {
+        background: linear-gradient(135deg,#F59E0B,#d97706);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* ── ICON RING ───────────────────────────────────── */
+    .icon-ring {
+        width: 52px; height: 52px;
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem;
+        animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
+    }
+
+    /* ── CHART CARD ──────────────────────────────────── */
+    .chart-card { opacity: 0; animation: popUp 0.6s ease 0.12s forwards; }
+
+    /* ── TRACK CARDS ─────────────────────────────────── */
+    .track-card {
+        opacity: 0;
+        transform: translateY(22px);
+        animation: popUp 0.55s ease forwards;
+    }
+    .track-card:nth-child(1) { animation-delay: 0.06s; }
+    .track-card:nth-child(2) { animation-delay: 0.14s; }
+    .track-card:nth-child(3) { animation-delay: 0.22s; }
+    .track-card:nth-child(4) { animation-delay: 0.30s; }
+
+    /* ── TIMELINE CARDS ──────────────────────────────── */
+    .timeline-card {
+        opacity: 0;
+        transform: translateY(18px) scale(0.94);
+        animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .timeline-card:nth-child(1) { animation-delay: 0.06s; }
+    .timeline-card:nth-child(2) { animation-delay: 0.16s; }
+    .timeline-card:nth-child(3) { animation-delay: 0.26s; }
+
+    /* ── ANALYTICS ROW ───────────────────────────────── */
+    .analytic-row {
+        opacity: 0;
+        transform: translateX(-10px);
+        animation: slideIn 0.4s ease forwards;
+    }
+    @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+    .analytic-row:nth-child(1) { animation-delay: 0.08s; }
+    .analytic-row:nth-child(2) { animation-delay: 0.14s; }
+    .analytic-row:nth-child(3) { animation-delay: 0.20s; }
+    .analytic-row:nth-child(4) { animation-delay: 0.26s; }
+    .analytic-row:nth-child(5) { animation-delay: 0.32s; }
+    .analytic-row:nth-child(6) { animation-delay: 0.38s; }
+
+    /* ── FINDING ITEM ────────────────────────────────── */
+    .finding-item {
+        opacity: 0;
+        transform: translateX(-12px);
+        animation: slideIn 0.42s ease forwards;
+    }
+    .finding-item:nth-child(1) { animation-delay: 0.05s; }
+    .finding-item:nth-child(2) { animation-delay: 0.12s; }
+    .finding-item:nth-child(3) { animation-delay: 0.19s; }
+    .finding-item:nth-child(4) { animation-delay: 0.26s; }
+    .finding-item:nth-child(5) { animation-delay: 0.33s; }
+
+    /* ── FADE IN ─────────────────────────────────────── */
+    .fade-in { opacity: 0; animation: popUp 0.6s ease forwards; }
+
+    /* ── SPOTLIGHT SHIMMER ───────────────────────────── */
+    .spotlight {
+        position: relative; overflow: hidden;
+        opacity: 0; animation: popUp 0.65s ease 0.2s forwards;
+    }
+    .spotlight::before {
+        content:"";
+        position:absolute; top:-80%; left:-60%;
+        width:50%; height:220%;
+        background: linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.13) 50%,transparent 60%);
+        animation: shimmer 5s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+        0%   { transform:translateX(-60%) rotate(15deg); }
+        60%,100% { transform:translateX(350%) rotate(15deg); }
+    }
+
+    /* ── PROGRESS TRACK ──────────────────────────────── */
+    .track-fill {
+        height: 100%;
+        border-radius: 6px;
+        animation: fillBar 1.4s cubic-bezier(0.4,0,0.2,1) 0.6s both;
+        transform-origin: left;
+    }
+    @keyframes fillBar {
+        from { transform: scaleX(0); }
+        to   { transform: scaleX(1); }
+    }
+
+    /* ── TIMELINE CONNECTOR ──────────────────────────── */
+    .timeline-line {
+        position: absolute;
+        top: 50%; left: 100%;
+        width: 100%; height: 2px;
+        background: linear-gradient(90deg, #E14D2A, #162850);
+        display: none;
+    }
+    @media (min-width: 768px) { .timeline-line { display: block; } }
+    .timeline-card:last-child .timeline-line { display: none; }
+
+    /* ── COUNTER POP ─────────────────────────────────── */
+    @keyframes counterPop {
+        0% { transform: scale(0.7); opacity: 0; }
+        70% { transform: scale(1.08); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .counter-pop { animation: counterPop 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
+
+    /* ── VISION BANNER ───────────────────────────────── */
+    .vision-banner {
+        opacity:0; animation: popUp 0.7s ease 0.25s forwards;
+        position: relative; overflow: hidden;
+    }
+    .vision-banner::after {
+        content:"📚";
+        position:absolute; right:-10px; bottom:-20px;
+        font-size:10rem; opacity:0.06; line-height:1;
+        pointer-events:none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ PAGE HEADER ══ -->
+<div class="mb-10 section-head">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Skill Ecosystem</span>
+    </div>
+    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-wide text-secondary leading-tight" style="font-family:'DM Serif Display',serif;">
+        Skill Courses &<br class="hidden md:block"> Certification Ecosystem
+    </h2>
+    <div class="mt-3 h-1 rounded-full bg-gradient-to-r from-primary to-secondary accent-bar"></div>
+    <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
+        Analysis of skill-oriented curriculum growth, certification tracks,
+        NEP integration, industry-focused learning and practical skill development.
+    </p>
+</div>
+
+<!-- ══ KPI CARDS ══ -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <!-- SKILL COURSES -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-primary/8 blur-2xl group-hover:bg-primary/14 transition-all duration-500"></div>
+        <div class="icon-ring bg-primary/10 mb-4">📚</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Skill Courses</p>
+        <h2 class="mt-3 text-6xl font-black num-primary leading-none counter-pop">{{ summary.total_skill_courses }}</h2>
+        <p class="mt-3 text-xs text-slate-500 font-semibold">Curriculum Skill Ecosystem</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- COVERAGE -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-secondary/8 blur-2xl group-hover:bg-secondary/14 transition-all duration-500"></div>
+        <div class="icon-ring bg-secondary/10 mb-4">📊</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Coverage</p>
+        <h2 class="mt-3 text-6xl font-black num-secondary leading-none counter-pop">{{ summary.percentage_of_curriculum }}<span class="text-3xl">%</span></h2>
+        <p class="mt-3 text-xs text-slate-500 font-semibold">Of Total Curriculum</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-secondary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- CERTIFICATION TRACKS -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-green-400/8 blur-2xl group-hover:bg-green-400/16 transition-all duration-500"></div>
+        <div class="icon-ring bg-green-100 mb-4">🏅</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Certification Tracks</p>
+        <h2 class="mt-3 text-6xl font-black num-green leading-none counter-pop">{{ summary.certification_tracks }}</h2>
+        <p class="mt-3 text-xs text-slate-500 font-semibold">Industry Aligned</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- GROWTH -->
+    <div class="kpi-card lift relative rounded-[28px] bg-gradient-to-br from-secondary via-secondary/95 to-secondary/80 p-7 shadow-xl overflow-hidden group text-white">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="w-[52px] h-[52px] rounded-2xl bg-white/15 flex items-center justify-center text-2xl mb-4">📈</div>
+        <p class="uppercase tracking-widest text-xs text-white/50 font-bold">Growth</p>
+        <h2 class="mt-3 text-6xl font-black text-white leading-none counter-pop">{{ summary.growth_percentage }}<span class="text-3xl">%</span></h2>
+        <p class="mt-3 text-xs text-white/50 font-semibold">Since 2019</p>
+    </div>
+
+</div>
+
+<!-- ══ CHART + ANALYTICS ══ -->
+<div class="mt-12 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- LINE CHART -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+            <div>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Skill Credit Growth</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Credits across curriculum revisions</p>
+            </div>
+        </div>
+        <div class="relative h-[260px]">
+            <canvas id="skillGrowthChart"></canvas>
+        </div>
+    </div>
+
+    <!-- KEY ANALYTICS -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl" style="animation-delay:0.18s;">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
+            <div>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Key Analytics</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Curriculum performance metrics</p>
+            </div>
+        </div>
+        <div class="space-y-4">
+
+            <div class="analytic-row flex items-center justify-between rounded-2xl bg-slate-50 border border-slate-100 px-4 py-3">
+                <span class="text-sm font-semibold text-slate-600">Skill Courses</span>
+                <span class="font-black text-primary text-sm">{{ summary.total_skill_courses }}</span>
+            </div>
+
+            <div class="analytic-row flex items-center justify-between rounded-2xl bg-slate-50 border border-slate-100 px-4 py-3">
+                <span class="text-sm font-semibold text-slate-600">Curriculum Coverage</span>
+                <span class="font-black text-secondary text-sm">{{ summary.percentage_of_curriculum }}%</span>
+            </div>
+
+            <div class="analytic-row flex items-center justify-between rounded-2xl bg-slate-50 border border-slate-100 px-4 py-3">
+                <span class="text-sm font-semibold text-slate-600">Previous Coverage</span>
+                <span class="font-black text-slate-500 text-sm">{{ summary.previous_percentage }}%</span>
+            </div>
+
+            <div class="analytic-row flex items-center justify-between rounded-2xl bg-slate-50 border border-slate-100 px-4 py-3">
+                <span class="text-sm font-semibold text-slate-600">Certification Tracks</span>
+                <span class="font-black text-green-600 text-sm">{{ summary.certification_tracks }}</span>
+            </div>
+
+            <div class="analytic-row flex items-center justify-between rounded-2xl bg-slate-50 border border-slate-100 px-4 py-3">
+                <span class="text-sm font-semibold text-slate-600">Skill Lab Semesters</span>
+                <span class="font-black text-amber-600 text-sm">{{ summary.semester_skill_labs }}</span>
+            </div>
+
+            <div class="analytic-row flex items-center justify-between rounded-2xl bg-green-50 border border-green-200 px-4 py-3">
+                <span class="text-sm font-semibold text-slate-600">Growth Since 2019</span>
+                <span class="font-black text-green-600 text-sm">{{ summary.growth_percentage }}% ↑</span>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ══ CERTIFICATION TRACKS ══ -->
+<div class="mt-14">
+    <div class="section-head mb-8" style="animation-delay:0.05s;">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+            <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Tracks</span>
+        </div>
+        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+            Certification Tracks
+        </h3>
+        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:14rem;"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        {% for track in tracks %}
+        <div class="track-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+            <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-primary/6 blur-2xl group-hover:bg-primary/12 transition-all duration-500"></div>
+            <div class="w-1 h-6 rounded-full bg-primary mb-4"></div>
+            <h3 class="text-xl font-black text-primary leading-tight mb-3">{{ track.name }}</h3>
+            <div class="w-8 h-0.5 rounded-full bg-primary/30 mb-4"></div>
+            <p class="text-slate-600 leading-relaxed text-sm">{{ track.description }}</p>
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+        </div>
+        {% empty %}
+        <p class="text-slate-400 text-sm col-span-4 text-center py-8">No certification tracks found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ══ SKILL EVOLUTION TIMELINE ══ -->
+<div class="mt-14 fade-in" style="animation-delay:0.1s;">
+    <div class="section-head mb-8" style="animation-delay:0.07s;">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
+            <span class="text-xs font-bold uppercase tracking-widest text-amber-600/70">Timeline</span>
+        </div>
+        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+            Skill Evolution Timeline
+        </h3>
+        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-amber-500 to-primary" style="width:14rem;"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="timeline-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+            <div class="absolute top-0 right-0 opacity-5 text-[5rem] leading-none select-none pointer-events-none font-black text-primary">19</div>
+            <div class="w-1 h-7 rounded-full bg-primary mb-4"></div>
+            <h4 class="text-5xl font-black num-primary mb-3">2019</h4>
+            <p class="font-black text-slate-700 text-base mb-2">Skill Foundation</p>
+            <div class="mt-3 h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                <div class="track-fill bg-gradient-to-r from-primary to-primary/50" style="width:21%;"></div>
+            </div>
+            <p class="mt-2 text-xs text-slate-400 font-semibold">6 Skill Credits</p>
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+        </div>
+
+        <div class="timeline-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+            <div class="absolute top-0 right-0 opacity-5 text-[5rem] leading-none select-none pointer-events-none font-black text-secondary">21</div>
+            <div class="w-1 h-7 rounded-full bg-secondary mb-4"></div>
+            <h4 class="text-5xl font-black num-secondary mb-3">2021</h4>
+            <p class="font-black text-slate-700 text-base mb-2">Industry Integration</p>
+            <div class="mt-3 h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                <div class="track-fill bg-gradient-to-r from-secondary to-secondary/50" style="width:57%;"></div>
+            </div>
+            <p class="mt-2 text-xs text-slate-400 font-semibold">16 Skill Credits</p>
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+        </div>
+
+        <div class="timeline-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+            <div class="absolute top-0 right-0 opacity-5 text-[5rem] leading-none select-none pointer-events-none font-black text-green-600">23</div>
+            <div class="w-1 h-7 rounded-full bg-green-600 mb-4"></div>
+            <h4 class="text-5xl font-black num-green mb-3">2023</h4>
+            <p class="font-black text-slate-700 text-base mb-2">NEP Skill Ecosystem</p>
+            <div class="mt-3 h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                <div class="track-fill bg-gradient-to-r from-green-500 to-green-300" style="width:100%;"></div>
+            </div>
+            <p class="mt-2 text-xs text-slate-400 font-semibold">28 Skill Credits</p>
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══ KEY FINDINGS ══ -->
+<div class="mt-14 fade-in" style="animation-delay:0.12s;">
+    <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-8">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+            <div>
+                <h3 class="text-lg font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">Key Findings</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Curriculum insights & outcomes</p>
+            </div>
+        </div>
+        <div class="space-y-3">
+
+            <div class="finding-item flex items-start gap-4 rounded-2xl bg-primary/6 border border-primary/12 px-5 py-4">
+                <span class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-xs shrink-0 mt-0.5">1</span>
+                <p class="text-sm font-semibold text-slate-700 leading-relaxed">Skill credits increased from <span class="text-primary font-black">6 to 28 credits</span> across curriculum revisions.</p>
+            </div>
+
+            <div class="finding-item flex items-start gap-4 rounded-2xl bg-secondary/6 border border-secondary/12 px-5 py-4">
+                <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-black text-xs shrink-0 mt-0.5">2</span>
+                <p class="text-sm font-semibold text-slate-700 leading-relaxed">Curriculum coverage increased from <span class="text-secondary font-black">6.4% to 16.67%</span>.</p>
+            </div>
+
+            <div class="finding-item flex items-start gap-4 rounded-2xl bg-green-50 border border-green-200 px-5 py-4">
+                <span class="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center text-green-700 font-black text-xs shrink-0 mt-0.5">3</span>
+                <p class="text-sm font-semibold text-slate-700 leading-relaxed">Four <span class="text-green-600 font-black">certification tracks</span> introduced for industry readiness.</p>
+            </div>
+
+            <div class="finding-item flex items-start gap-4 rounded-2xl bg-amber-50 border border-amber-200 px-5 py-4">
+                <span class="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 font-black text-xs shrink-0 mt-0.5">4</span>
+                <p class="text-sm font-semibold text-slate-700 leading-relaxed">Strong <span class="text-amber-600 font-black">NEP alignment</span> through skill-based learning.</p>
+            </div>
+
+            <div class="finding-item flex items-start gap-4 rounded-2xl bg-primary/6 border border-primary/12 px-5 py-4">
+                <span class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-xs shrink-0 mt-0.5">5</span>
+                <p class="text-sm font-semibold text-slate-700 leading-relaxed">Greater emphasis on <span class="text-primary font-black">practical and experiential</span> education.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ══ VISION BANNER ══ -->
+<div class="vision-banner mt-12 rounded-[32px] bg-gradient-to-r from-primary via-primary/90 to-secondary text-white p-10 shadow-2xl">
+    <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/70 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">
+        NEP Aligned Vision
+    </span>
+    <h3 class="text-3xl md:text-4xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
+        Building a Future-Ready<br class="hidden md:block"> Skill Ecosystem
+    </h3>
+    <p class="mt-5 text-lg leading-relaxed text-white/85 max-w-3xl">
+        From foundational skill credits to a full certification ecosystem — empowering students with practical, industry-relevant competencies aligned with NEP 2020.
+    </p>
+</div>
+
+<script>
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = "#64748b";
+
+const labels = [
+    {% for item in growth %}
+        "{{ item.year }}",
+    {% endfor %}
+];
+
+const credits = [
+    {% for item in growth %}
+        {{ item.credits }},
+    {% endfor %}
+];
+
+new Chart(document.getElementById('skillGrowthChart'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Skill Credits',
+            data: credits,
+            borderColor: '#E14D2A',
+            backgroundColor: 'rgba(225,77,42,0.12)',
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: '#E14D2A',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 9
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: '#475569', font: { weight: '700' }, usePointStyle: true }
+            }
+        },
+        scales: {
+            x: { grid: { color: 'rgba(22,40,80,0.06)' }, ticks: { font: { weight: '600' } } },
+            y: { grid: { color: 'rgba(22,40,80,0.06)' }, ticks: { font: { weight: '600' } } }
+        },
+        animation: { duration: 1200, easing: 'easeOutQuart' }
+    }
+});
+</script>
+
+{% endblock %}

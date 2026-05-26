@@ -1,0 +1,450 @@
+{% extends 'base.html' %}
+
+{% block title %}Overview{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ── SECTION HEADER ──────────────────────────── */
+    .section-header {
+        animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    /* ── KPI CARDS ───────────────────────────────── */
+    .kpi-card {
+        position: relative;
+        overflow: hidden;
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 28px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(22,40,80,0.08);
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                    box-shadow 0.3s ease;
+        animation: cardIn 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .kpi-card:hover {
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 24px 48px rgba(22,40,80,0.14);
+    }
+    .kpi-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #E14D2A, #162850);
+        border-radius: 28px 28px 0 0;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .kpi-card:hover::before { transform: scaleX(1); }
+
+    .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.12s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.19s; }
+    .kpi-card:nth-child(4) { animation-delay: 0.26s; }
+
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(24px) scale(0.96); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── COUNTER ANIMATION ───────────────────────── */
+    .kpi-value {
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+    .kpi-card:hover .kpi-value {
+        transform: scale(1.06);
+    }
+
+    /* ── KPI ICON BUBBLE ─────────────────────────── */
+    .kpi-icon {
+        width: 44px; height: 44px;
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    /* ── REVISION CARDS ──────────────────────────── */
+    .revision-card {
+        position: relative;
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 28px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(22,40,80,0.07);
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                    box-shadow 0.3s ease;
+        animation: cardIn 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+        overflow: hidden;
+    }
+    .revision-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 44px rgba(22,40,80,0.13);
+    }
+    .revision-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+        pointer-events: none;
+        border-radius: 28px;
+    }
+
+    .revision-card:nth-child(1) { animation-delay: 0.08s; }
+    .revision-card:nth-child(2) { animation-delay: 0.15s; }
+    .revision-card:nth-child(3) { animation-delay: 0.22s; }
+    .revision-card:nth-child(4) { animation-delay: 0.29s; }
+    .revision-card:nth-child(5) { animation-delay: 0.36s; }
+
+    /* ── YEAR BIG NUMBER ─────────────────────────── */
+    .revision-year {
+        font-size: 3.5rem;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -2px;
+        font-family: 'DM Serif Display', serif;
+        margin-top: 0.75rem;
+    }
+
+    /* ── CHART CARDS ─────────────────────────────── */
+    .chart-card {
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 28px;
+        padding: 1.75rem;
+        box-shadow: 0 8px 32px rgba(22,40,80,0.08);
+        transition: box-shadow 0.3s ease;
+        animation: cardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+    }
+    .chart-card:hover {
+        box-shadow: 0 20px 44px rgba(22,40,80,0.12);
+    }
+
+    /* ── SECTION DIVIDER ─────────────────────────── */
+    .section-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(225,77,42,0.1);
+        border: 1px solid rgba(225,77,42,0.2);
+        color: #E14D2A;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 999px;
+        margin-bottom: 0.6rem;
+    }
+
+    /* ── CHANGE BADGE ────────────────────────────── */
+    .change-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 14px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        background: rgba(16,185,129,0.1);
+        color: #059669;
+        border: 1px solid rgba(16,185,129,0.2);
+    }
+
+    /* ── CHART HEADER ACCENT ─────────────────────── */
+    .chart-accent-bar {
+        width: 5px;
+        border-radius: 4px;
+        background: linear-gradient(180deg, #E14D2A 0%, #162850 100%);
+        flex-shrink: 0;
+        align-self: stretch;
+        min-height: 40px;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE CHART ────────────────────────── */
+    .chart-wrap {
+        position: relative;
+        height: 300px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ KPI SECTION ══════════════════════════════════ -->
+<div class="section-header mb-6">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Analytics
+    </div>
+    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-secondary" style="font-family:'DM Serif Display',serif;">
+        Key Metrics Across All Revisions
+    </h2>
+    <div class="mt-2 h-1 w-64 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+</div>
+
+<!-- KPI CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+    {% for kpi in kpis %}
+    <div class="kpi-card">
+
+        <div class="flex items-start justify-between mb-5">
+            <p class="uppercase tracking-widest text-xs text-slate-400 font-bold leading-tight max-w-[70%]">
+                {{ kpi.title }}
+            </p>
+        </div>
+
+        <div class="kpi-value text-6xl font-black tracking-tight text-slate-800" style="font-family:'DM Serif Display',serif;">
+            {{ kpi.value }}
+        </div>
+
+        <div class="mt-5 flex items-center gap-3 flex-wrap">
+            <span class="text-slate-500 text-sm font-medium">{{ kpi.tag }}</span>
+            <span class="change-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                </svg>
+                {{ kpi.change }}
+            </span>
+        </div>
+
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-12 text-slate-400 font-medium">
+        No KPI records found.
+    </div>
+    {% endfor %}
+
+</div>
+
+<!-- ══ REVISIONS SECTION ════════════════════════════ -->
+<div class="section-header mt-14 mb-6">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        History
+    </div>
+    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-secondary" style="font-family:'DM Serif Display',serif;">
+        Curriculum Revisions
+    </h2>
+    <div class="mt-2 h-1 w-64 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+</div>
+
+<!-- REVISION CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
+
+    {% for revision in revisions %}
+    <div class="revision-card border-t-4 {{ revision.border_class }}">
+
+        <!-- REVISION NAME -->
+        <p class="text-base font-bold {{ revision.color_class }} uppercase tracking-wider">
+            {{ revision.name }}
+        </p>
+
+        <!-- YEAR -->
+        <div class="revision-year {{ revision.color_class }}">
+            {{ revision.year }}
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="my-4 border-t border-slate-100"></div>
+
+        <!-- DESCRIPTION -->
+        <p class="text-sm text-slate-600 leading-relaxed">
+            {{ revision.description }}
+        </p>
+
+        <!-- TAGS -->
+        <p class="mt-3 text-xs text-slate-400 leading-relaxed font-medium">
+            {{ revision.tags }}
+        </p>
+
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-12 text-slate-400 font-medium">
+        No revision records found.
+    </div>
+    {% endfor %}
+
+</div>
+
+<!-- ══ CHARTS ═══════════════════════════════════════ -->
+<div class="mt-14 grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+    <!-- CREDIT DISTRIBUTION -->
+    <div class="chart-card">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Distribution</p>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">
+                    Credit Distribution by Category
+                </h3>
+                <div class="mt-1.5 h-0.5 w-48 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="creditChart"></canvas>
+        </div>
+    </div>
+
+    <!-- GROWTH CHART -->
+    <div class="chart-card">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Trends</p>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700" style="font-family:'DM Serif Display',serif;">
+                    Skill &amp; Experience Growth
+                </h3>
+                <div class="mt-1.5 h-0.5 w-48 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="growthChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* ── SHARED CHART DEFAULTS ───────────────────── */
+    const chartDefaults = {
+        font: { family: "'DM Sans', sans-serif", size: 12 },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 16,
+                    usePointStyle: true,
+                    pointStyleWidth: 10,
+                    font: { family: "'DM Sans', sans-serif", size: 11, weight: '600' },
+                    color: '#64748b'
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(22,40,80,0.92)',
+                titleFont: { family: "'DM Sans', sans-serif", size: 12, weight: '700' },
+                bodyFont: { family: "'DM Sans', sans-serif", size: 11 },
+                padding: 12,
+                cornerRadius: 10,
+                borderColor: 'rgba(255,255,255,0.1)',
+                borderWidth: 1,
+            }
+        },
+        animation: {
+            duration: 900,
+            easing: 'easeOutQuart'
+        }
+    };
+
+    /* ── CREDIT DISTRIBUTION BAR ─────────────────── */
+    new Chart(document.getElementById('creditChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ credit_labels|safe }},
+            datasets: [
+                { label: 'Core',               data: {{ core_data|safe }},     backgroundColor: 'rgba(22,40,80,0.85)',    borderRadius: 6 },
+                { label: 'Minor Track',         data: {{ minor_data|safe }},    backgroundColor: 'rgba(225,77,42,0.85)',   borderRadius: 6 },
+                { label: 'Open Elective',        data: {{ oe_data|safe }},       backgroundColor: 'rgba(245,158,11,0.85)', borderRadius: 6 },
+                { label: 'Value Education',      data: {{ value_data|safe }},    backgroundColor: 'rgba(16,185,129,0.85)', borderRadius: 6 },
+                { label: 'Skill Enhancement',    data: {{ skill_data|safe }},    backgroundColor: 'rgba(139,92,246,0.85)', borderRadius: 6 },
+                { label: 'Ability Enhancement',  data: {{ ability_data|safe }},  backgroundColor: 'rgba(236,72,153,0.85)', borderRadius: 6 },
+                { label: 'Elective',             data: {{ elective_data|safe }}, backgroundColor: 'rgba(14,165,233,0.85)', borderRadius: 6 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: chartDefaults.plugins,
+            animation: chartDefaults.animation,
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' }
+                },
+                y: {
+                    grid: { color: 'rgba(148,163,184,0.12)', drawBorder: false },
+                    ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' },
+                    border: { display: false }
+                }
+            }
+        }
+    });
+
+    /* ── GROWTH LINE ─────────────────────────────── */
+    new Chart(document.getElementById('growthChart'), {
+        type: 'line',
+        data: {
+            labels: {{ growth_labels|safe }},
+            datasets: [
+                {
+                    label: 'Internship',
+                    data: {{ internship_data|safe }},
+                    borderColor: '#162850',
+                    backgroundColor: 'rgba(22,40,80,0.08)',
+                    tension: 0.45, fill: true, pointRadius: 5,
+                    pointBackgroundColor: '#162850',
+                    pointBorderColor: '#fff', pointBorderWidth: 2
+                },
+                {
+                    label: 'Value Education',
+                    data: {{ growth_value_data|safe }},
+                    borderColor: '#E14D2A',
+                    backgroundColor: 'rgba(225,77,42,0.07)',
+                    tension: 0.45, fill: true, pointRadius: 5,
+                    pointBackgroundColor: '#E14D2A',
+                    pointBorderColor: '#fff', pointBorderWidth: 2
+                },
+                {
+                    label: 'Skill Enhancement',
+                    data: {{ growth_skill_data|safe }},
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16,185,129,0.07)',
+                    tension: 0.45, fill: true, pointRadius: 5,
+                    pointBackgroundColor: '#10B981',
+                    pointBorderColor: '#fff', pointBorderWidth: 2
+                },
+                {
+                    label: 'Ability Enhancement',
+                    data: {{ growth_ability_data|safe }},
+                    borderColor: '#F59E0B',
+                    backgroundColor: 'rgba(245,158,11,0.07)',
+                    tension: 0.45, fill: true, pointRadius: 5,
+                    pointBackgroundColor: '#F59E0B',
+                    pointBorderColor: '#fff', pointBorderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: chartDefaults.plugins,
+            animation: chartDefaults.animation,
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' }
+                },
+                y: {
+                    grid: { color: 'rgba(148,163,184,0.12)', drawBorder: false },
+                    ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' },
+                    border: { display: false }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

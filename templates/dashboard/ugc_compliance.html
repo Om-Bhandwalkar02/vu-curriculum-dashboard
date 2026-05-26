@@ -1,0 +1,571 @@
+{% extends 'base.html' %}
+
+{% block title %}UGC Compliance Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    .section-header { animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+
+    .kpi-card {
+        position: relative; overflow: hidden;
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 28px; padding: 2rem;
+        box-shadow: 0 8px 32px rgba(22,40,80,0.08);
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+        animation: cardIn 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .kpi-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 24px 48px rgba(22,40,80,0.14); }
+    .kpi-card::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        border-radius: 28px 28px 0 0; transform: scaleX(0); transform-origin: left;
+        transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .kpi-card:hover::before { transform: scaleX(1); }
+    .kpi-card.primary::before { background: linear-gradient(90deg, #E14D2A, #162850); }
+    .kpi-card.blue::before    { background: linear-gradient(90deg, #162850, #3b82f6); }
+    .kpi-card.green::before   { background: linear-gradient(90deg, #10b981, #059669); }
+    .kpi-card.amber::before   { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.12s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.19s; }
+    .kpi-card:nth-child(4) { animation-delay: 0.26s; }
+    .kpi-value { display: inline-block; transition: transform 0.2s; }
+    .kpi-card:hover .kpi-value { transform: scale(1.06); }
+
+    .chart-card {
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 28px; padding: 1.75rem;
+        box-shadow: 0 8px 32px rgba(22,40,80,0.08);
+        transition: box-shadow 0.3s ease;
+        animation: cardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.25s both;
+        position: relative; overflow: hidden;
+    }
+    .chart-card:hover { box-shadow: 0 20px 44px rgba(22,40,80,0.12); }
+    .chart-accent-bar {
+        width: 5px; border-radius: 4px;
+        background: linear-gradient(180deg, #E14D2A 0%, #162850 100%);
+        flex-shrink: 0; align-self: stretch; min-height: 40px;
+    }
+    .chart-wrap { position: relative; height: 280px; }
+
+    .banner-card {
+        border-radius: 32px;
+        background: linear-gradient(125deg, #E14D2A 0%, #162850 100%);
+        color: white; padding: 2.25rem 2.5rem;
+        box-shadow: 0 20px 60px rgba(22,40,80,0.25);
+        animation: cardIn 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+        position: relative; overflow: hidden;
+    }
+    .banner-card::before {
+        content: ""; position: absolute; top: -60%; right: -8%;
+        width: 420px; height: 420px; border-radius: 50%;
+        background: rgba(255,255,255,0.05); pointer-events: none;
+    }
+    .banner-card::after {
+        content: ""; position: absolute; bottom: -50%; left: 15%;
+        width: 300px; height: 300px; border-radius: 50%;
+        background: rgba(255,255,255,0.04); pointer-events: none;
+    }
+
+    .glass-panel {
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 28px; padding: 2rem;
+        box-shadow: 0 8px 32px rgba(22,40,80,0.07);
+        animation: cardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+    }
+
+    .compliance-table {
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 28px; overflow: hidden;
+        box-shadow: 0 8px 32px rgba(22,40,80,0.08);
+        animation: cardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.25s both;
+    }
+    .compliance-table table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .compliance-table thead { background: #f1f5f9; }
+    .compliance-table th {
+        padding: 1rem 1.25rem;
+        font-size: 0.7rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.07em; color: #475569;
+    }
+    .compliance-table th:not(:first-child) { text-align: center; }
+    .compliance-table td {
+        padding: 0.875rem 1.25rem;
+        border-top: 1px solid #e2e8f0;
+        color: #475569; font-size: 0.85rem;
+    }
+    .compliance-table td:not(:first-child) { text-align: center; }
+    .compliance-table tr:hover td { background: rgba(225,77,42,0.02); }
+    .compliance-table td.req-name { font-weight: 600; color: #1e293b; }
+    .compliance-table td.col-latest { font-weight: 800; color: #059669; }
+
+    .obs-card {
+        position: relative;
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 24px; padding: 1.75rem;
+        box-shadow: 0 6px 28px rgba(22,40,80,0.07);
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+        animation: cardIn 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+        overflow: hidden;
+    }
+    .obs-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(22,40,80,0.12); }
+    .obs-card::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, #E14D2A, #162850);
+        border-radius: 24px 24px 0 0; transform: scaleX(0); transform-origin: left;
+        transition: transform 0.3s;
+    }
+    .obs-card:hover::before { transform: scaleX(1); }
+    .obs-card:nth-child(1) { animation-delay: 0.06s; }
+    .obs-card:nth-child(2) { animation-delay: 0.12s; }
+    .obs-card:nth-child(3) { animation-delay: 0.18s; }
+    .obs-card:nth-child(4) { animation-delay: 0.24s; }
+    .obs-card:nth-child(5) { animation-delay: 0.30s; }
+    .obs-card:nth-child(6) { animation-delay: 0.36s; }
+
+    .year-summary-card {
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 24px; padding: 1.75rem;
+        box-shadow: 0 6px 28px rgba(22,40,80,0.07);
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+        animation: cardIn 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .year-summary-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(22,40,80,0.12); }
+    .year-summary-card:nth-child(1) { animation-delay: 0.06s; }
+    .year-summary-card:nth-child(2) { animation-delay: 0.12s; }
+    .year-summary-card:nth-child(3) { animation-delay: 0.18s; }
+
+    .timeline-col {
+        background: #f8fafc; border: 1px solid #e2e8f0;
+        border-radius: 18px; padding: 1rem 0.75rem; text-align: center;
+        transition: background 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s;
+    }
+    .timeline-col:hover { background: rgba(225,77,42,0.04); border-color: rgba(225,77,42,0.25); transform: translateY(-3px); }
+    .timeline-col.latest { background: rgba(225,77,42,0.06); border-color: rgba(225,77,42,0.3); }
+
+    .scorecard-item {
+        text-align: center; background: #f8fafc; border: 1px solid #e2e8f0;
+        border-radius: 20px; padding: 1.5rem 1rem;
+        transition: background 0.2s, border-color 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .scorecard-item:hover { background: rgba(225,77,42,0.04); border-color: rgba(225,77,42,0.2); transform: translateY(-3px); }
+
+    .section-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: rgba(225,77,42,0.1); border: 1px solid rgba(225,77,42,0.2);
+        color: #E14D2A; font-size: 0.7rem; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        padding: 4px 12px; border-radius: 999px; margin-bottom: 0.6rem;
+    }
+
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(24px) scale(0.96); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ PAGE HEADER ═══════════════════════════════════ -->
+<div class="section-header mb-8">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Compliance
+    </div>
+    <h2 class="text-2xl md:text-4xl font-black text-secondary"
+        style="font-family:'DM Serif Display',serif;">
+        UGC Compliance Dashboard
+    </h2>
+    <div class="mt-2 h-1 w-80 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+    <p class="mt-4 text-slate-500 max-w-3xl text-base leading-relaxed">
+        Curriculum alignment with UGC CCFUP and NEP 2020 through multidisciplinary
+        learning, flexible credits, internships, academic mobility, research
+        orientation and employability.
+    </p>
+</div>
+
+<!-- ══ KPI CARDS ════════════════════════════════════ -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+    <div class="kpi-card primary">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">Compliance 2025</p>
+        <div class="kpi-value text-6xl font-black text-primary"
+             style="font-family:'DM Serif Display',serif;">
+            {{ latest.compliance_percentage }}%
+        </div>
+        <p class="mt-4 text-sm text-slate-400 font-medium">Latest revision cycle</p>
+    </div>
+
+    <div class="kpi-card blue">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">Flexibility Index</p>
+        <div class="kpi-value text-6xl font-black text-secondary"
+             style="font-family:'DM Serif Display',serif;">
+            {{ latest.flexibility_index }}
+        </div>
+        <p class="mt-4 text-sm text-slate-400 font-medium">Score out of 100</p>
+    </div>
+
+    <div class="kpi-card green">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">Compliance Level</p>
+        <div class="kpi-value text-2xl font-black text-green-600 mt-2"
+             style="font-family:'DM Serif Display',serif; line-height:1.2;">
+            {{ latest.compliance_level }}
+        </div>
+        <p class="mt-4 text-sm text-slate-400 font-medium">UGC standard achieved</p>
+    </div>
+
+    <div class="kpi-card amber">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">NEP Status</p>
+        <div class="kpi-value text-2xl font-black text-accent mt-2"
+             style="font-family:'DM Serif Display',serif; line-height:1.2;">
+            Fully Aligned
+        </div>
+        <p class="mt-4 text-sm text-slate-400 font-medium">NEP 2020 compliant</p>
+    </div>
+
+</div>
+
+<!-- ══ CHARTS ═══════════════════════════════════════ -->
+<div class="mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+    <div class="chart-card">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Trends</p>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700"
+                    style="font-family:'DM Serif Display',serif;">
+                    UGC Compliance Growth
+                </h3>
+                <div class="mt-1.5 h-0.5 w-48 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="complianceChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="flex items-start gap-3 mb-6">
+            <div class="chart-accent-bar"></div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Progress</p>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700"
+                    style="font-family:'DM Serif Display',serif;">
+                    Flexibility Index Progress
+                </h3>
+                <div class="mt-1.5 h-0.5 w-48 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+            </div>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="flexibilityChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══ PROGRESSION INSIGHT ═══════════════════════════ -->
+<div class="mt-10 banner-card">
+    <div class="relative z-10">
+        <p class="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">Insight</p>
+        <h3 class="text-2xl font-black mb-4" style="font-family:'DM Serif Display',serif;">
+            UGC Progression Insight
+        </h3>
+        <p class="text-base text-white/85 leading-relaxed max-w-4xl">
+            The progression reflects adoption of UGC recommendations such as multidisciplinary education,
+            flexible credit systems, vocational integration, and student mobility.
+        </p>
+    </div>
+</div>
+
+<!-- ══ ALIGNMENT OVERVIEW ════════════════════════════ -->
+<div class="mt-10 glass-panel">
+    <div class="flex items-start gap-4 mb-5">
+        <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-lg shrink-0">📊</div>
+        <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Overview</p>
+            <h3 class="text-xl font-black text-secondary" style="font-family:'DM Serif Display',serif;">
+                UGC Alignment Overview
+            </h3>
+            <div class="mt-1.5 h-0.5 w-40 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+        </div>
+    </div>
+    <p class="text-slate-700 leading-relaxed text-base">{{ summary.overview }}</p>
+</div>
+
+<!-- ══ COMPLIANCE STATUS MATRIX ══════════════════════ -->
+<div class="section-header mt-14 mb-6">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Matrix
+    </div>
+    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-secondary"
+        style="font-family:'DM Serif Display',serif;">
+        UGC Compliance Status Matrix
+    </h2>
+    <div class="mt-2 h-1 w-72 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+</div>
+
+<div class="compliance-table overflow-x-auto">
+    <table>
+        <thead>
+            <tr>
+                <th class="text-left">Requirement</th>
+                <th>2018</th>
+                <th>2019</th>
+                <th>2021</th>
+                <th>2023</th>
+                <th>2024</th>
+                <th>2025</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in requirements %}
+            <tr>
+                <td class="req-name">{{ item.requirement }}</td>
+                <td>{{ item.year_2018 }}</td>
+                <td>{{ item.year_2019 }}</td>
+                <td>{{ item.year_2021 }}</td>
+                <td>{{ item.year_2023 }}</td>
+                <td>{{ item.year_2024 }}</td>
+                <td class="col-latest">{{ item.year_2025 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ KEY OBSERVATIONS ══════════════════════════════ -->
+<div class="section-header mt-14 mb-6">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Observations
+    </div>
+    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-secondary"
+        style="font-family:'DM Serif Display',serif;">
+        Key UGC Compliance Observations
+    </h2>
+    <div class="mt-2 h-1 w-72 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+    {% for item in observations %}
+    <div class="obs-card">
+        <div class="flex items-start gap-3 mb-4">
+            <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-base shrink-0">📌</div>
+            <h4 class="font-black text-primary text-base leading-tight">{{ item.title }}</h4>
+        </div>
+        <p class="text-slate-600 leading-relaxed text-sm">{{ item.description }}</p>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-12 text-slate-400 font-medium">No observations recorded.</div>
+    {% endfor %}
+</div>
+
+<!-- ══ OVERALL COMPLIANCE SUMMARY ════════════════════ -->
+<div class="section-header mt-14 mb-6">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Summary
+    </div>
+    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-secondary"
+        style="font-family:'DM Serif Display',serif;">
+        Overall Compliance Summary
+    </h2>
+    <div class="mt-2 h-1 w-64 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+    {% for item in year_summaries %}
+    <div class="year-summary-card">
+        <div class="text-4xl font-black text-primary mb-1"
+             style="font-family:'DM Serif Display',serif;">
+            {{ item.year }}
+        </div>
+        <div class="h-0.5 w-12 rounded-full bg-gradient-to-r from-primary to-secondary mb-4"></div>
+        <p class="text-slate-700 leading-relaxed text-sm">{{ item.interpretation }}</p>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-12 text-slate-400 font-medium">No year summaries found.</div>
+    {% endfor %}
+</div>
+
+<!-- ══ COMPLIANCE EVOLUTION TIMELINE ════════════════ -->
+<div class="section-header mt-14 mb-6">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Timeline
+    </div>
+    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-secondary"
+        style="font-family:'DM Serif Display',serif;">
+        Compliance Evolution Timeline
+    </h2>
+    <div class="mt-2 h-1 w-64 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+</div>
+
+<div class="glass-panel">
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+        {% for item in scores %}
+        <div class="timeline-col {% if forloop.last %}latest{% endif %}">
+            <div class="font-black text-primary text-lg mb-1"
+                 style="font-family:'DM Serif Display',serif;">
+                {{ item.year }}
+            </div>
+            <div class="text-xs font-semibold text-slate-500 mb-2">
+                {{ item.compliance_level }}
+            </div>
+            <div class="text-2xl font-black text-secondary"
+                 style="font-family:'DM Serif Display',serif;">
+                {{ item.compliance_percentage }}%
+            </div>
+            {% if forloop.last %}
+            <div class="mt-2 inline-block text-xs font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">
+                Latest
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ══ NEP READINESS SCORECARD ═══════════════════════ -->
+<div class="section-header mt-14 mb-6">
+    <div class="section-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        Scorecard
+    </div>
+    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-secondary"
+        style="font-family:'DM Serif Display',serif;">
+        NEP Readiness Scorecard
+    </h2>
+    <div class="mt-2 h-1 w-64 rounded-full bg-gradient-to-r from-primary to-secondary"></div>
+</div>
+
+<div class="glass-panel">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div class="scorecard-item">
+            <div class="text-4xl font-black text-primary mb-2"
+                 style="font-family:'DM Serif Display',serif;">98%</div>
+            <div class="text-sm text-slate-500 font-medium">UGC Alignment</div>
+        </div>
+        <div class="scorecard-item">
+            <div class="text-4xl font-black text-secondary mb-2"
+                 style="font-family:'DM Serif Display',serif;">96</div>
+            <div class="text-sm text-slate-500 font-medium">Flexibility Index</div>
+        </div>
+        <div class="scorecard-item">
+            <div class="text-4xl font-black text-green-600 mb-2"
+                 style="font-family:'DM Serif Display',serif;">ABC</div>
+            <div class="text-sm text-slate-500 font-medium">Credit Framework Ready</div>
+        </div>
+        <div class="scorecard-item">
+            <div class="text-4xl font-black text-accent mb-2"
+                 style="font-family:'DM Serif Display',serif;">NEP</div>
+            <div class="text-sm text-slate-500 font-medium">2020 Aligned</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ CONCLUSION ════════════════════════════════════ -->
+<div class="mt-10 banner-card">
+    <div class="relative z-10">
+        <p class="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">Conclusion</p>
+        <h3 class="text-3xl font-black mb-5" style="font-family:'DM Serif Display',serif;">
+            UGC Compliance Conclusion
+        </h3>
+        <p class="text-lg text-white/85 leading-relaxed max-w-4xl">
+            {{ summary.conclusion }}
+        </p>
+    </div>
+</div>
+
+<!-- ══ CHARTS SCRIPT ═════════════════════════════════ -->
+<script>
+    const chartDefaults = {
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 16, usePointStyle: true, pointStyleWidth: 10,
+                    font: { family: "'DM Sans', sans-serif", size: 11, weight: '600' },
+                    color: '#64748b'
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(22,40,80,0.92)',
+                titleFont: { family: "'DM Sans', sans-serif", size: 12, weight: '700' },
+                bodyFont:  { family: "'DM Sans', sans-serif", size: 11 },
+                padding: 12, cornerRadius: 10,
+                borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            }
+        },
+        animation: { duration: 900, easing: 'easeOutQuart' }
+    };
+
+    new Chart(document.getElementById('complianceChart'), {
+        type: 'line',
+        data: {
+            labels: {{ years|safe }},
+            datasets: [{
+                label: 'Compliance %',
+                data: {{ compliance_data|safe }},
+                borderColor: '#E14D2A',
+                backgroundColor: 'rgba(225,77,42,0.08)',
+                tension: 0.45, fill: true, pointRadius: 5,
+                pointBackgroundColor: '#E14D2A',
+                pointBorderColor: '#fff', pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: chartDefaults.plugins, animation: chartDefaults.animation,
+            scales: {
+                x: { grid: { display: false }, ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' } },
+                y: { grid: { color: 'rgba(148,163,184,0.12)', drawBorder: false }, ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' }, border: { display: false } }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('flexibilityChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ years|safe }},
+            datasets: [{
+                label: 'Flexibility Index',
+                data: {{ flexibility_data|safe }},
+                backgroundColor: [
+                    'rgba(22,40,80,0.45)', 'rgba(22,40,80,0.55)',
+                    'rgba(22,40,80,0.65)', 'rgba(22,40,80,0.75)',
+                    'rgba(22,40,80,0.88)', 'rgba(22,40,80,1.00)'
+                ],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: chartDefaults.plugins, animation: chartDefaults.animation,
+            scales: {
+                x: { grid: { display: false }, ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' } },
+                y: { grid: { color: 'rgba(148,163,184,0.12)', drawBorder: false }, ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#94a3b8' }, border: { display: false } }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

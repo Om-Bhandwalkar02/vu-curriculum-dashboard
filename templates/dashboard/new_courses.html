@@ -1,0 +1,443 @@
+{% extends 'base.html' %}
+
+{% block title %}New Courses (2019–2023){% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ── STAGGERED KPI REVEALS ───────────────────────── */
+    .kpi-card {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+        animation: popUp 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.14s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.23s; }
+    .kpi-card:nth-child(4) { animation-delay: 0.32s; }
+
+    @keyframes popUp {
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── SECTION HEAD ────────────────────────────────── */
+    .section-head {
+        opacity: 0; transform: translateX(-14px);
+        animation: headIn 0.5s ease forwards;
+    }
+    @keyframes headIn { to { opacity: 1; transform: translateX(0); } }
+
+    /* ── ACCENT BAR ──────────────────────────────────── */
+    .accent-bar { width: 0; animation: barGrow 0.7s ease 0.2s forwards; }
+    @keyframes barGrow { to { width: 30rem; } }
+
+    /* ── HOVER LIFT ──────────────────────────────────── */
+    .lift {
+        transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+                    box-shadow 0.25s ease;
+    }
+    .lift:hover {
+        transform: translateY(-6px) scale(1.015);
+        box-shadow: 0 28px 56px rgba(22,40,80,0.14);
+    }
+
+    /* ── GRADIENT NUMBERS ────────────────────────────── */
+    .num-primary {
+        background: linear-gradient(135deg,#E14D2A,#c23d1f);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .num-secondary {
+        background: linear-gradient(135deg,#162850,#243b6e);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .num-green {
+        background: linear-gradient(135deg,#10B981,#059669);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .num-red {
+        background: linear-gradient(135deg,#ef4444,#dc2626);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* ── ICON RING ───────────────────────────────────── */
+    .icon-ring {
+        width: 52px; height: 52px;
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem;
+        animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
+    }
+
+    /* ── CHART CARD ──────────────────────────────────── */
+    .chart-card { opacity: 0; animation: popUp 0.6s ease 0.12s forwards; }
+
+    /* ── TABLE STYLES ────────────────────────────────── */
+    .table-card { opacity: 0; animation: popUp 0.6s ease 0.2s forwards; }
+
+    .course-row {
+        opacity: 0;
+        transform: translateX(-8px);
+        animation: slideIn 0.35s ease forwards;
+    }
+    @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+
+    .course-row:nth-child(1)  { animation-delay: 0.04s; }
+    .course-row:nth-child(2)  { animation-delay: 0.08s; }
+    .course-row:nth-child(3)  { animation-delay: 0.12s; }
+    .course-row:nth-child(4)  { animation-delay: 0.16s; }
+    .course-row:nth-child(5)  { animation-delay: 0.20s; }
+    .course-row:nth-child(6)  { animation-delay: 0.24s; }
+    .course-row:nth-child(7)  { animation-delay: 0.28s; }
+    .course-row:nth-child(8)  { animation-delay: 0.32s; }
+    .course-row:nth-child(9)  { animation-delay: 0.36s; }
+    .course-row:nth-child(10) { animation-delay: 0.40s; }
+
+    /* ── TABLE ROW HOVER ─────────────────────────────── */
+    .course-row:hover {
+        background: rgba(225,77,42,0.04);
+        transition: background 0.2s;
+    }
+
+    /* ── DOMAIN BADGE ────────────────────────────────── */
+    .domain-badge {
+        display: inline-flex; align-items: center;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        background: rgba(22,40,80,0.08);
+        color: #162850;
+        border: 1px solid rgba(22,40,80,0.12);
+    }
+
+    /* ── YEAR BADGE ──────────────────────────────────── */
+    .year-badge {
+        display: inline-flex; align-items: center;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        background: rgba(225,77,42,0.10);
+        color: #E14D2A;
+        border: 1px solid rgba(225,77,42,0.15);
+    }
+
+    /* ── CREDIT BADGE ────────────────────────────────── */
+    .credit-badge {
+        display: inline-flex; align-items: center;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        background: rgba(16,185,129,0.10);
+        color: #059669;
+        border: 1px solid rgba(16,185,129,0.18);
+    }
+
+    /* ── SEM BADGE ───────────────────────────────────── */
+    .sem-badge {
+        display: inline-flex; align-items: center;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        background: rgba(245,158,11,0.10);
+        color: #d97706;
+        border: 1px solid rgba(245,158,11,0.18);
+    }
+
+    /* ── COUNTER POP ─────────────────────────────────── */
+    @keyframes counterPop {
+        0% { transform: scale(0.7); opacity: 0; }
+        70% { transform: scale(1.08); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .counter-pop { animation: counterPop 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
+
+    /* ── FADE IN ─────────────────────────────────────── */
+    .fade-in { opacity: 0; animation: popUp 0.6s ease forwards; }
+
+    /* ── VISION BANNER ───────────────────────────────── */
+    .vision-banner {
+        opacity: 0; animation: popUp 0.7s ease 0.25s forwards;
+        position: relative; overflow: hidden;
+    }
+    .vision-banner::after {
+        content:"🎓";
+        position:absolute; right:-10px; bottom:-20px;
+        font-size:10rem; opacity:0.06; line-height:1;
+        pointer-events:none;
+    }
+
+    /* ── SEARCH BOX ──────────────────────────────────── */
+    #search-input:focus {
+        outline: none;
+        border-color: #E14D2A;
+        box-shadow: 0 0 0 3px rgba(225,77,42,0.12);
+    }
+
+    /* ── SCROLL TABLE ────────────────────────────────── */
+    .table-scroll { overflow-x: auto; }
+    .table-scroll::-webkit-scrollbar { height: 6px; }
+    .table-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+    .table-scroll::-webkit-scrollbar-thumb { background: #E14D2A; border-radius: 3px; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ PAGE HEADER ══ -->
+<div class="mb-10 section-head">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Curriculum Expansion</span>
+    </div>
+    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-wide text-secondary leading-tight" style="font-family:'DM Serif Display',serif;">
+        New Courses &<br class="hidden md:block"> Curriculum Expansion
+    </h2>
+    <div class="mt-3 h-1 rounded-full bg-gradient-to-r from-primary to-secondary accent-bar"></div>
+    <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
+        Tracking newly introduced courses, credit additions, industry-facing subjects
+        and legacy curriculum removals across the 2019–2023 revision cycle.
+    </p>
+</div>
+
+<!-- ══ KPI CARDS ══ -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <!-- NEW COURSES -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-primary/8 blur-2xl group-hover:bg-primary/14 transition-all duration-500"></div>
+        <div class="icon-ring bg-primary/10 mb-4">✨</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">New Courses Added</p>
+        <h2 class="mt-3 text-6xl font-black num-primary leading-none counter-pop">{{ summary.new_courses_added }}</h2>
+        <p class="mt-3 text-xs text-green-600 font-bold">↑ {{ summary.percentage_growth }}% Growth</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- NEW CREDITS -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-secondary/8 blur-2xl group-hover:bg-secondary/14 transition-all duration-500"></div>
+        <div class="icon-ring bg-secondary/10 mb-4">🎯</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">New Credits</p>
+        <h2 class="mt-3 text-6xl font-black num-secondary leading-none counter-pop">{{ summary.new_credits }}</h2>
+        <p class="mt-3 text-xs text-slate-500 font-semibold">Added to Curriculum</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-secondary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- INDUSTRY FACING -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-green-400/8 blur-2xl group-hover:bg-green-400/16 transition-all duration-500"></div>
+        <div class="icon-ring bg-green-100 mb-4">🏭</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Industry Facing</p>
+        <h2 class="mt-3 text-6xl font-black num-green leading-none counter-pop">{{ summary.industry_facing }}</h2>
+        <p class="mt-3 text-xs text-slate-500 font-semibold">Internship + Projects</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- COURSES DROPPED -->
+    <div class="kpi-card lift relative rounded-[28px] bg-gradient-to-br from-secondary via-secondary/95 to-secondary/80 p-7 shadow-xl overflow-hidden group text-white">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="w-[52px] h-[52px] rounded-2xl bg-white/15 flex items-center justify-center text-2xl mb-4">🗑️</div>
+        <p class="uppercase tracking-widest text-xs text-white/50 font-bold">Courses Dropped</p>
+        <h2 class="mt-3 text-6xl font-black text-white leading-none counter-pop">{{ summary.courses_dropped }}</h2>
+        <p class="mt-3 text-xs text-white/50 font-semibold">Legacy Curriculum Removed</p>
+    </div>
+
+</div>
+
+<!-- ══ GROWTH CHART ══ -->
+<div class="mt-12 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl">
+    <div class="flex items-center gap-3 mb-6">
+        <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <div>
+            <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">New Courses by Revision & Category</h3>
+            <p class="text-xs text-slate-400 mt-0.5">Core · Elective · Skill · Experiential breakdown</p>
+        </div>
+    </div>
+    <div class="relative h-[320px]">
+        <canvas id="growthChart"></canvas>
+    </div>
+</div>
+
+<!-- ══ COURSE TABLE ══ -->
+<div class="mt-12 table-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl">
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div class="flex items-center gap-3">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
+            <div>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Newly Introduced Courses</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Full list of additions since 2019</p>
+            </div>
+        </div>
+        <!-- SEARCH -->
+        <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
+            <input
+                id="search-input"
+                type="text"
+                placeholder="Search courses…"
+                oninput="filterTable(this.value)"
+                class="pl-9 pr-4 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-700 w-64 transition-all duration-200"
+            >
+        </div>
+    </div>
+
+    <div class="table-scroll rounded-2xl overflow-hidden border border-slate-100">
+        <table class="w-full min-w-[700px]" id="courses-table">
+            <thead class="sticky top-0 z-10">
+                <tr class="bg-gradient-to-r from-secondary to-secondary/80 text-white">
+                    <th class="text-left py-4 px-5 text-xs font-bold uppercase tracking-widest">Course</th>
+                    <th class="text-left py-4 px-4 text-xs font-bold uppercase tracking-widest">Code</th>
+                    <th class="text-left py-4 px-4 text-xs font-bold uppercase tracking-widest">Year</th>
+                    <th class="text-left py-4 px-4 text-xs font-bold uppercase tracking-widest">Credits</th>
+                    <th class="text-left py-4 px-4 text-xs font-bold uppercase tracking-widest">Semester</th>
+                    <th class="text-left py-4 px-4 text-xs font-bold uppercase tracking-widest">Domain</th>
+                </tr>
+            </thead>
+            <tbody id="courses-tbody">
+                {% for course in courses %}
+                <tr class="course-row border-b border-slate-100 cursor-default">
+                    <td class="py-4 px-5 font-semibold text-slate-800 text-sm">{{ course.course_name }}</td>
+                    <td class="py-4 px-4">
+                        <span class="font-mono text-xs font-bold text-primary bg-primary/8 px-2 py-1 rounded-lg border border-primary/15">{{ course.course_code }}</span>
+                    </td>
+                    <td class="py-4 px-4">
+                        <span class="year-badge">{{ course.introduced_year }}</span>
+                    </td>
+                    <td class="py-4 px-4">
+                        <span class="credit-badge">{{ course.credit }} cr</span>
+                    </td>
+                    <td class="py-4 px-4">
+                        <span class="sem-badge">Sem {{ course.semester }}</span>
+                    </td>
+                    <td class="py-4 px-4">
+                        <span class="domain-badge">{{ course.domain }}</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="py-10 text-center text-slate-400 text-sm font-semibold">No courses found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ROW COUNT -->
+    <div class="mt-4 flex items-center justify-between">
+        <p class="text-xs text-slate-400 font-semibold" id="row-count">
+            Showing <span id="visible-count">{{ courses|length }}</span> of {{ courses|length }} courses
+        </p>
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+            <span class="text-xs text-slate-400 font-semibold">2019–2023 Revision Cycle</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══ VISION BANNER ══ -->
+<div class="vision-banner mt-12 rounded-[32px] bg-gradient-to-r from-primary via-primary/90 to-secondary text-white p-10 shadow-2xl">
+    <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/70 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">
+        Curriculum Vision
+    </span>
+    <h3 class="text-3xl md:text-4xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
+        Evolving Curriculum for<br class="hidden md:block"> Tomorrow's Challenges
+    </h3>
+    <p class="mt-5 text-lg leading-relaxed text-white/85 max-w-3xl">
+        Continuous curriculum expansion driven by industry demands, NEP mandates
+        and emerging technology — ensuring students are always ahead of the curve.
+    </p>
+</div>
+
+<script>
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = "#64748b";
+
+const labels = [
+    {% for item in growth %}
+        "{{ item.year }}",
+    {% endfor %}
+];
+
+new Chart(document.getElementById('growthChart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Core',
+                data: [{% for item in growth %}{{ item.core }},{% endfor %}],
+                backgroundColor: 'rgba(225,77,42,0.85)',
+                borderRadius: 6,
+                borderSkipped: false,
+            },
+            {
+                label: 'Elective',
+                data: [{% for item in growth %}{{ item.elective }},{% endfor %}],
+                backgroundColor: 'rgba(22,40,80,0.80)',
+                borderRadius: 6,
+                borderSkipped: false,
+            },
+            {
+                label: 'Skill',
+                data: [{% for item in growth %}{{ item.skill }},{% endfor %}],
+                backgroundColor: 'rgba(16,185,129,0.80)',
+                borderRadius: 6,
+                borderSkipped: false,
+            },
+            {
+                label: 'Experiential',
+                data: [{% for item in growth %}{{ item.experiential }},{% endfor %}],
+                backgroundColor: 'rgba(245,158,11,0.80)',
+                borderRadius: 6,
+                borderSkipped: false,
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10, font: { weight: '700' } }
+            }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: { font: { weight: '700' } }
+            },
+            y: {
+                grid: { color: 'rgba(22,40,80,0.06)' },
+                ticks: { font: { weight: '600' } }
+            }
+        },
+        animation: { duration: 1200, easing: 'easeOutQuart' }
+    }
+});
+
+/* ── TABLE SEARCH ────────────────────────────────── */
+function filterTable(query) {
+    const rows = document.querySelectorAll('#courses-tbody tr.course-row');
+    const q = query.toLowerCase();
+    let visible = 0;
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const show = text.includes(q);
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+    });
+    document.getElementById('visible-count').textContent = visible;
+}
+</script>
+
+{% endblock %}

@@ -201,24 +201,6 @@ python manage.py runserver
 
 ---
 
-## 📸 Screenshots
-
-Add screenshots of:
-
-- Dashboard Overview
-- SWOT Analysis
-- Incremental Growth Dashboard
-- Curriculum Flexibility Dashboard
-- UGC Compliance Dashboard
-
-inside:
-
-```text
-docs/screenshots/
-```
-
----
-
 ## 👨‍💻 Author
 
 **Om Bhandwalkar**

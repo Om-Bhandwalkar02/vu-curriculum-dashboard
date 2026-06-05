@@ -1,0 +1,858 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Academic Review{% endblock %}
+
+{% block extra_head %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --red:    #E14D2A;
+    --navy:   #162850;
+    --gold:   #F59E0B;
+    --glass:  rgba(255,255,255,0.72);
+    --glass-b:rgba(255,255,255,0.52);
+    --soft:   0 2px 16px rgba(22,40,80,0.07);
+    --card:   0 8px 32px rgba(22,40,80,0.10);
+    --lift:   0 22px 64px rgba(22,40,80,0.17);
+    --spring: cubic-bezier(0.34,1.56,0.64,1);
+    --out:    cubic-bezier(0.16,1,0.3,1);
+    --serif:  "DM Serif Display",Georgia,serif;
+    --sans:   "DM Sans",sans-serif;
+    --mono:   "JetBrains Mono",monospace;
+}
+#ar-root { font-family:var(--sans); }
+
+/* HERO */
+.ar-hero{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(140deg,var(--navy) 0%,#1d3a6e 55%,#0e1f45 100%);padding:52px 56px 48px;margin-bottom:40px;}
+.ar-hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 92% 15%,rgba(245,158,11,.20) 0%,transparent 60%),radial-gradient(ellipse 40% 55% at 5% 85%,rgba(225,77,42,.18) 0%,transparent 55%);}
+.ar-hero::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:36px 36px;}
+.ar-hero-inner{position:relative;z-index:1;}
+.ar-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.65rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,158,11,.9);background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.25);padding:5px 14px;border-radius:999px;margin-bottom:18px;}
+.ar-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:edot 2s ease-in-out infinite;}
+@keyframes edot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+.ar-hero-title{font-family:var(--serif);font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:400;color:#fff;line-height:1.1;margin-bottom:14px;}
+.ar-hero-title em{font-style:italic;background:linear-gradient(90deg,var(--gold),#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ar-hero-sub{font-size:.88rem;color:rgba(255,255,255,.48);max-width:520px;line-height:1.65;}
+.ar-hero-stats{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.08);padding-top:28px;}
+.ar-hstat{display:flex;flex-direction:column;gap:2px;}
+.ar-hstat-val{font-family:var(--serif);font-size:2rem;font-style:italic;color:#fff;line-height:1;}
+.ar-hstat-val b{color:var(--gold);font-style:normal;font-weight:400;}
+.ar-hstat-lbl{font-family:var(--mono);font-size:.60rem;color:rgba(255,255,255,.35);letter-spacing:.12em;text-transform:uppercase;}
+.ar-hdiv{width:1px;background:rgba(255,255,255,.10);align-self:stretch;margin:4px 0;}
+.ar-hero-inner>*{opacity:0;animation:heroUp .7s var(--out) forwards;}
+.ar-hero-inner>*:nth-child(1){animation-delay:.05s}.ar-hero-inner>*:nth-child(2){animation-delay:.14s}
+.ar-hero-inner>*:nth-child(3){animation-delay:.23s}.ar-hero-inner>*:nth-child(4){animation-delay:.32s}
+@keyframes heroUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* KPI STRIP */
+.ar-kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:40px;}
+@media(max-width:1200px){.ar-kpi-strip{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.ar-kpi-strip{grid-template-columns:repeat(2,1fr)}}
+.ar-kpi{background:var(--glass);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid var(--glass-b);border-radius:20px;padding:20px 16px 16px;box-shadow:var(--soft);position:relative;overflow:hidden;transition:transform .28s var(--spring),box-shadow .25s;opacity:0;transform:translateY(18px) scale(.97);}
+.ar-kpi.vis{opacity:1;transform:translateY(0) scale(1);}
+.ar-kpi:hover{transform:translateY(-5px) scale(1.02);box-shadow:var(--lift);}
+.ar-kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:2.5px;border-radius:2px 2px 0 0;}
+.kpi-r::before{background:linear-gradient(90deg,var(--red),transparent)}.kpi-n::before{background:linear-gradient(90deg,var(--navy),transparent)}
+.kpi-g::before{background:linear-gradient(90deg,var(--gold),transparent)}.kpi-gr::before{background:linear-gradient(90deg,#10B981,transparent)}
+.kpi-p::before{background:linear-gradient(90deg,#7C3AED,transparent)}
+.kpi-dk{background:linear-gradient(135deg,var(--navy),#1d3a6e);border-color:rgba(255,255,255,.08);}
+.kpi-dk::before{background:linear-gradient(90deg,var(--red),var(--gold));}
+.ar-kpi-icon{font-size:1.3rem;line-height:1;margin-bottom:10px;display:block;}
+.ar-kpi-lbl{font-family:var(--mono);font-size:.57rem;letter-spacing:.13em;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;}
+.kpi-dk .ar-kpi-lbl{color:rgba(255,255,255,.35);}
+.ar-kpi-val{font-family:var(--serif);font-size:2.4rem;font-style:italic;line-height:1;margin-bottom:3px;}
+.kpi-r .ar-kpi-val{color:var(--red)}.kpi-n .ar-kpi-val{color:var(--navy)}.kpi-g .ar-kpi-val{color:var(--gold)}
+.kpi-gr .ar-kpi-val{color:#059669}.kpi-p .ar-kpi-val{color:#7C3AED}.kpi-dk .ar-kpi-val{color:#fff;}
+.ar-kpi-sub{font-size:.67rem;color:#94a3b8;font-weight:500;}.kpi-dk .ar-kpi-sub{color:rgba(255,255,255,.30);}
+
+/* SECTION LABEL */
+.ar-sec-label{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.ar-sec-tag{font-family:var(--mono);font-size:.62rem;font-weight:500;letter-spacing:.10em;color:var(--red);background:rgba(225,77,42,.07);border:1px solid rgba(225,77,42,.16);padding:3px 9px;border-radius:6px;flex-shrink:0;}
+.ar-sec-name{font-family:var(--sans);font-size:1rem;font-weight:800;color:var(--navy);}
+.ar-sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(22,40,80,.10),transparent);}
+.ar-sec{margin-bottom:48px;opacity:0;transform:translateY(24px);transition:opacity .55s var(--out),transform .55s var(--out);}
+.ar-sec.vis{opacity:1;transform:translateY(0);}
+
+/* GLASS CARD */
+.ar-card{background:var(--glass);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);border:1px solid var(--glass-b);border-radius:24px;box-shadow:var(--card);overflow:hidden;transition:transform .28s var(--spring),box-shadow .25s;}
+.ar-card:hover{transform:translateY(-4px);box-shadow:var(--lift);}
+.ar-card-hd{display:flex;align-items:center;gap:13px;padding:22px 26px 0;}
+.ar-card-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.ico-r{background:rgba(225,77,42,.09)}.ico-n{background:rgba(22,40,80,.07)}.ico-g{background:rgba(245,158,11,.10)}
+.ico-gr{background:rgba(16,185,129,.09)}.ico-p{background:rgba(124,58,237,.09)}
+.ar-card-title{font-size:.80rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;}
+.ar-card-sub{font-size:.70rem;color:#94a3b8;margin-top:1px;}
+.ar-card-tag{margin-left:auto;font-family:var(--mono);font-size:.60rem;color:var(--red);background:rgba(225,77,42,.07);border:1px solid rgba(225,77,42,.14);padding:2px 8px;border-radius:5px;flex-shrink:0;}
+.ar-card-bd{padding:16px 26px 24px;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+@media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:780px){.g2,.g3{grid-template-columns:1fr}}
+
+/* TABLE */
+.ar-tw{border-radius:14px;overflow:hidden;border:1px solid rgba(22,40,80,.07);}
+.ar-t{width:100%;border-collapse:collapse;}
+.ar-t thead tr{background:var(--navy);}
+.ar-t th{padding:10px 14px;font-family:var(--mono);font-size:.59rem;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.60);text-align:left;white-space:nowrap;}
+.ar-t td{padding:10px 14px;font-size:.82rem;color:#334155;font-weight:500;border-bottom:1px solid rgba(22,40,80,.05);}
+.ar-t tbody tr:last-child td{border-bottom:none;}
+.ar-t tbody tr:hover td{background:rgba(225,77,42,.03);}
+.ar-t .tot td{background:linear-gradient(90deg,rgba(245,158,11,.11),rgba(245,158,11,.03)) !important;font-weight:800;color:#92400e;font-family:var(--mono);font-size:.76rem;}
+.tc{text-align:center;}.tb{font-weight:800;color:var(--navy);}.tm{color:#94a3b8;font-size:.71rem;font-weight:400;}.tg{color:#059669;font-weight:700;}
+
+/* RESULT BADGES */
+.rb{display:inline-block;padding:3px 11px;border-radius:999px;font-family:var(--mono);font-size:.66rem;font-weight:500;}
+.rb-hi{background:#dcfce7;color:#15803d;}.rb-mid{background:#fef9c3;color:#a16207;}.rb-lo{background:#fee2e2;color:#b91c1c;}
+
+/* IMAGE FRAME */
+.ar-img-frame{border-radius:14px;overflow:hidden;border:1px solid rgba(22,40,80,.07);box-shadow:var(--soft);background:#f8fafc;transition:transform .28s var(--spring),box-shadow .25s;}
+.ar-img-frame:hover{transform:scale(1.015) translateY(-3px);box-shadow:var(--lift);}
+.ar-img-frame img{width:100%;display:block;}
+.ar-img-frame.cover img{object-fit:cover;height:230px;}
+.ar-img-frame.contain img{object-fit:contain;padding:14px;max-height:480px;}
+.ar-img-cap{font-family:var(--mono);font-size:.60rem;letter-spacing:.09em;text-transform:uppercase;color:#94a3b8;padding:9px 13px;background:#f8fafc;border-top:1px solid rgba(22,40,80,.05);}
+
+/* MINI TILES */
+.ar-mini-g{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:15px;}
+.ar-mini{border-radius:13px;padding:13px 15px;text-align:center;border:1px solid transparent;}
+.m-gr{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.14);}.m-p{background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.12);}.m-ind{background:rgba(99,102,241,.06);border-color:rgba(99,102,241,.12);}
+.ar-mini-lbl{font-family:var(--mono);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;}
+.m-gr .ar-mini-lbl{color:#059669;}.m-p .ar-mini-lbl{color:#7C3AED;}.m-ind .ar-mini-lbl{color:#4F46E5;}
+.ar-mini-val{font-family:var(--serif);font-size:1.9rem;font-style:italic;line-height:1;}
+.m-gr .ar-mini-val{color:#059669;}.m-p .ar-mini-val{color:#7C3AED;}.m-ind .ar-mini-val{color:#4F46E5;}
+.ar-mini-sub{font-size:.64rem;color:#94a3b8;margin-top:1px;}
+
+/* HIGHLIGHT BOX */
+.ar-hl{border-radius:14px;padding:18px 22px;margin-top:16px;background:linear-gradient(135deg,rgba(245,158,11,.09),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.22);border-left:3px solid var(--gold);}
+.ar-hl-title{font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:7px;}
+.ar-hl p{font-size:.84rem;color:#78350f;line-height:1.65;}
+
+/* INFO TILES */
+.ar-info-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:780px){.ar-info-g{grid-template-columns:1fr}}
+.ar-info-t{background:rgba(22,40,80,.04);border:1px solid rgba(22,40,80,.07);border-radius:13px;padding:14px 16px;}
+.ar-info-t-lbl{font-family:var(--mono);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:5px;}
+.ar-info-t-val{font-weight:800;color:var(--navy);font-size:.88rem;}
+.ar-info-t-sub{font-size:.70rem;color:#94a3b8;margin-top:1px;}
+
+/* DATE HERO */
+.ar-date-hero{background:linear-gradient(140deg,var(--navy),#1d3a6e);border-radius:20px;padding:26px 22px;text-align:center;color:white;position:relative;overflow:hidden;}
+.ar-date-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(245,158,11,.20),transparent 60%);}
+.ar-date-day{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;position:relative;}
+.ar-date-date{font-family:var(--serif);font-size:1.75rem;font-style:italic;color:#fff;line-height:1.15;position:relative;}
+.ar-date-bdg{display:inline-block;margin-top:13px;padding:5px 13px;border-radius:999px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.28);font-family:var(--mono);font-size:.60rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);position:relative;}
+
+/* TIMELINE */
+.ar-tl-item{display:flex;gap:14px;align-items:flex-start;padding:14px 18px;border-radius:13px;border:1px solid transparent;transition:background .2s,border-color .2s;}
+.ar-tl-item:hover{background:rgba(22,40,80,.03);border-color:rgba(22,40,80,.07);}
+.ar-tl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px;position:relative;}
+.ar-tl-dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1.5px solid currentColor;opacity:.25;}
+.ar-tl-name{font-weight:800;font-size:.87rem;color:var(--navy);margin-bottom:2px;}
+.ar-tl-sub{font-size:.72rem;color:#94a3b8;}
+.ar-ig{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:5px 13px;border-radius:999px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white;font-size:.68rem;font-weight:700;text-decoration:none;letter-spacing:.04em;transition:opacity .2s,transform .2s var(--spring);}
+.ar-ig:hover{opacity:.88;transform:scale(1.04);}
+
+/* VISIT CARD */
+.ar-visit{border-radius:20px;overflow:hidden;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-b);box-shadow:var(--card);transition:transform .28s var(--spring),box-shadow .25s;}
+.ar-visit:hover{transform:translateY(-6px);box-shadow:var(--lift);}
+.ar-visit-hd{padding:14px 18px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(22,40,80,.07);}
+.ar-visit-ico{width:34px;height:34px;border-radius:10px;background:rgba(22,40,80,.06);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.ar-visit-name{font-weight:800;font-size:.83rem;color:var(--navy);}
+.ar-visit-loc{font-size:.68rem;color:#94a3b8;margin-top:1px;}
+
+/* CHART */
+.ar-chart-wrap{background:var(--glass);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);border:1px solid var(--glass-b);border-radius:24px;box-shadow:var(--card);padding:28px 30px;}
+.ar-chart-title{font-family:var(--serif);font-size:1.45rem;font-style:italic;color:var(--navy);}
+.ar-chart-sub{font-size:.73rem;color:#94a3b8;margin-top:3px;margin-bottom:24px;}
+
+/* ════════════════════════════════════════
+   INITIATIVES — CLEAN ROW LAYOUT
+════════════════════════════════════════ */
+
+/* NIRF banner */
+.ar-nirf{background:linear-gradient(140deg,var(--navy),#1d3a6e);border-radius:16px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.ar-nirf-title{font-family:var(--mono);font-size:.60rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);white-space:nowrap;flex-shrink:0;}
+.ar-nirf-items{display:flex;gap:7px;flex-wrap:wrap;}
+.ar-nirf-item{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:.70rem;color:rgba(255,255,255,.78);font-weight:500;}
+.ar-nirf-item::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+
+/* Row wrappers */
+.init-row { margin-bottom: 16px; }
+
+.init-row--3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+.init-row--2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+/* centered card — 60% wide on desktop */
+.init-row--center {
+    display: flex;
+    justify-content: center;
+}
+.init-row--center .init-card {
+    width: 60%;
+}
+/* full-width card */
+.init-row--full {
+    display: block;
+}
+
+@media(max-width:900px) {
+    .init-row--3  { grid-template-columns: repeat(2,1fr); }
+    .init-row--center .init-card { width: 80%; }
+}
+@media(max-width:600px) {
+    .init-row--3, .init-row--2 { grid-template-columns: 1fr; }
+    .init-row--center .init-card { width: 100%; }
+}
+
+/* The card */
+.init-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--glass-b);
+    border-radius: 18px;
+    box-shadow: var(--card);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .28s var(--spring), box-shadow .25s;
+}
+.init-card:hover { transform: translateY(-5px); box-shadow: var(--lift); }
+
+/* top accent line */
+.init-card::before { content:""; display:block; height:3px; flex-shrink:0; }
+.ic-red::before   { background: linear-gradient(90deg,var(--red),rgba(225,77,42,.08)); }
+.ic-navy::before  { background: linear-gradient(90deg,var(--navy),rgba(22,40,80,.08)); }
+.ic-gold::before  { background: linear-gradient(90deg,var(--gold),rgba(245,158,11,.08)); }
+.ic-green::before { background: linear-gradient(90deg,#059669,rgba(5,150,105,.08)); }
+.ic-blue::before  { background: linear-gradient(90deg,#3B82F6,rgba(59,130,246,.08)); }
+
+/* image zone */
+.init-img {
+    position: relative;
+    overflow: hidden;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+/* portrait — fixed ratio 4:5 */
+.init-img--portrait { aspect-ratio: 4/5; }
+/* landscape — fixed ratio 16:9 */
+.init-img--landscape { aspect-ratio: 16/9; }
+/* dual side-by-side — panoramic */
+.init-img--dual {
+    aspect-ratio: 21/9;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: rgba(22,40,80,.15);
+}
+.init-dual-slot { overflow: hidden; background: #f1f5f9; }
+
+.init-img img,
+.init-dual-slot img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform .5s var(--out);
+}
+.init-card:hover .init-img img,
+.init-card:hover .init-dual-slot img { transform: scale(1.04); }
+
+/* overlay badges bottom-left of image */
+.init-badges {
+    position: absolute;
+    bottom: 10px; left: 10px; z-index: 2;
+    display: flex; gap: 5px; align-items: center;
+}
+.init-num {
+    font-family: var(--mono); font-size: .58rem; font-weight: 500;
+    letter-spacing: .10em; text-transform: uppercase;
+    background: rgba(10,18,40,.80); color: #fff;
+    backdrop-filter: blur(10px);
+    padding: 3px 9px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+}
+.init-cat {
+    font-family: var(--mono); font-size: .58rem; font-weight: 500;
+    letter-spacing: .07em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.20);
+    backdrop-filter: blur(10px);
+}
+.icat-red   { background: rgba(225,77,42,.85);  color:#fff; }
+.icat-navy  { background: rgba(22,40,80,.85);   color:#fff; }
+.icat-gold  { background: rgba(180,120,0,.90);  color:#fff; }
+.icat-green { background: rgba(5,150,105,.85);  color:#fff; }
+.icat-blue  { background: rgba(37,99,235,.85);  color:#fff; }
+
+/* card body */
+.init-body {
+    padding: 14px 16px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.init-title {
+    font-size: .86rem; font-weight: 800;
+    color: var(--navy); line-height: 1.35;
+}
+
+/* pill tags */
+.init-tags { display:flex; gap:5px; flex-wrap:wrap; }
+.init-tag {
+    display:inline-block; padding:2px 9px; border-radius:999px;
+    font-family:var(--mono); font-size:.58rem; font-weight:500; letter-spacing:.04em;
+    background:rgba(22,40,80,.06); color:var(--navy);
+    border:1px solid rgba(22,40,80,.10);
+}
+.init-tag--blue { background:rgba(59,130,246,.08); color:#1d4ed8; border-color:rgba(59,130,246,.15); }
+
+/* event meta */
+.init-meta { display:flex; flex-direction:column; gap:5px; }
+.init-meta--2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 24px;
+}
+@media(max-width:640px){ .init-meta--2col { grid-template-columns: 1fr; } }
+.init-meta-row { display:flex; align-items:flex-start; gap:7px; }
+.init-meta-ico  { font-size:.78rem; flex-shrink:0; width:16px; text-align:center; margin-top:1px; }
+.init-meta-lbl  { font-family:var(--mono); font-size:.56rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--red); flex-shrink:0; min-width:42px; padding-top:2px; }
+.init-meta-val  { font-size:.76rem; color:#334155; font-weight:500; line-height:1.4; }
+
+@media(max-width:780px){.ar-hero{padding:36px 28px 32px;}.ar-card-bd{padding:14px 18px 20px;}.ar-card-hd{padding:18px 18px 0;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="ar-root">
+
+<!-- HERO -->
+<div class="ar-hero">
+    <div class="ar-hero-inner">
+        <div class="ar-eyebrow"><span class="ar-eyebrow-dot"></span>Academic Year 2025 – 26</div>
+        <h1 class="ar-hero-title">Academic Review &amp;<br><em>Performance Overview</em></h1>
+        <p class="ar-hero-sub">Comprehensive review of research output, industry engagement, student outcomes, compliance and institutional activities — Computer Science Department.</p>
+        <div class="ar-hero-stats">
+            <div class="ar-hstat"><div class="ar-hstat-val">38<b>+</b></div><div class="ar-hstat-lbl">Publications</div></div>
+            <div class="ar-hdiv"></div>
+            <div class="ar-hstat"><div class="ar-hstat-val">111</div><div class="ar-hstat-lbl">Citations</div></div>
+            <div class="ar-hdiv"></div>
+            <div class="ar-hstat"><div class="ar-hstat-val">21</div><div class="ar-hstat-lbl">IPR / Patents</div></div>
+            <div class="ar-hdiv"></div>
+            <div class="ar-hstat"><div class="ar-hstat-val">125</div><div class="ar-hstat-lbl">New Admissions</div></div>
+            <div class="ar-hdiv"></div>
+            <div class="ar-hstat"><div class="ar-hstat-val">7</div><div class="ar-hstat-lbl">Dept Initiatives</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- KPI STRIP -->
+<div class="ar-kpi-strip">
+    <div class="ar-kpi kpi-r"><span class="ar-kpi-icon">📄</span><div class="ar-kpi-lbl">Publications</div><div class="ar-kpi-val">38</div><div class="ar-kpi-sub">2025-26</div></div>
+    <div class="ar-kpi kpi-n"><span class="ar-kpi-icon">🔗</span><div class="ar-kpi-lbl">Citations</div><div class="ar-kpi-val">111</div><div class="ar-kpi-sub">2025-26</div></div>
+    <div class="ar-kpi kpi-g"><span class="ar-kpi-icon">💡</span><div class="ar-kpi-lbl">IPR / Patents</div><div class="ar-kpi-val">21</div><div class="ar-kpi-sub">2025-26</div></div>
+    <div class="ar-kpi kpi-gr"><span class="ar-kpi-icon">🏭</span><div class="ar-kpi-lbl">Internships</div><div class="ar-kpi-val">64</div><div class="ar-kpi-sub">2024-25</div></div>
+    <div class="ar-kpi kpi-p"><span class="ar-kpi-icon">🔧</span><div class="ar-kpi-lbl">Live Projects</div><div class="ar-kpi-val">11</div><div class="ar-kpi-sub">2025-26</div></div>
+    <div class="ar-kpi kpi-dk"><span class="ar-kpi-icon">🎓</span><div class="ar-kpi-lbl">Admissions</div><div class="ar-kpi-val">125</div><div class="ar-kpi-sub">FY 2025-26</div></div>
+</div>
+
+<!-- §1 + §2 -->
+<div class="ar-sec g2">
+    <div class="ar-card">
+        <div class="ar-card-hd"><div class="ar-card-ico ico-r">📄</div><div><div class="ar-card-title">1 · Publications</div><div class="ar-card-sub">Faculty-wise · 2025-26</div></div><div class="ar-card-tag">§ 01</div></div>
+        <div class="ar-card-bd"><div class="ar-tw"><table class="ar-t">
+            <thead><tr><th>Faculty</th><th class="tc">Papers</th></tr></thead>
+            <tbody>
+                <tr><td>Dr. Rajkumar Jagdale</td><td class="tc tb">9</td></tr>
+                <tr><td>Dr. Pooja Kulkarni</td><td class="tc tb">3</td></tr>
+                <tr><td>Dr. Sonali Powar</td><td class="tc tb">4</td></tr>
+                <tr><td>Dr. Madhuri Pant</td><td class="tc tb">4</td></tr>
+                <tr><td>Dr. Mayur Deshmukh</td><td class="tc tb">6</td></tr>
+                <tr><td>Dr. Anupriya Kamble</td><td class="tc tb">6</td></tr>
+                <tr><td>Dr. Priyanka Singh</td><td class="tc tb">3</td></tr>
+                <tr><td>Shriprada Chaturbhuj</td><td class="tc tb">3</td></tr>
+                <tr class="tot"><td>Total</td><td class="tc">38</td></tr>
+            </tbody>
+        </table></div></div>
+    </div>
+    <div class="ar-card">
+        <div class="ar-card-hd"><div class="ar-card-ico ico-n">🔗</div><div><div class="ar-card-title">2 · Citations</div><div class="ar-card-sub">Faculty-wise · 2025-26</div></div><div class="ar-card-tag">§ 02</div></div>
+        <div class="ar-card-bd"><div class="ar-tw"><table class="ar-t">
+            <thead><tr><th>Faculty</th><th class="tc">Citations</th></tr></thead>
+            <tbody>
+                <tr><td>Dr. Rajkumar Jagdale</td><td class="tc tb">31</td></tr>
+                <tr><td>Dr. Pooja Kulkarni</td><td class="tc tb">32</td></tr>
+                <tr><td>Dr. Sonali Pawar</td><td class="tc tb">18</td></tr>
+                <tr><td>Dr. Madhuri Pant</td><td class="tc tb">4</td></tr>
+                <tr><td>Dr. Mayur Deshmukh</td><td class="tc tb">15</td></tr>
+                <tr><td>Dr. Anupriya Kamble</td><td class="tc tb">5</td></tr>
+                <tr><td>Dr. Priyanka Singh</td><td class="tc tb">6</td></tr>
+                <tr><td>Shriprada Chaturbhuj</td><td class="tc tb">0</td></tr>
+                <tr class="tot"><td>Total</td><td class="tc">111</td></tr>
+            </tbody>
+        </table></div></div>
+    </div>
+</div>
+
+<!-- §3 IPR -->
+<div class="ar-sec">
+    <div class="ar-card">
+        <div class="ar-card-hd"><div class="ar-card-ico ico-g">💡</div><div><div class="ar-card-title">3 · IPR — Patent / Copyright / Design</div><div class="ar-card-sub">Published / Granted · 2025-26</div></div><div class="ar-card-tag">§ 03</div></div>
+        <div class="ar-card-bd"><div class="ar-tw"><table class="ar-t">
+            <thead><tr><th>Faculty</th><th class="tc">IPR Count</th></tr></thead>
+            <tbody>
+                <tr><td>Dr. Rajkumar Jagdale</td><td class="tc tb">3</td></tr>
+                <tr><td>Dr. Pooja Kulkarni</td><td class="tc tb">3</td></tr>
+                <tr><td>Dr. Sonali Pawar</td><td class="tc tb">3</td></tr>
+                <tr><td>Dr. Madhuri Pant</td><td class="tc tb">3</td></tr>
+                <tr><td>Dr. Mayur Deshmukh</td><td class="tc tb">3</td></tr>
+                <tr><td>Dr. Anupriya Kamble</td><td class="tc tb">3</td></tr>
+                <tr><td>Dr. Priyanka Singh</td><td class="tc tb">1</td></tr>
+                <tr><td>Shriprada Chaturbhuj</td><td class="tc tb">2</td></tr>
+                <tr class="tot"><td>Total</td><td class="tc">21</td></tr>
+            </tbody>
+        </table></div></div>
+    </div>
+</div>
+
+<!-- §4 DEPARTMENT INITIATIVES -->
+<div class="ar-sec">
+    <div class="ar-sec-label">
+        <span class="ar-sec-tag">§ 04</span>
+        <span class="ar-sec-name">Department Initiatives</span>
+        <div class="ar-sec-line"></div>
+    </div>
+
+    <div class="ar-nirf">
+        <div class="ar-nirf-title">🏆 NIRF Strategic Focus</div>
+        <div class="ar-nirf-items">
+            <div class="ar-nirf-item">Faculty Ratio</div>
+            <div class="ar-nirf-item">Research Output</div>
+            <div class="ar-nirf-item">Industry &amp; Global Perception</div>
+            <div class="ar-nirf-item">Placement Statistics</div>
+            <div class="ar-nirf-item">Higher Education</div>
+        </div>
+    </div>
+
+    <!-- Row 1: 3 portraits (01-A, 01-B, 02-A) -->
+    <div class="init-row init-row--3">
+        <div class="init-card ic-red">
+            <div class="init-img init-img--portrait">
+                <img src="{% static 'academic_review/pptx_image1.png' %}" alt="Guest Lecture 1" loading="lazy">
+                <div class="init-badges"><span class="init-num">01 — A</span><span class="init-cat icat-red">Guest Lecture</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Guest Lecture — Session 1</div>
+                <div class="init-tags"><span class="init-tag">Academic Exposure</span></div>
+            </div>
+        </div>
+        <div class="init-card ic-red">
+            <div class="init-img init-img--portrait">
+                <img src="{% static 'academic_review/pptx_image8.jpg' %}" alt="Guest Lecture 2" loading="lazy">
+                <div class="init-badges"><span class="init-num">01 — B</span><span class="init-cat icat-red">Guest Lecture</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Guest Lecture — Session 2</div>
+                <div class="init-tags"><span class="init-tag">Academic Exposure</span></div>
+            </div>
+        </div>
+        <div class="init-card ic-navy">
+            <div class="init-img init-img--portrait">
+                <img src="{% static 'academic_review/pptx_image9.jpg' %}" alt="Project Competition 1" loading="lazy">
+                <div class="init-badges"><span class="init-num">02 — A</span><span class="init-cat icat-navy">Competition</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Project Competition — Photo 1</div>
+                <div class="init-tags"><span class="init-tag">Student Competition</span><span class="init-tag init-tag--blue">Scopus</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: 02-B + 03 landscape -->
+    <div class="init-row init-row--2">
+        <div class="init-card ic-navy">
+            <div class="init-img init-img--landscape">
+                <img src="{% static 'academic_review/pptx_image2.png' %}" alt="Project Competition 2" loading="lazy">
+                <div class="init-badges"><span class="init-num">02 — B</span><span class="init-cat icat-navy">Competition</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Project Competition — Photo 2</div>
+                <div class="init-tags"><span class="init-tag">Student Competition</span><span class="init-tag init-tag--blue">Scopus</span></div>
+            </div>
+        </div>
+        <div class="init-card ic-gold">
+            <div class="init-img init-img--landscape">
+                <img src="{% static 'academic_review/pptx_image6.png' %}" alt="UGC Integrity Pledge" loading="lazy">
+                <div class="init-badges"><span class="init-num">03</span><span class="init-cat icat-gold">UGC Pledge</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">UGC Recommendation — Integrity Pledge</div>
+                <div class="init-tags"><span class="init-tag">UGC Compliance</span><span class="init-tag init-tag--blue">Scopus</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: 04 centered 60% -->
+    <div class="init-row init-row--center">
+        <div class="init-card ic-gold">
+            <div class="init-img init-img--landscape">
+                <img src="{% static 'academic_review/pptx_image7.jpg' %}" alt="Placement Orientation" loading="lazy">
+                <div class="init-badges"><span class="init-num">04</span><span class="init-cat icat-gold">Placement</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Placement Orientation Session</div>
+                <div class="init-meta">
+                    <div class="init-meta-row"><span class="init-meta-ico">📅</span><span class="init-meta-lbl">Date</span><span class="init-meta-val">15 April 2026</span></div>
+                    <div class="init-meta-row"><span class="init-meta-ico">🕙</span><span class="init-meta-lbl">Time</span><span class="init-meta-val">10:30 AM – 12:30 PM</span></div>
+                    <div class="init-meta-row"><span class="init-meta-ico">📍</span><span class="init-meta-lbl">Venue</span><span class="init-meta-val">Auditorium, Building No. 1, VU</span></div>
+                    <div class="init-meta-row"><span class="init-meta-ico">🏛️</span><span class="init-meta-lbl">By</span><span class="init-meta-val">Dept. of Computer Science</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: 05 full-width dual -->
+    <div class="init-row init-row--full">
+        <div class="init-card ic-green">
+            <div class="init-img init-img--dual">
+                <div class="init-dual-slot"><img src="{% static 'academic_review/pptx_image11.jpg' %}" alt="Old Age Home 1" loading="lazy"></div>
+                <div class="init-dual-slot"><img src="{% static 'academic_review/pptx_image10.jpg' %}" alt="Old Age Home 2" loading="lazy"></div>
+                <div class="init-badges"><span class="init-num">05</span><span class="init-cat icat-green">Extension Activity</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Extension Activity — Visit to Old Age Home</div>
+                <div class="init-meta init-meta--2col">
+                    <div class="init-meta-row"><span class="init-meta-ico">📅</span><span class="init-meta-lbl">Date</span><span class="init-meta-val">21 August 2025</span></div>
+                    <div class="init-meta-row"><span class="init-meta-ico">🕙</span><span class="init-meta-lbl">Time</span><span class="init-meta-val">10:00 AM – 12:00 PM</span></div>
+                    <div class="init-meta-row"><span class="init-meta-ico">📍</span><span class="init-meta-lbl">Venue</span><span class="init-meta-val">Swami Nivas Vruddhashram, Deshpande Farm, Pune</span></div>
+                    <div class="init-meta-row"><span class="init-meta-ico">🏛️</span><span class="init-meta-lbl">By</span><span class="init-meta-val">Dept. of Computer Science</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 5: 06 single landscape -->
+    <div class="init-row init-row--full">
+        <div class="init-card ic-blue">
+            <div class="init-img init-img--landscape">
+                <img src="{% static 'academic_review/pptx_image4.png' %}" alt="Community Service 1" loading="lazy">
+                <div class="init-badges"><span class="init-num">06</span><span class="init-cat icat-blue">Community Service</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Community to Service — Social Outreach</div>
+                <div class="init-tags"><span class="init-tag">Community Service</span><span class="init-tag init-tag--blue">Scopus</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 6: 07 single landscape -->
+    <div class="init-row init-row--full">
+        <div class="init-card ic-blue">
+            <div class="init-img init-img--landscape">
+                <img src="{% static 'academic_review/pptx_image5.png' %}" alt="Community Service 2" loading="lazy">
+                <div class="init-badges"><span class="init-num">07</span><span class="init-cat icat-blue">Community Service</span></div>
+            </div>
+            <div class="init-body">
+                <div class="init-title">Community to Service — Social Outreach</div>
+                <div class="init-tags"><span class="init-tag">Community Service</span><span class="init-tag init-tag--blue">Scopus</span></div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- §4 -->
+
+<!-- §5 + §6 -->
+<div class="ar-sec g2">
+    <div class="ar-card">
+        <div class="ar-card-hd"><div class="ar-card-ico ico-gr">💼</div><div><div class="ar-card-title">5 · Consultancy Projects</div><div class="ar-card-sub">Industry-funded internships</div></div><div class="ar-card-tag">§ 05</div></div>
+        <div class="ar-card-bd"><div class="ar-tw"><table class="ar-t">
+            <thead><tr><th>A.Y.</th><th>Agency</th><th class="tc">Amount</th></tr></thead>
+            <tbody>
+                <tr><td class="tb">2024-25</td><td>WILO <span class="tm">(2 students)</span></td><td class="tc tg">&#8377;50,000</td></tr>
+                <tr><td class="tb">2025-26</td><td>Bramhan Nyas Foundation <span class="tm">(2 students)</span></td><td class="tc tg">&#8377;60,000</td></tr>
+            </tbody>
+        </table></div></div>
+    </div>
+    <div class="ar-card">
+        <div class="ar-card-hd"><div class="ar-card-ico ico-p">🏛️</div><div><div class="ar-card-title">6 · Funded / Sponsored Projects</div><div class="ar-card-sub">Govt. / Industry sponsored</div></div><div class="ar-card-tag">§ 06</div></div>
+        <div class="ar-card-bd"><div class="ar-tw"><table class="ar-t">
+            <thead><tr><th>Year</th><th>Agency</th><th class="tc">Amount</th></tr></thead>
+            <tbody>
+                <tr><td class="tb">2024-25</td><td>WILO <span class="tm">(2)</span></td><td class="tc tb">&#8377;50,000</td></tr>
+                <tr><td class="tb">2025-26</td><td>Future Chip Technologies <span class="tm">(9)</span></td><td class="tc tm">—</td></tr>
+                <tr><td class="tb">2025-26</td><td>Bramhan Nyas Foundation</td><td class="tc tb">&#8377;60,000</td></tr>
+                <tr><td class="tb">2025-26</td><td>Suma Soft Pvt Ltd <span class="tm">(4)</span></td><td class="tc tm">—</td></tr>
+                <tr><td class="tb">2025-26</td><td>Invictus Engineering <span class="tm">(6)</span></td><td class="tc tm">—</td></tr>
+            </tbody>
+        </table></div></div>
+    </div>
+</div>
+
+<!-- §7 CO-TEACHING -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 07</span><span class="ar-sec-name">Co-Teaching by Alumni in Industry</span><div class="ar-sec-line"></div></div>
+    <div class="g2">
+        <div class="ar-card">
+            <div class="ar-card-bd" style="padding-top:22px;">
+                <div class="ar-tl-item" style="background:rgba(244,63,94,.04);border-color:rgba(244,63,94,.12);">
+                    <div class="ar-tl-dot" style="background:#F43F5E;color:#F43F5E;"></div>
+                    <div>
+                        <div class="ar-tl-name">Pooja Mundada</div>
+                        <div class="ar-tl-sub">PRM Soft Solutions &nbsp;·&nbsp; M.Sc. Comp. Sci. (Batch 2023)</div>
+                        <span style="display:inline-block;margin-top:8px;padding:3px 12px;border-radius:999px;background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.16);font-size:.67rem;font-weight:700;color:#be123c;letter-spacing:.04em;">Lecture Planned — July</span>
+                    </div>
+                </div>
+                <div class="ar-tl-item" style="margin-top:8px;">
+                    <div class="ar-tl-dot" style="background:var(--navy);color:var(--navy);"></div>
+                    <div>
+                        <div class="ar-tl-name">Sayma Shaikh</div>
+                        <div class="ar-tl-sub">BSc Computer Science · Alumni Talk</div>
+                        <a href="https://www.instagram.com/reel/DXG0kytjSCW/?igsh=bmV0OWd0NmUzcHA0" target="_blank" class="ar-ig">
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            View Instagram Reel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ar-img-frame contain">
+            <img src="{% static 'academic_review/docx_image5.png' %}" alt="Co-Teaching Alumni" loading="lazy">
+            <div class="ar-img-cap">Alumni Session Documentation</div>
+        </div>
+    </div>
+</div>
+
+<!-- §8 + §9 -->
+<div class="ar-sec g2">
+    <div class="ar-card">
+        <div class="ar-card-hd"><div class="ar-card-ico ico-gr">🏭</div><div><div class="ar-card-title">8 · Internship Records</div><div class="ar-card-sub">BSc &amp; MSc across academic years</div></div><div class="ar-card-tag">§ 08</div></div>
+        <div class="ar-card-bd">
+            <div class="ar-tw"><table class="ar-t">
+                <thead><tr><th>Programme</th><th class="tc">2024-25</th><th class="tc">2025-26</th></tr></thead>
+                <tbody>
+                    <tr><td>BSc Comp Sci</td><td class="tc tb">52 <span class="tm">TYBSC</span></td><td class="tc tb">10 <span class="tm">TYBSC</span></td></tr>
+                    <tr><td>MSc Comp Sci</td><td class="tc tb">12 <span class="tm">SYMSC</span></td><td class="tc tb">6 <span class="tm">FYMSC</span></td></tr>
+                    <tr class="tot"><td>Total</td><td class="tc">64</td><td class="tc">15</td></tr>
+                </tbody>
+            </table></div>
+            <div class="ar-mini-g">
+                <div class="ar-mini m-gr"><div class="ar-mini-lbl">2024-25</div><div class="ar-mini-val">64</div><div class="ar-mini-sub">Students</div></div>
+                <div class="ar-mini m-gr"><div class="ar-mini-lbl">2025-26</div><div class="ar-mini-val">15</div><div class="ar-mini-sub">Ongoing</div></div>
+            </div>
+        </div>
+    </div>
+    <div class="ar-card">
+        <div class="ar-card-hd"><div class="ar-card-ico ico-p">🔧</div><div><div class="ar-card-title">9 · Industry Live Projects</div><div class="ar-card-sub">Faculty-supervised projects</div></div><div class="ar-card-tag">§ 09</div></div>
+        <div class="ar-card-bd">
+            <div class="ar-tw"><table class="ar-t">
+                <thead><tr><th>Dept</th><th class="tc">2024-25</th><th class="tc">2025-26</th></tr></thead>
+                <tbody>
+                    <tr><td>Comp Sci</td><td class="tc tb">4 <span class="tm">SP</span></td><td class="tc tb">11<div style="font-size:.63rem;color:#94a3b8;font-weight:400;margin-top:1px;">4SP · 2AK · 3MP · 2RJ · 1MD</div></td></tr>
+                    <tr class="tot"><td>Total</td><td class="tc">4</td><td class="tc">11</td></tr>
+                </tbody>
+            </table></div>
+            <div class="ar-mini-g">
+                <div class="ar-mini m-p"><div class="ar-mini-lbl">2024-25</div><div class="ar-mini-val">4</div><div class="ar-mini-sub">Projects</div></div>
+                <div class="ar-mini m-ind"><div class="ar-mini-lbl">2025-26</div><div class="ar-mini-val">11</div><div class="ar-mini-sub">Projects</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- §10 PLACEMENTS -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 10</span><span class="ar-sec-name">Placements &amp; Higher Education Analysis</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-img-frame contain"><img src="{% static 'academic_review/docx_image6.png' %}" alt="Placements" loading="lazy"><div class="ar-img-cap">Outcome Analytics</div></div>
+    </div></div>
+</div>
+
+<!-- §11 PTM -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 11</span><span class="ar-sec-name">Parent-Teacher Meet</span><div class="ar-sec-line"></div></div>
+    <div class="g2" style="grid-template-columns:220px 1fr;">
+        <div class="ar-date-hero">
+            <div class="ar-date-day">Friday</div>
+            <div class="ar-date-date">March 13,<br>2026</div>
+            <div class="ar-date-bdg">Parent-Teacher Meet</div>
+        </div>
+        <div class="g2" style="gap:12px;">
+            <div class="ar-img-frame cover"><img src="{% static 'academic_review/docx_image7.jpg' %}" alt="PTM 1" loading="lazy"><div class="ar-img-cap">Session · 01</div></div>
+            <div class="ar-img-frame cover"><img src="{% static 'academic_review/docx_image8.jpg' %}" alt="PTM 2" loading="lazy"><div class="ar-img-cap">Session · 02</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- §12 ADMISSIONS -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 12</span><span class="ar-sec-name">Admission Status</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-tw" style="overflow-x:auto;"><table class="ar-t" style="min-width:640px;">
+            <thead>
+                <tr><th rowspan="2">Programme</th><th colspan="2" style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">2023-24</th><th colspan="2" style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">2024-25</th><th colspan="2" style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">2025-26</th></tr>
+                <tr><th style="text-align:center;">Admissions</th><th style="text-align:center;">Grad.</th><th style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">Admissions</th><th style="text-align:center;">Grad.</th><th style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">Admissions</th><th style="text-align:center;">Grad.</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="tb">BSc Comp Sci</td><td class="tc tb">92</td><td class="tc">16</td><td class="tc tb">87</td><td class="tc">58</td><td class="tc tb">103</td><td class="tc tm">NA</td></tr>
+                <tr><td class="tb">MSc Comp Sci</td><td class="tc tb">12</td><td class="tc">5</td><td class="tc tb">8</td><td class="tc">12</td><td class="tc tb">22</td><td class="tc tm">NA</td></tr>
+                <tr class="tot"><td>Total</td><td class="tc">104</td><td class="tc">21</td><td class="tc">95</td><td class="tc">70</td><td class="tc">125</td><td class="tc">—</td></tr>
+            </tbody>
+        </table></div>
+    </div></div>
+</div>
+
+<!-- §13 RESULT ANALYSIS -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 13</span><span class="ar-sec-name">Result Analysis — Semester-wise Passing %</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-tw" style="overflow-x:auto;"><table class="ar-t" style="min-width:580px;">
+            <thead>
+                <tr><th rowspan="2">Programme</th><th colspan="3" style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">Sem I</th><th colspan="2" style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">Sem II</th></tr>
+                <tr><th style="text-align:center;">2023-24</th><th style="text-align:center;">2024-25</th><th style="text-align:center;">2025-26</th><th style="text-align:center;border-left:1px solid rgba(255,255,255,.08);">2023-24</th><th style="text-align:center;">2024-25</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="tb">SY BSc Comp Sci</td><td class="tc"><span class="rb rb-mid">50%</span></td><td class="tc"><span class="rb rb-mid">53%</span></td><td class="tc"><span class="rb rb-lo">48%</span></td><td class="tc"><span class="rb rb-hi">68%</span></td><td class="tc"><span class="rb rb-mid">63%</span></td></tr>
+                <tr><td class="tb">TY BSc Comp Sci</td><td class="tc"><span class="rb rb-lo">43%</span></td><td class="tc"><span class="rb rb-hi">85%</span></td><td class="tc"><span class="rb rb-mid">64%</span></td><td class="tc"><span class="rb rb-hi">100%</span></td><td class="tc"><span class="rb rb-hi">96%</span></td></tr>
+                <tr><td class="tb">SY MSc Comp Sci</td><td class="tc"><span class="rb rb-lo">44%</span></td><td class="tc"><span class="rb rb-hi">75%</span></td><td class="tc"><span class="rb rb-hi">88%</span></td><td class="tc"><span class="rb rb-mid">55%</span></td><td class="tc"><span class="rb rb-hi">83%</span></td></tr>
+            </tbody>
+        </table></div>
+        <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap;align-items:center;">
+            <span style="font-family:var(--mono);font-size:.60rem;color:#94a3b8;letter-spacing:.08em;text-transform:uppercase;">Legend</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:#64748b;"><span class="rb rb-hi">&#8805;70%</span> High</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:#64748b;"><span class="rb rb-mid">50–69%</span> Mid</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:#64748b;"><span class="rb rb-lo">&lt;50%</span> Needs Attention</span>
+        </div>
+    </div></div>
+</div>
+
+<!-- §14 AUDIT -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 14</span><span class="ar-sec-name">External Academic Audit</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-info-g">
+            <div class="ar-info-t"><div class="ar-info-t-lbl">Department</div><div class="ar-info-t-val">Computer Science</div></div>
+            <div class="ar-info-t"><div class="ar-info-t-lbl">Audit Date</div><div class="ar-info-t-val">9th February 2026</div></div>
+            <div class="ar-info-t"><div class="ar-info-t-lbl">Auditor</div><div class="ar-info-t-val">Dr. Smita Bhanap</div><div class="ar-info-t-sub">Fergussion College, Pune</div></div>
+        </div>
+        <div class="ar-hl">
+            <div class="ar-hl-title">&#128172; Key Finding &amp; Recommendation</div>
+            <p>The audit recommends introducing structured <strong>tutorial (TUT) sessions</strong> to strengthen concept clarity, problem-solving ability, and individual student mentoring.</p>
+        </div>
+    </div></div>
+</div>
+
+<!-- §15 BOS -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 15</span><span class="ar-sec-name">Board of Studies (BOS)</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-img-frame contain"><img src="{% static 'academic_review/docx_image9.png' %}" alt="BOS" loading="lazy"><div class="ar-img-cap">BOS Meeting Documentation</div></div>
+    </div></div>
+</div>
+
+<!-- §16 DAB -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 16</span><span class="ar-sec-name">Departmental Advisory Board (DAB)</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-img-frame contain"><img src="{% static 'academic_review/docx_image10.png' %}" alt="DAB" loading="lazy"><div class="ar-img-cap">DAB Meeting Documentation</div></div>
+    </div></div>
+</div>
+
+<!-- §17 MOU -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 17</span><span class="ar-sec-name">Industry MOU</span><div class="ar-sec-line"></div></div>
+    <div class="g2">
+        <div class="ar-img-frame contain"><img src="{% static 'academic_review/docx_image11.png' %}" alt="MOU 1" loading="lazy"><div class="ar-img-cap">MOU · 01</div></div>
+        <div class="ar-img-frame contain"><img src="{% static 'academic_review/docx_image12.png' %}" alt="MOU 2" loading="lazy"><div class="ar-img-cap">MOU · 02</div></div>
+    </div>
+</div>
+
+<!-- §18 INDUSTRY VISITS -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 18</span><span class="ar-sec-name">Industry Visits</span><div class="ar-sec-line"></div></div>
+    <div class="g2">
+        <div class="ar-visit">
+            <div class="ar-visit-hd"><div class="ar-visit-ico">🏭</div><div><div class="ar-visit-name">KANINI Software Solutions India Pvt. Ltd.</div><div class="ar-visit-loc">Kharadi, Pune</div></div></div>
+            <img src="{% static 'academic_review/docx_image13.jpg' %}" alt="KANINI" style="width:100%;object-fit:cover;height:240px;display:block;" loading="lazy">
+        </div>
+        <div class="ar-visit">
+            <div class="ar-visit-hd"><div class="ar-visit-ico">⚙️</div><div><div class="ar-visit-name">WILO Mather and Platt Pvt. Ltd.</div><div class="ar-visit-loc">Shirwal</div></div></div>
+            <img src="{% static 'academic_review/docx_image14.jpg' %}" alt="WILO" style="width:100%;object-fit:cover;height:240px;display:block;" loading="lazy">
+        </div>
+    </div>
+</div>
+
+<!-- §19 LANGUAGES & TOOLS -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 19</span><span class="ar-sec-name">Modern Languages &amp; Tools</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-img-frame contain"><img src="{% static 'academic_review/docx_image15.png' %}" alt="Modern Languages" loading="lazy"><div class="ar-img-cap">Curriculum Technology Stack</div></div>
+    </div></div>
+</div>
+
+<!-- §20 PATTERNS -->
+<div class="ar-sec">
+    <div class="ar-sec-label"><span class="ar-sec-tag">§ 20</span><span class="ar-sec-name">Patterns &amp; Assessment Framework</span><div class="ar-sec-line"></div></div>
+    <div class="ar-card"><div class="ar-card-bd">
+        <div class="ar-img-frame contain"><img src="{% static 'academic_review/docx_image16.png' %}" alt="Patterns" loading="lazy"><div class="ar-img-cap">Evaluation Structure &amp; Question Paper Patterns</div></div>
+    </div></div>
+</div>
+
+<!-- CHART -->
+<div class="ar-sec ar-chart-wrap" style="opacity:1;transform:none;">
+    <div class="ar-chart-title">Research Output Analytics</div>
+    <div class="ar-chart-sub">Publications · Citations · IPR — Faculty Comparison 2025-26</div>
+    <div style="position:relative;height:310px;"><canvas id="researchChart"></canvas></div>
+</div>
+
+</div>
+
+<script>
+(function(){
+    const secs=document.querySelectorAll('.ar-sec');
+    const kpis=document.querySelectorAll('.ar-kpi');
+    const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');io.unobserve(x.target);}});},{threshold:.06});
+    secs.forEach(el=>io.observe(el));
+    const kio=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){const i=Array.from(kpis).indexOf(x.target);setTimeout(()=>x.target.classList.add('vis'),i*65);kio.unobserve(x.target);}});},{threshold:.05});
+    kpis.forEach(el=>kio.observe(el));
+})();
+Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.color="#94a3b8";
+new Chart(document.getElementById('researchChart'),{
+    type:'bar',
+    data:{
+        labels:['Dr. R. Jagdale','Dr. P. Kulkarni','Dr. S. Powar','Dr. M. Pant','Dr. M. Deshmukh','Dr. A. Kamble','Dr. P. Singh','S. Chaturbhuj'],
+        datasets:[
+            {label:'Publications',data:[9,3,4,4,6,6,3,3],backgroundColor:'#E14D2A',borderRadius:{topLeft:6,topRight:6},borderSkipped:false},
+            {label:'Citations',data:[31,32,18,4,15,5,6,0],backgroundColor:'#162850',borderRadius:{topLeft:6,topRight:6},borderSkipped:false},
+            {label:'IPR/Patents',data:[3,3,3,3,3,3,1,2],backgroundColor:'#F59E0B',borderRadius:{topLeft:6,topRight:6},borderSkipped:false}
+        ]
+    },
+    options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{
+            legend:{position:'top',labels:{padding:20,usePointStyle:true,pointStyleWidth:10,font:{size:12,weight:'700'}}},
+            tooltip:{backgroundColor:'#162850',padding:12,cornerRadius:10}
+        },
+        scales:{
+            x:{grid:{display:false},ticks:{font:{size:11,weight:'600'}}},
+            y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:"'JetBrains Mono'",size:11}},beginAtZero:true}
+        },
+        animation:{duration:1000,easing:'easeOutQuart'}
+    }
+});
+</script>
+{% endblock %}

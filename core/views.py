@@ -520,3 +520,6 @@ def incremental_growth(request):
     )
 
 
+def academic_review(request):
+    return render(request, 'dashboard/academic_review.html')
+

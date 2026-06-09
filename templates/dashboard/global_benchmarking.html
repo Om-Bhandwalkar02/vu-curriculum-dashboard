@@ -4,7 +4,6 @@
 
 {% block extra_head %}
 <style>
-    /* ── STAGGERED REVEALS ───────────────────────────── */
     .fade-up {
         opacity: 0;
         transform: translateY(24px);
@@ -14,10 +13,10 @@
     .fade-up:nth-child(2) { animation-delay: 0.13s; }
     .fade-up:nth-child(3) { animation-delay: 0.21s; }
     .fade-up:nth-child(4) { animation-delay: 0.29s; }
+    .fade-up:nth-child(5) { animation-delay: 0.37s; }
+    .fade-up:nth-child(6) { animation-delay: 0.45s; }
 
-    @keyframes fadeUpAnim {
-        to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUpAnim { to { opacity: 1; transform: translateY(0); } }
 
     .pillar-card {
         opacity: 0;
@@ -27,14 +26,8 @@
     .pillar-card:nth-child(1) { animation-delay: 0.1s; }
     .pillar-card:nth-child(2) { animation-delay: 0.2s; }
     .pillar-card:nth-child(3) { animation-delay: 0.3s; }
+    .pillar-card:nth-child(4) { animation-delay: 0.4s; }
 
-    .partner-card {
-        opacity: 0;
-        transform: translateY(16px) scale(0.98);
-        animation: fadeUpAnim 0.5s ease forwards;
-    }
-
-    /* ── HOVER LIFT ──────────────────────────────────── */
     .lift {
         transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
     }
@@ -43,7 +36,6 @@
         box-shadow: 0 24px 48px rgba(22,40,80,0.14);
     }
 
-    /* ── KPI STAT NUMBER ─────────────────────────────── */
     .stat-num {
         background: linear-gradient(135deg, #E14D2A, #162850);
         -webkit-background-clip: text;
@@ -51,7 +43,6 @@
         background-clip: text;
     }
 
-    /* ── GLOBE SPIN ──────────────────────────────────── */
     .globe-spin {
         display: inline-block;
         animation: globeSpin 8s linear infinite;
@@ -62,14 +53,9 @@
         100% { transform: rotate(360deg) scale(1); }
     }
 
-    /* ── ACCENT BAR ──────────────────────────────────── */
-    .accent-bar {
-        width: 0;
-        animation: barGrow 0.7s ease 0.2s forwards;
-    }
+    .accent-bar { width: 0; animation: barGrow 0.7s ease 0.2s forwards; }
     @keyframes barGrow { to { width: 28rem; } }
 
-    /* ── SECTION HEADING SLIDE ───────────────────────── */
     .section-head {
         opacity: 0;
         transform: translateX(-12px);
@@ -77,21 +63,7 @@
     }
     @keyframes headSlide { to { opacity: 1; transform: translateX(0); } }
 
-    /* ── PARTNER CATEGORY BADGE ──────────────────────── */
-    .cat-badge {
-        transition: background 0.2s, color 0.2s, transform 0.2s;
-    }
-    .cat-badge:hover {
-        background: #E14D2A;
-        color: #fff;
-        transform: scale(1.05);
-    }
-
-    /* ── SPOTLIGHT CARD SHIMMER ──────────────────────── */
-    .spotlight-card {
-        position: relative;
-        overflow: hidden;
-    }
+    .spotlight-card { position: relative; overflow: hidden; }
     .spotlight-card::before {
         content: "";
         position: absolute;
@@ -105,7 +77,6 @@
         60%, 100% { transform: translateX(350%) rotate(15deg); }
     }
 
-    /* ── VISION CARD ─────────────────────────────────── */
     .vision-card {
         opacity: 0;
         animation: fadeUpAnim 0.7s ease 0.3s forwards;
@@ -121,22 +92,67 @@
         line-height: 1;
     }
 
-    /* ── IMPACT CARD ─────────────────────────────────── */
-    .impact-card {
-        opacity: 0;
-        animation: fadeUpAnim 0.6s ease 0.2s forwards;
+    /* ── TABLE STYLES ── */
+    .bench-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .bench-table th {
+        background: linear-gradient(135deg, #162850, #1e3a6e);
+        color: #fff; padding: 10px 12px; text-align: left;
+        font-weight: 700; font-size: 0.72rem;
+        text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
     }
-
-    /* ── CHART CARD ──────────────────────────────────── */
-    .chart-card {
-        opacity: 0;
-        animation: fadeUpAnim 0.6s ease 0.15s forwards;
+    .bench-table td {
+        padding: 9px 12px;
+        border-bottom: 1px solid rgba(22,40,80,0.07);
+        color: #334155; white-space: nowrap;
     }
+    .bench-table tr:last-child td { border-bottom: none; }
+    .bench-table tbody tr:hover td { background: rgba(225,77,42,0.04); }
+    .bench-table tr.vu-row td { background: rgba(225,77,42,0.07); font-weight: 700; color: #E14D2A; }
+    .bench-table tr.vu-row:hover td { background: rgba(225,77,42,0.12); }
 
-    /* ── PARTNER GRID STAGGER ────────────────────────── */
-    {% for i in "123456789" %}
-    .partner-card:nth-child({{ forloop.counter }}) { animation-delay: {{ forloop.counter0 }}00ms; }
-    {% endfor %}
+    /* ── FEATURE TABLE ── */
+    .feat-table { width: 100%; border-collapse: collapse; font-size: 0.79rem; }
+    .feat-table th {
+        background: linear-gradient(135deg,#162850,#1e3a6e);
+        color:#fff; padding:9px 10px; font-weight:700; font-size:0.7rem;
+        text-transform:uppercase; letter-spacing:0.04em; text-align:center;
+    }
+    .feat-table th:first-child { text-align:left; }
+    .feat-table td { padding:8px 10px; border-bottom:1px solid rgba(22,40,80,0.07); text-align:center; color:#334155; }
+    .feat-table td:first-child { text-align:left; font-weight:600; color:#1e293b; white-space:normal; }
+    .feat-table tbody tr:hover td { background:rgba(225,77,42,0.04); }
+    .feat-table tr.vu-feat td { background:rgba(225,77,42,0.04); }
+    .tick-yes  { color:#16a34a; font-weight:900; font-size:1rem; }
+    .tick-no   { color:#dc2626; font-weight:900; font-size:1rem; }
+    .tick-part { color:#d97706; font-weight:900; font-size:1rem; }
+
+    .insight-card { opacity:0; animation: fadeUpAnim 0.6s ease 0.15s forwards; }
+    .insight-card + .insight-card { animation-delay: 0.25s; }
+    .chart-card { opacity: 0; animation: fadeUpAnim 0.6s ease 0.15s forwards; }
+
+    .inst-btn {
+        padding: 5px 13px; border-radius: 999px; font-size: 0.7rem;
+        font-weight: 700; border: 2px solid transparent; cursor: pointer;
+        transition: all 0.2s ease; background: #f1f5f9; color: #475569;
+    }
+    .inst-btn.active, .inst-btn:hover { background: #162850; color: #fff; border-color: #162850; }
+
+    .score-bar-wrap { width: 100%; background: #e2e8f0; border-radius: 999px; height: 8px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 999px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+
+    /* ── INTERPRETATION CARD ── */
+    .interp-item {
+        display: flex; align-items: flex-start; gap: 10px;
+        padding: 10px 12px; border-radius: 14px;
+        background: rgba(22,40,80,0.04);
+        border-left: 3px solid transparent;
+        transition: background 0.2s;
+    }
+    .interp-item:hover { background: rgba(225,77,42,0.06); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
 </style>
 {% endblock %}
 
@@ -153,163 +169,644 @@
     </h2>
     <div class="mt-3 h-1 rounded-full bg-gradient-to-r from-primary to-secondary accent-bar"></div>
     <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
-        International collaborations, exchange programs, global internships,
-        research partnerships and worldwide academic exposure initiatives.
+        Comparative analysis of Vishwakarma University curriculum against 7 leading global and national
+        institutions across 12 dimensions. References: ACM/IEEE Curriculum Guidelines, MIT, Stanford CS,
+        CMU CS, BITS Pilani CS, IISc CSE, NUS and Oxford. Score out of 100 per dimension.
     </p>
 </div>
 
-<!-- ══ KPI CARDS ══ -->
+<!-- ══ KPI CARDS — ROW 1 ══ -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
-    <!-- GLOBAL PARTNERS -->
+    <!-- VU COMPOSITE SCORE -->
     <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-primary/8 blur-2xl group-hover:bg-primary/14 transition-all duration-500"></div>
-        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-4">Global Partners</p>
-        <h2 class="text-6xl font-black stat-num leading-none">{{ partner_count }}</h2>
-        <p class="mt-3 text-xs text-slate-400">Active international institutions</p>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-3">VU Composite Score</p>
+        <h2 class="text-6xl font-black stat-num leading-none">85</h2>
+        <p class="mt-1 text-xs text-slate-400">out of 100 composite</p>
+        <p class="mt-3 text-xs text-slate-500 font-semibold">Ranked <strong class="text-primary">#6</strong> globally</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- COUNTRIES -->
+    <!-- GLOBAL TOP-3 AVG -->
     <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-secondary/8 blur-2xl group-hover:bg-secondary/14 transition-all duration-500"></div>
-        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-4">Countries</p>
-        <h2 class="text-6xl font-black text-secondary leading-none">{{ country_count }}</h2>
-        <p class="mt-3 text-xs text-slate-400">Across continents & regions</p>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-3">Global Top-3 Avg.</p>
+        <h2 class="text-6xl font-black text-secondary leading-none">96</h2>
+        <p class="mt-1 text-xs text-slate-400">MIT / Stanford / CMU</p>
+        <p class="mt-3 text-xs text-red-500 font-semibold">Gap: <strong>11.3 pts</strong> above VU</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- EXCHANGE STUDENT -->
+    <!-- NATIONAL AVG -->
     <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-green-400/10 blur-2xl group-hover:bg-green-400/18 transition-all duration-500"></div>
-        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-4">Exchange Student</p>
-        <h2 class="text-3xl font-black text-green-600 leading-tight mt-2">Dev Shah</h2>
-        <span class="mt-3 inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">Featured</span>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-3">National Avg. Score</p>
+        <h2 class="text-6xl font-black text-green-600 leading-none">87</h2>
+        <p class="mt-1 text-xs text-slate-400">IISc Bengaluru / BITS Pilani / SPPU</p>
+        <p class="mt-3 text-xs text-amber-600 font-semibold">Gap: <strong>2.3 pts</strong> above VU</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- DIMENSIONS VU LEADS -->
+    <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-amber-400/10 blur-2xl group-hover:bg-amber-400/18 transition-all duration-500"></div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-3">Dimensions VU Leads</p>
+        <h2 class="text-6xl font-black text-amber-500 leading-none">3</h2>
+        <p class="mt-1 text-xs text-slate-400">NEP compliance, IKS, VSEC</p>
+        <p class="mt-3 text-xs text-slate-500 font-semibold">Gap to close: <strong class="text-red-500">2 pts</strong> <span class="text-slate-400">(research, hardware, theory)</span></p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+</div>
+
+<!-- ══ KPI CARDS — ROW 2 ══ -->
+<div class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <!-- INDUSTRY ALIGNMENT -->
+    <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-3">Industry Alignment</p>
+        <h2 class="text-6xl font-black text-green-600 leading-none">95</h2>
+        <p class="mt-1 text-xs text-slate-400">VU score — matches BITS Pilani</p>
+        <span class="mt-3 inline-block px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">VU Strength ★</span>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- EXPERIENTIAL LEARNING -->
+    <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-3">Experiential Learning</p>
+        <h2 class="text-6xl font-black text-green-600 leading-none">96</h2>
+        <p class="mt-1 text-xs text-slate-400">Highest among all institutions</p>
+        <span class="mt-3 inline-block px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">VU Strength ★</span>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- RESEARCH GAP -->
+    <div class="fade-up lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold mb-3">Research Orientation</p>
+        <h2 class="text-6xl font-black text-red-500 leading-none">72</h2>
+        <p class="mt-1 text-xs text-slate-400">VU score — area for growth</p>
+        <p class="mt-3 text-xs text-red-500 font-semibold">−28 pts vs Global · −13 pts vs National</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-red-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
     <!-- VISION -->
     <div class="fade-up lift relative rounded-[28px] bg-gradient-to-br from-secondary via-secondary to-secondary/80 p-7 shadow-xl overflow-hidden group text-white">
-        <div class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-white/10 blur-2xl"></div>
-        <p class="uppercase tracking-widest text-xs text-white/50 font-bold mb-4">Vision</p>
+        <p class="uppercase tracking-widest text-xs text-white/50 font-bold mb-3">Vision</p>
         <h2 class="text-5xl font-black leading-none text-white">Global</h2>
-        <p class="mt-3 text-xs text-white/50">LaunchPad to the world</p>
+        <p class="mt-2 text-xs text-white/50">LaunchPad to the world</p>
         <div class="mt-4 text-3xl globe-spin">🌍</div>
     </div>
 
 </div>
 
-<!-- ══ ANALYTICS + SPOTLIGHT ══ -->
+<!-- ══ OVERALL RANKINGS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Rankings</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Overall Composite Rankings
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:18rem;"></div>
+</div>
+
+<div class="mt-6 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <table class="bench-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>University</th>
+                <th>Overall Composite Score (/100)</th>
+                <th style="min-width:160px;">Score Bar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="font-black text-amber-500 text-base">#1</td>
+                <td class="font-semibold">Stanford University</td>
+                <td class="font-black text-slate-700">97.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:97%;background:#162850;"></div></div></td>
+            </tr>
+            <tr>
+                <td class="font-black text-slate-400 text-base">#2</td>
+                <td class="font-semibold">Massachusetts Institute of Technology (MIT)</td>
+                <td class="font-black text-slate-700">96.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:96%;background:#1e3a6e;"></div></div></td>
+            </tr>
+            <tr>
+                <td class="font-black text-slate-400 text-base">#2</td>
+                <td class="font-semibold">Carnegie Mellon University (CMU)</td>
+                <td class="font-black text-slate-700">96.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:96%;background:#6366F1;"></div></div></td>
+            </tr>
+            <tr>
+                <td class="font-black text-slate-400 text-base">#4</td>
+                <td class="font-semibold">Indian Institute of Science (IISc)</td>
+                <td class="font-black text-slate-700">90.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:90%;background:#10B981;"></div></div></td>
+            </tr>
+            <tr>
+                <td class="font-black text-slate-400 text-base">#5</td>
+                <td class="font-semibold">Birla Institute of Technology and Science (BITS Pilani)</td>
+                <td class="font-black text-slate-700">88.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:88%;background:#F59E0B;"></div></div></td>
+            </tr>
+            <tr class="vu-row">
+                <td class="font-black text-base">#6</td>
+                <td class="font-semibold">⭐ Vishwakarma University (VU)</td>
+                <td class="font-black">85.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:85%;background:#E14D2A;"></div></div></td>
+            </tr>
+            <tr>
+                <td class="font-black text-slate-400 text-base">#7</td>
+                <td class="font-semibold">University of Delhi</td>
+                <td class="font-black text-slate-700">79.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:79%;background:#94a3b8;"></div></div></td>
+            </tr>
+            <tr>
+                <td class="font-black text-slate-400 text-base">#8</td>
+                <td class="font-semibold">Banaras Hindu University (BHU)</td>
+                <td class="font-black text-slate-700">77.0</td>
+                <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:77%;background:#cbd5e1;"></div></div></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ RADAR + BUBBLE CHARTS ══ -->
 <div class="mt-12 grid grid-cols-1 xl:grid-cols-2 gap-8">
 
-    <!-- CHART -->
+    <!-- RADAR -->
     <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
-        <div class="flex items-center gap-3 mb-6">
+        <div class="flex items-center gap-3 mb-4">
             <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
             <div>
-                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Global Partner Distribution</h3>
-                <p class="text-xs text-slate-400 mt-0.5">By geographic region</p>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">12-Dimension Curriculum Radar</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Click buttons to show/hide institutions</p>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-4">
+            <button class="inst-btn active" onclick="toggleRadar('vu',this)">VU</button>
+            <button class="inst-btn active" onclick="toggleRadar('global',this)">Global Top-3</button>
+            <button class="inst-btn active" onclick="toggleRadar('national',this)">National Top-3</button>
+            <button class="inst-btn" onclick="toggleRadar('mit',this)">MIT</button>
+            <button class="inst-btn" onclick="toggleRadar('stanford',this)">Stanford</button>
+            <button class="inst-btn" onclick="toggleRadar('cmu',this)">CMU</button>
+            <button class="inst-btn" onclick="toggleRadar('iisc',this)">IISc</button>
+            <button class="inst-btn" onclick="toggleRadar('bits',this)">BITS</button>
+            <button class="inst-btn" onclick="toggleRadar('nus',this)">NUS</button>
+            <button class="inst-btn" onclick="toggleRadar('oxford',this)">Oxford</button>
+        </div>
+        <div class="relative h-[300px]">
+            <canvas id="radarChart"></canvas>
+        </div>
+    </div>
+
+    <!-- BUBBLE / POSITIONING MAP -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+            <div>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Industry Readiness vs Research Orientation</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Bubble size = Flexibility Index · VU highlighted</p>
+            </div>
+        </div>
+        <div class="relative h-[300px]">
+            <canvas id="bubbleChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══ POSITIONING MAP INTERPRETATION ══ -->
+<div class="mt-8 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+        <div>
+            <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Positioning Map — Interpretation</h3>
+            <p class="text-xs text-slate-400 mt-0.5">X = Industry Readiness · Y = Research Orientation · Bubble = Flexibility Index</p>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+        <div class="interp-item" style="border-left-color:#E14D2A;">
+            <span class="text-xl shrink-0">⭐</span>
+            <div>
+                <p class="font-bold text-sm text-primary">Vishwakarma University</p>
+                <p class="text-xs text-slate-500 mt-0.5">High industry readiness (85), moderate research orientation (65), strong curriculum flexibility (88).</p>
+            </div>
+        </div>
+        <div class="interp-item" style="border-left-color:#162850;">
+            <span class="text-xl shrink-0">🏛️</span>
+            <div>
+                <p class="font-bold text-sm text-secondary">MIT / Stanford / CMU</p>
+                <p class="text-xs text-slate-500 mt-0.5">Strong balance of research + flexibility. Industry readiness 68–74, research 88–95, flexibility 96–99.</p>
+            </div>
+        </div>
+        <div class="interp-item" style="border-left-color:#14B8A6;">
+            <span class="text-xl shrink-0">🔬</span>
+            <div>
+                <p class="font-bold text-sm text-teal-600">IISc Bengaluru</p>
+                <p class="text-xs text-slate-500 mt-0.5">Highest research intensity (90) with comparatively lower industry orientation (62).</p>
+            </div>
+        </div>
+        <div class="interp-item" style="border-left-color:#F59E0B;">
+            <span class="text-xl shrink-0">⚡</span>
+            <div>
+                <p class="font-bold text-sm text-amber-600">BITS Pilani</p>
+                <p class="text-xs text-slate-500 mt-0.5">Balanced industry (74) and flexibility (90) profile. Research orientation 85.</p>
+            </div>
+        </div>
+        <div class="interp-item" style="border-left-color:#94a3b8;">
+            <span class="text-xl shrink-0">🎓</span>
+            <div>
+                <p class="font-bold text-sm text-slate-600">SPPU</p>
+                <p class="text-xs text-slate-500 mt-0.5">Moderate balance across both dimensions. Industry 72, research 82, flexibility 78.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ 12-DIMENSION FULL TABLE — ALL INSTITUTIONS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.08s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary/60">Deep Dive</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        12-Dimension Breakdown — Global Institutions
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:22rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">VU · MIT · Stanford · CMU · BITS Pilani · IISc · NUS · Oxford</p>
+</div>
+
+<div class="mt-6 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <table class="bench-table">
+        <thead>
+            <tr>
+                <th style="min-width:180px;">Dimension</th>
+                <th>VU</th><th>MIT</th><th>Stanford</th><th>CMU</th>
+                <th>BITS Pilani</th><th>IISc</th><th>NUS</th><th>Oxford</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="vu-row"><td>Curriculum Breadth</td><td>88</td><td>98</td><td>97</td><td>97</td><td>90</td><td>90</td><td>95</td><td>90</td></tr>
+            <tr><td>Core CS Coverage</td><td class="text-primary font-bold">82</td><td>99</td><td>98</td><td>99</td><td>88</td><td>94</td><td>96</td><td>93</td></tr>
+            <tr class="vu-row"><td>Mathematics &amp; Theory</td><td>65</td><td>99</td><td>97</td><td>98</td><td>84</td><td>98</td><td>94</td><td>97</td></tr>
+            <tr><td>AI &amp; Emerging Technologies</td><td class="text-green-600 font-bold">92 ★</td><td>95</td><td>99</td><td>96</td><td>86</td><td>90</td><td>95</td><td>85</td></tr>
+            <tr class="vu-row"><td>Software Engineering</td><td>90</td><td>92</td><td>94</td><td>98</td><td>88</td><td>85</td><td>91</td><td>82</td></tr>
+            <tr><td>Systems &amp; Infrastructure</td><td class="text-primary font-bold">80</td><td>98</td><td>95</td><td>97</td><td>85</td><td>92</td><td>94</td><td>88</td></tr>
+            <tr class="vu-row"><td>Research Orientation</td><td>72</td><td>100</td><td>99</td><td>100</td><td>80</td><td>100</td><td>94</td><td>98</td></tr>
+            <tr><td>Industry Alignment</td><td class="text-green-600 font-bold">95 ★</td><td>90</td><td>95</td><td>94</td><td>95</td><td>82</td><td>92</td><td>80</td></tr>
+            <tr class="vu-row"><td>Experiential Learning</td><td>96 ★</td><td>92</td><td>93</td><td>95</td><td>94</td><td>86</td><td>90</td><td>84</td></tr>
+            <tr><td>Flexibility &amp; Electives</td><td class="text-primary font-bold">88</td><td>99</td><td>98</td><td>96</td><td>90</td><td>82</td><td>92</td><td>88</td></tr>
+            <tr class="vu-row"><td>Interdisciplinary Integration</td><td>92 ★</td><td>97</td><td>98</td><td>92</td><td>88</td><td>90</td><td>95</td><td>94</td></tr>
+            <tr><td>Global Competency &amp; Ethics</td><td class="text-primary font-bold">82</td><td>95</td><td>96</td><td>92</td><td>82</td><td>88</td><td>94</td><td>96</td></tr>
+            <tr style="background:#f8fafc;font-weight:900;font-size:0.82rem;">
+                <td class="text-secondary">Overall Average</td>
+                <td class="text-primary">85</td><td>96</td><td>97</td><td>96</td><td>88</td><td>90</td><td>94</td><td>90</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="mt-3 text-xs text-slate-400">★ = VU leads or matches global peers</p>
+</div>
+
+<!-- ══ 12-DIMENSION TABLE — NATIONAL INSTITUTIONS ══ -->
+<div class="mt-10 section-head" style="animation-delay:0.08s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-green-600 to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-green-700/70">National Comparison</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        12-Dimension Breakdown — National Institutions
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-green-600 to-secondary" style="width:22rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">VU · IISc Bengaluru · BITS Pilani · University of Delhi · BHU · SPPU</p>
+</div>
+
+<div class="mt-6 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <table class="bench-table">
+        <thead>
+            <tr>
+                <th style="min-width:180px;">Dimension</th>
+                <th>VU</th><th>IISc Bengaluru</th><th>BITS Pilani</th>
+                <th>Univ. of Delhi</th><th>BHU</th><th>SPPU</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="vu-row"><td>Curriculum Breadth</td><td>88</td><td>90</td><td>90</td><td>84</td><td>82</td><td>86</td></tr>
+            <tr><td>Core CS Coverage</td><td class="text-primary font-bold">82</td><td>94</td><td>88</td><td>84</td><td>82</td><td>85</td></tr>
+            <tr class="vu-row"><td>Mathematics &amp; Theory</td><td>65</td><td>98</td><td>84</td><td>80</td><td>78</td><td>82</td></tr>
+            <tr><td>AI &amp; Emerging Technologies</td><td class="text-green-600 font-bold">92 ★</td><td>90</td><td>86</td><td>75</td><td>72</td><td>80</td></tr>
+            <tr class="vu-row"><td>Software Engineering</td><td>90 ★</td><td>85</td><td>88</td><td>82</td><td>80</td><td>84</td></tr>
+            <tr><td>Systems &amp; Infrastructure</td><td class="text-primary font-bold">80</td><td>92</td><td>85</td><td>78</td><td>75</td><td>82</td></tr>
+            <tr class="vu-row"><td>Research Orientation</td><td>72</td><td>100</td><td>80</td><td>72</td><td>70</td><td>75</td></tr>
+            <tr><td>Industry Alignment</td><td class="text-green-600 font-bold">95 ★</td><td>82</td><td>95</td><td>80</td><td>78</td><td>85</td></tr>
+            <tr class="vu-row"><td>Experiential Learning</td><td>96 ★</td><td>86</td><td>94</td><td>82</td><td>80</td><td>88</td></tr>
+            <tr><td>Flexibility &amp; Electives</td><td class="text-green-600 font-bold">88 ★</td><td>82</td><td>90</td><td>76</td><td>74</td><td>82</td></tr>
+            <tr class="vu-row"><td>Interdisciplinary Integration</td><td>92 ★</td><td>90</td><td>88</td><td>78</td><td>76</td><td>82</td></tr>
+            <tr><td>Global Competency &amp; Ethics</td><td class="text-green-600 font-bold">82 ★</td><td>88</td><td>82</td><td>76</td><td>74</td><td>78</td></tr>
+        </tbody>
+    </table>
+    <p class="mt-3 text-xs text-slate-400">★ = VU leads national peers on this dimension</p>
+</div>
+
+<!-- ══ VU vs GLOBAL vs NATIONAL — GAP ANALYSIS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.08s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Gap Analysis</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        VU vs Global Top-3 vs National Top-3
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:20rem;"></div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- GAP TABLE -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+        <table class="bench-table">
+            <thead>
+                <tr>
+                    <th style="min-width:175px;">Dimension</th>
+                    <th>VU</th>
+                    <th>Global Top-3 Avg.<br><span style="font-weight:400;text-transform:none;letter-spacing:0;">(Stanford+MIT+CMU)</span></th>
+                    <th>National Top-3 Avg.<br><span style="font-weight:400;text-transform:none;letter-spacing:0;">(IISc+BITS+SPPU)</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Curriculum Breadth</td><td class="text-primary font-bold">88</td><td>97.0</td><td>88.7</td></tr>
+                <tr><td>Core CS Coverage</td><td class="text-primary font-bold">82</td><td>98.7</td><td>89.0</td></tr>
+                <tr><td>Mathematics &amp; Theory</td><td class="text-red-500 font-bold">65 ⚠</td><td>98.0</td><td>88.0</td></tr>
+                <tr><td>AI &amp; Emerging Technologies</td><td class="text-green-600 font-bold">92 ★</td><td>96.7</td><td>85.3</td></tr>
+                <tr><td>Software Engineering</td><td class="text-primary font-bold">90</td><td>94.7</td><td>85.7</td></tr>
+                <tr><td>Systems &amp; Infrastructure</td><td class="text-primary font-bold">80</td><td>96.7</td><td>86.3</td></tr>
+                <tr><td>Research Orientation</td><td class="text-red-500 font-bold">72 ⚠</td><td>99.7</td><td>85.0</td></tr>
+                <tr><td>Industry Alignment</td><td class="text-green-600 font-bold">95 ★</td><td>93.0</td><td>87.3</td></tr>
+                <tr><td>Experiential Learning</td><td class="text-green-600 font-bold">96 ★</td><td>93.3</td><td>89.3</td></tr>
+                <tr><td>Flexibility &amp; Electives</td><td class="text-primary font-bold">88</td><td>97.7</td><td>84.7</td></tr>
+                <tr><td>Interdisciplinary Integration</td><td class="text-green-600 font-bold">92 ★</td><td>95.7</td><td>86.7</td></tr>
+                <tr><td>Global Competency &amp; Ethics</td><td class="text-primary font-bold">82</td><td>94.3</td><td>82.7</td></tr>
+                <tr style="background:#f8fafc;font-weight:900;">
+                    <td class="text-secondary">Overall Composite</td>
+                    <td class="text-primary">85.0</td><td>96.3</td><td>87.3</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="mt-3 text-xs text-slate-400">★ = VU leads national avg · ⚠ = significant gap area</p>
+    </div>
+
+    <!-- GAP BAR CHART -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+            <div>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">12-Dimension Comparison Bar</h3>
+                <p class="text-xs text-slate-400 mt-0.5">VU · Global Top-3 · National Top-3</p>
+            </div>
+        </div>
+        <div class="relative h-[310px]">
+            <canvas id="gapBarChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- GAP SUMMARY CARDS -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="insight-card lift rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 p-6 shadow-lg">
+        <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-lg mb-4">🏆</div>
+        <p class="text-xs uppercase tracking-wide font-bold text-slate-400 mb-1">Vishwakarma University</p>
+        <p class="text-4xl font-black text-primary">85.0</p>
+        <p class="text-xs text-slate-500 mt-2">Composite Score (out of 100)</p>
+        <p class="text-xs text-slate-400 mt-1">Ranked #6 globally</p>
+    </div>
+    <div class="insight-card lift rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 p-6 shadow-lg">
+        <div class="w-10 h-10 rounded-2xl bg-secondary/10 flex items-center justify-center text-lg mb-4">🌐</div>
+        <p class="text-xs uppercase tracking-wide font-bold text-slate-400 mb-1">Global Top-3 Avg.</p>
+        <p class="text-4xl font-black text-secondary">96.3</p>
+        <p class="text-xs text-red-500 mt-2 font-semibold">Gap: <strong>11.3 pts</strong> above VU</p>
+        <p class="text-xs text-slate-400 mt-1">Stanford 97 · MIT 96 · CMU 96</p>
+    </div>
+    <div class="insight-card lift rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 p-6 shadow-lg">
+        <div class="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center text-lg mb-4">🇮🇳</div>
+        <p class="text-xs uppercase tracking-wide font-bold text-slate-400 mb-1">National Top-3 Avg.</p>
+        <p class="text-4xl font-black text-green-600">87.3</p>
+        <p class="text-xs text-amber-600 mt-2 font-semibold">Gap: <strong>2.3 pts</strong> above VU</p>
+        <p class="text-xs text-slate-400 mt-1">IISc 90 · BITS 88 · SPPU 84</p>
+    </div>
+</div>
+
+<!-- ══ VU STRONG DIMENSIONS ══ -->
+<div class="mt-8 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-green-500 to-green-700"></div>
+        <div>
+            <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Dimensions Where VU Performs Strongly</h3>
+            <p class="text-xs text-slate-400 mt-0.5">VU leads or is competitive with global peers in these areas</p>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+        <div class="rounded-2xl bg-green-50 border border-green-200 p-4 text-center">
+            <div class="text-2xl mb-2">🏭</div>
+            <p class="font-black text-green-700 text-sm">Industry Alignment</p>
+            <p class="text-2xl font-black text-green-600 mt-1">95</p>
+            <p class="text-xs text-slate-400 mt-1">= BITS Pilani</p>
+        </div>
+        <div class="rounded-2xl bg-green-50 border border-green-200 p-4 text-center">
+            <div class="text-2xl mb-2">🎓</div>
+            <p class="font-black text-green-700 text-sm">Experiential Learning</p>
+            <p class="text-2xl font-black text-green-600 mt-1">96</p>
+            <p class="text-xs text-slate-400 mt-1">Highest among all</p>
+        </div>
+        <div class="rounded-2xl bg-green-50 border border-green-200 p-4 text-center">
+            <div class="text-2xl mb-2">🤖</div>
+            <p class="font-black text-green-700 text-sm">AI &amp; Emerging Tech</p>
+            <p class="text-2xl font-black text-green-600 mt-1">92</p>
+            <p class="text-xs text-slate-400 mt-1">Ahead of national avg</p>
+        </div>
+        <div class="rounded-2xl bg-green-50 border border-green-200 p-4 text-center">
+            <div class="text-2xl mb-2">🔀</div>
+            <p class="font-black text-green-700 text-sm">Interdisciplinary</p>
+            <p class="text-2xl font-black text-green-600 mt-1">92</p>
+            <p class="text-xs text-slate-400 mt-1">Ahead of national avg</p>
+        </div>
+        <div class="rounded-2xl bg-green-50 border border-green-200 p-4 text-center">
+            <div class="text-2xl mb-2">📋</div>
+            <p class="font-black text-green-700 text-sm">NEP Flexibility</p>
+            <p class="text-2xl font-black text-green-600 mt-1">90+</p>
+            <p class="text-xs text-slate-400 mt-1">Applied learning focus</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══ CREDIT CATEGORY COMPARISON ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.1s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary/60">Credits</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Credit Category % Comparison — Key Institutions
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:20rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">Core Theory · Industry/Skill · Research/Project · Electives/MDM · HSS/Values</p>
+</div>
+
+<div class="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- CREDIT TABLE -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+        <table class="bench-table">
+            <thead>
+                <tr>
+                    <th>Institution</th>
+                    <th>Core Theory %</th>
+                    <th>Industry / Skill %</th>
+                    <th>Research / Project %</th>
+                    <th>Electives / MDM %</th>
+                    <th>HSS / Values %</th>
+                    <th>Total %</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="vu-row"><td>⭐ Vishwakarma University</td><td>28</td><td>22</td><td>12</td><td>24</td><td>10</td><td>96</td></tr>
+                <tr><td>MIT</td><td>35</td><td>15</td><td>25</td><td>18</td><td>5</td><td>98</td></tr>
+                <tr><td>Stanford</td><td>32</td><td>18</td><td>22</td><td>20</td><td>5</td><td>97</td></tr>
+                <tr><td>IISc Bengaluru</td><td>38</td><td>17</td><td>20</td><td>15</td><td>5</td><td>95</td></tr>
+                <tr><td>BITS Pilani</td><td>30</td><td>20</td><td>15</td><td>22</td><td>8</td><td>95</td></tr>
+            </tbody>
+        </table>
+        <p class="mt-3 text-xs text-slate-400">VU leads in Industry/Skill % (22) and HSS/Values % (10) among all listed institutions.</p>
+    </div>
+
+    <!-- CREDIT STACKED BAR CHART -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+            <div>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Credit Mix — Stacked Bar</h3>
+                <p class="text-xs text-slate-400 mt-0.5">5 credit categories across institutions</p>
             </div>
         </div>
         <div class="relative h-[280px]">
-            <canvas id="partnerChart"></canvas>
+            <canvas id="creditChart"></canvas>
         </div>
-    </div>
-
-    <!-- STUDENT SPOTLIGHT -->
-    <div class="spotlight-card lift rounded-[28px] bg-gradient-to-br from-primary via-primary to-secondary text-white p-8 shadow-2xl"
-         style="opacity:0; animation: fadeUpAnim 0.6s ease 0.25s forwards;">
-        <div class="text-5xl mb-5 globe-spin" style="animation-duration:6s;">🌍</div>
-        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/80 text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">
-            Student Spotlight
-        </span>
-        <h3 class="text-2xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
-            International Achievement
-        </h3>
-        <p class="mt-5 leading-relaxed text-white/85 text-sm">
-            {{ summary.student_achievement }}
-        </p>
     </div>
 
 </div>
 
-<!-- ══ THREE PILLARS ══ -->
-<div class="mt-10 grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- ══ CURRICULUM FEATURE PRESENCE ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.1s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Features</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Curriculum Feature Presence
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:18rem;"></div>
+    <p class="mt-3 text-xs text-slate-400">
+        <span class="tick-yes">✓</span> Present &nbsp;
+        <span class="tick-no">✕</span> Absent &nbsp;
+        <span class="tick-part">~</span> Partial / Planned
+    </p>
+</div>
 
-    <!-- ACADEMIC BENCHMARKING -->
+<div class="mt-6 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Academic Structure &amp; NEP Features — VU | Global | National</p>
+    <table class="feat-table">
+        <thead>
+            <tr>
+                <th style="min-width:240px;text-align:left;">Curriculum Feature</th>
+                <th>VU</th><th>MIT</th><th>Stanford</th><th>CMU</th><th>IISc</th><th>BITS</th><th>SPPU</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="vu-feat"><td>Capstone / Major Project Requirement</td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td></tr>
+            <tr><td>Mandatory Undergraduate Research Thesis / Project</td><td><span class="tick-no">✕</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-yes">✓</span></td></tr>
+            <tr class="vu-feat"><td>Faculty-Supervised Research Opportunities (UROP-type)</td><td><span class="tick-yes">✓</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr><td>Formal NEP Exit Criteria (Diploma / Adv. Diploma)</td><td><span class="tick-yes">✓</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr class="vu-feat"><td>Indian Knowledge System (IKS) Course</td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr><td>Multi-disciplinary Minor (MDM / Cross-department Minor)</td><td><span class="tick-yes">✓</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr class="vu-feat"><td>SWAYAM / MOOC Credit Transfer</td><td><span class="tick-yes">✓</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr><td>Dedicated Embedded Systems Course (≥3 Credits)</td><td><span class="tick-no">✕</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td></tr>
+        </tbody>
+    </table>
+
+    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 mt-8">Industry &amp; Innovation Features — MIT AoE | Global | National</p>
+    <table class="feat-table">
+        <thead>
+            <tr>
+                <th style="min-width:240px;text-align:left;">Curriculum Feature</th>
+                <th>VU</th><th>MIT</th><th>Stanford</th><th>CMU</th><th>IISc</th><th>BITS</th><th>SPPU</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="vu-feat"><td>Compiler Design in Core Curriculum</td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr><td>Semester-long Industry Internship (≥5 months)</td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr class="vu-feat"><td>Industry Practicum / Co-op Programme</td><td><span class="tick-yes">✓</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-part">~</span></td></tr>
+            <tr><td>Certification-linked Skill Courses (VSEC)</td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td></tr>
+            <tr class="vu-feat"><td>GenAI / LLM Course in Curriculum</td><td><span class="tick-no">✕</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-no">✕</span></td><td><span class="tick-part">~</span></td><td><span class="tick-no">✕</span></td></tr>
+            <tr><td>Ethics in AI as Dedicated Course</td><td><span class="tick-part">~</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td></tr>
+            <tr class="vu-feat"><td>Startup / Entrepreneurship Studio Credit</td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-yes">✓</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td><td><span class="tick-part">~</span></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ FOUR INSIGHT PILLARS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.08s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Key Insights</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Benchmarking Findings
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:16rem;"></div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- NEP STRENGTH -->
     <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
         <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-xl mb-5">🏛️</div>
         <div class="w-1 h-6 rounded-full bg-primary mb-3"></div>
-        <h3 class="text-lg font-black text-primary mb-3 uppercase tracking-wide">Academic Benchmarking</h3>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.benchmarking_text }}</p>
+        <h3 class="text-lg font-black text-primary mb-3 uppercase tracking-wide">VU Leads: NEP Compliance, IKS &amp; Multi-Disciplinary Flexibility</h3>
+        <p class="text-slate-600 leading-relaxed text-sm">Vishwakarma University demonstrates a distinctive advantage in NEP compliance, Indian Knowledge System (IKS) integration, and multi-disciplinary flexibility compared with IISc Bengaluru and BITS Pilani. Through formal integration of NEP-aligned curriculum design, interdisciplinary learning pathways, VSEC, and application-oriented education, VU achieves an estimated score of <strong>90+</strong>, vs ~80 for IISc and 84–86 for BITS Pilani. VU stands out for translating NEP 2020 objectives into curriculum practice, positioning it as a strong model for modern, student-centric higher education.</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- EXCHANGE PROGRAMS -->
+    <!-- RESEARCH OPPORTUNITY -->
     <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
-        <div class="w-10 h-10 rounded-2xl bg-secondary/10 flex items-center justify-center text-xl mb-5">✈️</div>
+        <div class="w-10 h-10 rounded-2xl bg-secondary/10 flex items-center justify-center text-xl mb-5">🔬</div>
         <div class="w-1 h-6 rounded-full bg-secondary mb-3"></div>
-        <h3 class="text-lg font-black text-secondary mb-3 uppercase tracking-wide">Exchange Programs</h3>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.exchange_program_text }}</p>
+        <h3 class="text-lg font-black text-secondary mb-3 uppercase tracking-wide">Research Development Opportunity: Strengthening Research Ecosystem</h3>
+        <p class="text-slate-600 leading-relaxed text-sm">VU shows strong industry orientation and project-based learning; however, research infrastructure and structured undergraduate research opportunities remain areas for growth. VU is estimated to be <strong>13 points below the national benchmark</strong> (IISc + BITS + SPPU) and <strong>28 points below the global benchmark</strong> (MIT, Stanford, CMU) in research orientation. While VU already includes Research Methodology and capstone projects, introducing faculty-mentored research, undergraduate publication pathways, and dedicated research seminars could strengthen research excellence and global competitiveness.</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- RESEARCH & INNOVATION -->
+    <!-- HARDWARE GAP -->
     <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
-        <div class="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center text-xl mb-5">🔬</div>
+        <div class="w-10 h-10 rounded-2xl bg-amber-500/10 flex items-center justify-center text-xl mb-5">⚙️</div>
+        <div class="w-1 h-6 rounded-full bg-amber-500 mb-3"></div>
+        <h3 class="text-lg font-black text-amber-600 mb-3 uppercase tracking-wide">Hardware &amp; Systems Depth: Opportunity for Strengthening Core Computing</h3>
+        <p class="text-slate-600 leading-relaxed text-sm">VU demonstrates strong coverage in AI, IoT, Cloud, and applied technologies, but hardware and low-level systems depth remains an area for future enhancement. VU scores approximately <strong>80 in Systems &amp; Infrastructure</strong>, compared with <strong>96–97 for MIT, Stanford, and CMU</strong>. Global curricula emphasize Computer Architecture, Embedded Systems, OS, hardware labs, and advanced systems design. While VU includes Computer Networks, IoT, IoT Data Acquisition, and Operating Systems, expanding dedicated credits in Computer Architecture, Embedded Systems, hardware-oriented labs, and systems research projects could further strengthen alignment with international computing curricula.</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- INDUSTRY READINESS -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center text-xl mb-5">🏭</div>
         <div class="w-1 h-6 rounded-full bg-green-600 mb-3"></div>
-        <h3 class="text-lg font-black text-green-600 mb-3 uppercase tracking-wide">Research & Innovation</h3>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.research_text }}</p>
+        <h3 class="text-lg font-black text-green-600 mb-3 uppercase tracking-wide">Industry Readiness: Competitive with BITS Pilani &amp; Ahead in Applied Learning</h3>
+        <p class="text-slate-600 leading-relaxed text-sm">VU demonstrates strong industry orientation through capstone projects, internships, VSEC-based skill development, industry projects, and application-focused learning. VU's Industry Readiness score <strong>(95)</strong> is competitive with BITS Pilani (95) and ahead of many traditional university curricula. The next opportunity is to strengthen formal long-term industry partnerships, co-designed curriculum pathways, and outcome-linked internship and placement analytics to further enhance industry impact.</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-</div>
-
-<!-- ══ INTERNATIONAL COLLABORATIONS ══ -->
-<div class="mt-14 mb-8 section-head" style="animation-delay:0.1s;">
-    <div class="flex items-center gap-3 mb-2">
-        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
-        <span class="text-xs font-bold uppercase tracking-widest text-secondary/60">Partners</span>
-    </div>
-    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-        International Collaborations
-    </h3>
-    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:16rem;"></div>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-    {% for partner in partners %}
-    <div class="partner-card lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-lg p-6 overflow-hidden group">
-        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-slate-50 border-b border-l border-slate-100 flex items-center justify-center text-xl opacity-60 group-hover:opacity-100 transition-opacity">
-            🤝
-        </div>
-        <h4 class="font-black text-slate-800 pr-12 text-base leading-tight">{{ partner.name }}</h4>
-        <div class="flex items-center gap-1.5 mt-2">
-            <span class="text-slate-400 text-sm">📍</span>
-            <p class="text-sm text-slate-500 font-medium">{{ partner.country }}</p>
-        </div>
-        <div class="mt-4">
-            <span class="cat-badge inline-block px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 cursor-default">
-                {{ partner.category }}
-            </span>
-        </div>
-        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    </div>
-    {% empty %}
-    <div class="col-span-full text-center py-12 text-slate-400 font-medium">No partner records found.</div>
-    {% endfor %}
-</div>
-
-<!-- ══ GLOBAL IMPACT ══ -->
-<div class="impact-card mt-12 rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-2xl">
-    <div class="flex items-center gap-3 mb-6">
-        <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
-        <div>
-            <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">Global Impact</h3>
-            <p class="text-xs text-slate-400 mt-0.5">Measurable outcomes & achievements</p>
-        </div>
-    </div>
-    <p class="text-slate-600 leading-relaxed text-sm max-w-4xl">{{ summary.impact_text }}</p>
 </div>
 
 <!-- ══ VISION BANNER ══ -->
@@ -321,36 +818,141 @@
         VU – LaunchPad to be Global
     </h3>
     <p class="mt-5 text-lg leading-relaxed text-white/85 max-w-3xl">
-        {{ summary.vision_statement }}
+        Vishwakarma University is positioned as a high-industry-readiness, NEP-compliant institution with strong experiential and interdisciplinary foundations. Closing the research and systems gap while maintaining its applied-learning strengths will propel VU into the global top tier.
     </p>
 </div>
 
+<!-- ══ CHARTS SCRIPTS ══ -->
 <script>
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.color = "#64748b";
 
-new Chart(document.getElementById('partnerChart'), {
-    type: 'doughnut',
+const dimensions = [
+    'Curriculum Breadth','Core CS Coverage','Math & Theory',
+    'AI & Emerging Tech','Software Eng.','Systems & Infra.',
+    'Research Orient.','Industry Align.','Experiential',
+    'Flexibility','Interdisciplinary','Global Comp. & Ethics'
+];
+
+const vuData       = [88,82,65,92,90,80,72,95,96,88,92,82];
+const globalTop3   = [97,98.7,98,96.7,94.7,96.7,99.7,93,93.3,97.7,95.7,94.3];
+const nationalTop3 = [88.7,89,88,85.3,85.7,86.3,85,87.3,89.3,84.7,86.7,82.7];
+const mitData      = [98,99,99,95,92,98,100,90,92,99,97,95];
+const stanfordData = [97,98,97,99,94,95,99,95,93,98,98,96];
+const cmuData      = [97,99,98,96,98,97,100,94,95,96,92,92];
+const iiscData     = [90,94,98,90,85,92,100,82,86,82,90,88];
+const bitsData     = [90,88,84,86,88,85,80,95,94,90,88,82];
+const nusData      = [95,96,94,95,91,94,94,92,90,92,95,94];
+const oxfordData   = [90,93,97,85,82,88,98,80,84,88,94,96];
+
+const allDatasets = {
+    vu:       { label:'Vishwakarma University', data:vuData,       borderColor:'#E14D2A', backgroundColor:'rgba(225,77,42,0.15)',  pointBackgroundColor:'#E14D2A' },
+    global:   { label:'Global Top-3 Avg.',      data:globalTop3,   borderColor:'#162850', backgroundColor:'rgba(22,40,80,0.1)',    pointBackgroundColor:'#162850' },
+    national: { label:'National Top-3 Avg.',     data:nationalTop3, borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.1)', pointBackgroundColor:'#10B981' },
+    mit:      { label:'MIT',                     data:mitData,      borderColor:'#6366F1', backgroundColor:'rgba(99,102,241,0.08)', pointBackgroundColor:'#6366F1' },
+    stanford: { label:'Stanford',                data:stanfordData, borderColor:'#F59E0B', backgroundColor:'rgba(245,158,11,0.08)', pointBackgroundColor:'#F59E0B' },
+    cmu:      { label:'CMU',                     data:cmuData,      borderColor:'#EC4899', backgroundColor:'rgba(236,72,153,0.08)', pointBackgroundColor:'#EC4899' },
+    iisc:     { label:'IISc Bengaluru',          data:iiscData,     borderColor:'#14B8A6', backgroundColor:'rgba(20,184,166,0.08)', pointBackgroundColor:'#14B8A6' },
+    bits:     { label:'BITS Pilani',             data:bitsData,     borderColor:'#F97316', backgroundColor:'rgba(249,115,22,0.08)', pointBackgroundColor:'#F97316' },
+    nus:      { label:'NUS',                     data:nusData,      borderColor:'#8B5CF6', backgroundColor:'rgba(139,92,246,0.08)', pointBackgroundColor:'#8B5CF6' },
+    oxford:   { label:'Oxford',                  data:oxfordData,   borderColor:'#0EA5E9', backgroundColor:'rgba(14,165,233,0.08)', pointBackgroundColor:'#0EA5E9' },
+};
+
+const activeKeys = new Set(['vu','global','national']);
+
+const radarChart = new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
     data: {
-        labels: ['Asia', 'North America', 'Europe', 'Africa'],
-        datasets: [{
-            data: [7, 3, 2, 1],
-            backgroundColor: ['#162850', '#E14D2A', '#F59E0B', '#10B981'],
-            borderWidth: 0,
-            hoverOffset: 10
-        }]
+        labels: dimensions,
+        datasets: ['vu','global','national'].map(k => ({...allDatasets[k], borderWidth:2.5, pointRadius:3, fill:true}))
     },
     options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '68%',
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10 }
-            }
+        responsive:true, maintainAspectRatio:false,
+        scales: { r: { min:50, max:100, ticks:{stepSize:10, font:{size:9}}, pointLabels:{font:{size:9.5}} }},
+        plugins: { legend:{ position:'bottom', labels:{ padding:14, usePointStyle:true, pointStyleWidth:10, font:{size:10} }}}
+    }
+});
+
+function toggleRadar(key, btn) {
+    if (activeKeys.has(key)) {
+        if (activeKeys.size === 1) return;
+        activeKeys.delete(key);
+        btn.classList.remove('active');
+    } else {
+        activeKeys.add(key);
+        btn.classList.add('active');
+    }
+    radarChart.data.datasets = [...activeKeys].map(k => ({
+        ...allDatasets[k], borderWidth:2.5, pointRadius:3, fill:true
+    }));
+    radarChart.update();
+}
+
+// ── BUBBLE CHART ──
+new Chart(document.getElementById('bubbleChart'), {
+    type: 'bubble',
+    data: {
+        datasets: [
+            { label:'Vishwakarma University', data:[{x:85,y:65,r:18}],  backgroundColor:'rgba(225,77,42,0.85)',  borderColor:'#E14D2A', borderWidth:2 },
+            { label:'MIT',                    data:[{x:68,y:95,r:22}],  backgroundColor:'rgba(22,40,80,0.8)',    borderColor:'#162850', borderWidth:2 },
+            { label:'Stanford',               data:[{x:70,y:92,r:22}],  backgroundColor:'rgba(99,102,241,0.75)',borderColor:'#6366F1', borderWidth:2 },
+            { label:'CMU',                    data:[{x:74,y:88,r:21}],  backgroundColor:'rgba(236,72,153,0.75)',borderColor:'#EC4899', borderWidth:2 },
+            { label:'IISc Bengaluru',         data:[{x:62,y:90,r:17}],  backgroundColor:'rgba(20,184,166,0.75)',borderColor:'#14B8A6', borderWidth:2 },
+            { label:'BITS Pilani',            data:[{x:74,y:85,r:19}],  backgroundColor:'rgba(245,158,11,0.8)', borderColor:'#F59E0B', borderWidth:2 },
+            { label:'SPPU',                   data:[{x:72,y:82,r:15}],  backgroundColor:'rgba(148,163,184,0.75)',borderColor:'#94a3b8',borderWidth:2 },
+        ]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        scales: {
+            x: { title:{ display:true, text:'Industry Readiness →', font:{size:11,weight:'bold'} }, min:55, max:100 },
+            y: { title:{ display:true, text:'Research Orientation →', font:{size:11,weight:'bold'} }, min:55, max:105 }
         },
-        animation: { animateRotate: true, duration: 1000, easing: 'easeOutQuart' }
+        plugins: {
+            legend:{ position:'bottom', labels:{ padding:10, usePointStyle:true, font:{size:10} }},
+            tooltip:{ callbacks:{ label: ctx => `${ctx.dataset.label}  |  Industry: ${ctx.raw.x}  Research: ${ctx.raw.y}` }}
+        }
+    }
+});
+
+// ── GAP BAR CHART ──
+new Chart(document.getElementById('gapBarChart'), {
+    type: 'bar',
+    data: {
+        labels: dimensions,
+        datasets: [
+            { label:'VU',             data:vuData,       backgroundColor:'rgba(225,77,42,0.85)', borderRadius:4 },
+            { label:'Global Top-3',   data:globalTop3,   backgroundColor:'rgba(22,40,80,0.8)',   borderRadius:4 },
+            { label:'National Top-3', data:nationalTop3, backgroundColor:'rgba(16,185,129,0.8)', borderRadius:4 },
+        ]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        scales: {
+            x: { ticks:{ font:{size:8}, maxRotation:45 } },
+            y: { min:50, max:105, ticks:{ stepSize:10 } }
+        },
+        plugins: { legend:{ position:'bottom', labels:{ padding:14, usePointStyle:true, pointStyleWidth:10, font:{size:11} }}}
+    }
+});
+
+// ── CREDIT STACKED BAR ──
+new Chart(document.getElementById('creditChart'), {
+    type: 'bar',
+    data: {
+        labels: ['VU','MIT','Stanford','IISc','BITS'],
+        datasets: [
+            { label:'Core Theory %',        data:[28,35,32,38,30], backgroundColor:'rgba(22,40,80,0.85)',   borderRadius:4 },
+            { label:'Industry / Skill %',   data:[22,15,18,17,20], backgroundColor:'rgba(225,77,42,0.85)', borderRadius:4 },
+            { label:'Research / Project %', data:[12,25,22,20,15], backgroundColor:'rgba(99,102,241,0.8)', borderRadius:4 },
+            { label:'Electives / MDM %',    data:[24,18,20,15,22], backgroundColor:'rgba(245,158,11,0.8)', borderRadius:4 },
+            { label:'HSS / Values %',       data:[10, 5, 5, 5, 8], backgroundColor:'rgba(16,185,129,0.8)', borderRadius:4 },
+        ]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        scales: { x:{ stacked:true }, y:{ stacked:true, max:110, ticks:{stepSize:20} }},
+        plugins: { legend:{ position:'bottom', labels:{ padding:12, usePointStyle:true, pointStyleWidth:10, font:{size:10} }}}
     }
 });
 </script>

@@ -1,611 +1,1235 @@
 {% extends "base.html" %}
 
-{% block title %}Employability, Ethics & Sustainability{% endblock %}
+{% block title %}Employability, Ethics &amp; Sustainability — VU BSc CS{% endblock %}
 
 {% block extra_head %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
 <style>
-    /* ══ KEYFRAMES ══════════════════════════════════════ */
-    @keyframes fadeUp {
-        from { opacity:0; transform:translateY(28px); }
-        to   { opacity:1; transform:translateY(0); }
-    }
-    @keyframes popIn {
-        from { opacity:0; transform:scale(0.88) translateY(20px); }
-        to   { opacity:1; transform:scale(1)    translateY(0); }
-    }
-    @keyframes barGrow {
-        to { width: var(--w, 80%); }
-    }
-    @keyframes slideRight {
-        from { transform: scaleX(0); }
-        to   { transform: scaleX(1); }
-    }
-    @keyframes floatOrb {
-        0%,100% { transform: translate(0,0) scale(1); }
-        50%      { transform: translate(10px,14px) scale(1.05); }
-    }
-    @keyframes glowPulse {
-        0%,100% { box-shadow: 0 0 0 0 var(--glow,rgba(225,77,42,.45)); }
-        50%      { box-shadow: 0 0 0 9px transparent; }
-    }
-    @keyframes countUp {
-        from { opacity:0; transform:translateY(10px) scale(.9); }
-        to   { opacity:1; transform:translateY(0)    scale(1); }
-    }
-    @keyframes shimmerSlide {
-        from { transform: translateX(-100%) rotate(12deg); }
-        to   { transform: translateX(280%)  rotate(12deg); }
-    }
-    @keyframes spinOnce {
-        from { transform: rotate(0deg); }
-        to   { transform: rotate(360deg); }
-    }
-    @keyframes borderDraw {
-        from { stroke-dashoffset: 400; }
-        to   { stroke-dashoffset: 0; }
-    }
-    @keyframes nepPulse {
-        0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
-        50%      { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
-    }
-    @keyframes tabIndicator {
-        from { opacity:0; transform:scaleX(0); }
-        to   { opacity:1; transform:scaleX(1); }
-    }
-    @keyframes cardFlip {
-        from { opacity:0; transform:perspective(600px) rotateX(-12deg) translateY(20px); }
-        to   { opacity:1; transform:perspective(600px) rotateX(0deg)   translateY(0); }
-    }
-    @keyframes waveIn {
-        0%   { clip-path: inset(0 100% 0 0); }
-        100% { clip-path: inset(0 0% 0 0); }
-    }
-    @keyframes ripple {
-        from { transform:scale(0); opacity:.5; }
-        to   { transform:scale(4); opacity:0; }
-    }
+/* ═══════════════════════════════════════════════
+   ROOT TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --red:    #E14D2A;
+  --navy:   #162850;
+  --green:  #10B981;
+  --purple: #8B5CF6;
+  --amber:  #F59E0B;
+  --slate:  #64748b;
+  --glass:  rgba(255,255,255,0.82);
+  --border: rgba(255,255,255,0.6);
+  --shadow: 0 8px 28px rgba(22,40,80,0.09);
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+}
 
-    /* ── UTILITY ────────────────────────────────────── */
-    .anim-fade { opacity:0; animation: fadeUp .55s ease forwards; }
-    .anim-pop  { opacity:0; animation: popIn  .5s  cubic-bezier(.34,1.4,.64,1) forwards; }
-    .anim-flip { opacity:0; animation: cardFlip .55s cubic-bezier(.34,1.4,.64,1) forwards; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .d1{animation-delay:.05s} .d2{animation-delay:.12s} .d3{animation-delay:.19s}
-    .d4{animation-delay:.26s} .d5{animation-delay:.33s} .d6{animation-delay:.40s}
-    .d7{animation-delay:.47s} .d8{animation-delay:.54s}
+body { font-family: var(--font-body); background: #f0f4f8; }
 
-    /* ── LIFT ───────────────────────────────────────── */
-    .lift {
-        transition: transform .28s cubic-bezier(.34,1.4,.64,1),
-                    box-shadow .25s ease;
-    }
-    .lift:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 28px 52px rgba(22,40,80,.14);
-    }
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════ */
+@keyframes fadeUp    { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+@keyframes popIn     { from{opacity:0;transform:scale(.88) translateY(18px)} to{opacity:1;transform:none} }
+@keyframes flipIn    { from{opacity:0;transform:perspective(600px) rotateX(-14deg) translateY(18px)} to{opacity:1;transform:perspective(600px) rotateX(0) translateY(0)} }
+@keyframes barGrow   { to{width:var(--w,80%)} }
+@keyframes orb       { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(12px,16px) scale(1.06)} }
+@keyframes shimmer   { from{transform:translateX(-100%) rotate(12deg)} to{transform:translateX(280%) rotate(12deg)} }
+@keyframes countUp   { from{opacity:0;transform:translateY(10px) scale(.9)} to{opacity:1;transform:none} }
+@keyframes nepPulse  { 0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5)} 50%{box-shadow:0 0 0 8px rgba(16,185,129,0)} }
+@keyframes scaleBar  { from{transform:scaleX(0)} to{transform:scaleX(1)} }
 
-    /* ── GRADIENT TEXT ──────────────────────────────── */
-    .gt-red  { background:linear-gradient(135deg,#E14D2A,#c0391c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .gt-navy { background:linear-gradient(135deg,#162850,#1d3d72); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .gt-grn  { background:linear-gradient(135deg,#10B981,#047857); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.anim-fade { opacity:0; animation: fadeUp .55s ease forwards; }
+.anim-pop  { opacity:0; animation: popIn  .5s cubic-bezier(.34,1.4,.64,1) forwards; }
+.anim-flip { opacity:0; animation: flipIn .55s cubic-bezier(.34,1.4,.64,1) forwards; }
 
-    /* ── HEADER ACCENT BAR ──────────────────────────── */
-    .acc-bar {
-        height:4px; width:0; border-radius:4px;
-        transform-origin:left;
-        animation: barGrow .8s cubic-bezier(.4,0,.2,1) .2s forwards;
-    }
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.19s}
+.d4{animation-delay:.26s}.d5{animation-delay:.33s}.d6{animation-delay:.40s}
+.d7{animation-delay:.47s}.d8{animation-delay:.54s}
 
-    /* ── ORB BG (floating) ──────────────────────────── */
-    .float-orb {
-        position:absolute; border-radius:50%;
-        filter:blur(55px); pointer-events:none; opacity:.18;
-        animation: floatOrb 8s ease-in-out infinite;
-    }
+/* ═══════════════════════════════════════════════
+   LAYOUT SHELL
+═══════════════════════════════════════════════ */
+.eegs-page { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
 
-    /* ── KPI CARD ───────────────────────────────────── */
-    .kpi-card {
-        position:relative; overflow:hidden;
-        border-radius:26px;
-        background:rgba(255,255,255,.82);
-        backdrop-filter:blur(22px) saturate(170%);
-        border:1px solid rgba(255,255,255,.6);
-        padding:1.75rem;
-        box-shadow:0 8px 28px rgba(22,40,80,.08);
-        cursor:default;
-        transition:transform .28s cubic-bezier(.34,1.4,.64,1),
-                   box-shadow .25s ease;
-    }
-    .kpi-card:hover {
-        transform:translateY(-6px) scale(1.01);
-        box-shadow:0 28px 52px rgba(22,40,80,.15);
-    }
-    /* bottom accent reveal */
-    .kpi-card .k-bar {
-        position:absolute; bottom:0; left:0; right:0; height:3px;
-        border-radius:0 0 26px 26px;
-        transform:scaleX(0); transform-origin:left;
-        transition:transform .35s cubic-bezier(.34,1.4,.64,1);
-    }
-    .kpi-card:hover .k-bar { transform:scaleX(1); }
-    /* shimmer */
-    .kpi-card .k-shine {
-        position:absolute; inset:0;
-        background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
-        transform:translateX(-100%) rotate(12deg);
-        pointer-events:none;
-    }
-    .kpi-card:hover .k-shine {
-        animation: shimmerSlide .6s ease forwards;
-    }
-    /* big number pop */
-    .kpi-card .k-num {
-        display:inline-block;
-        animation: countUp .6s cubic-bezier(.34,1.4,.64,1) .3s both;
-        transition:transform .2s;
-    }
-    .kpi-card:hover .k-num { transform:scale(1.08); }
+/* ═══════════════════════════════════════════════
+   SECTION LABEL & HEADING
+═══════════════════════════════════════════════ */
+.sec-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 999px;
+  background: rgba(225,77,42,.1); border: 1px solid rgba(225,77,42,.22); color: var(--red);
+  margin-bottom: .5rem;
+}
+.sec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); display: inline-block; }
 
-    /* ── PILLAR CARD ────────────────────────────────── */
-    .pillar-card {
-        position:relative; overflow:hidden;
-        border-radius:26px;
-        background:rgba(255,255,255,.82);
-        backdrop-filter:blur(22px) saturate(170%);
-        border:1px solid rgba(255,255,255,.6);
-        padding:2rem;
-        box-shadow:0 8px 28px rgba(22,40,80,.07);
-        transition:transform .28s cubic-bezier(.34,1.4,.64,1),
-                   box-shadow .25s ease;
-    }
-    .pillar-card:hover {
-        transform:translateY(-5px);
-        box-shadow:0 26px 50px rgba(22,40,80,.13);
-    }
-    .pillar-card .p-bar {
-        position:absolute; bottom:0; left:0; right:0; height:3px;
-        border-radius:0 0 26px 26px;
-        transform:scaleX(0); transform-origin:left;
-        transition:transform .35s cubic-bezier(.34,1.4,.64,1);
-    }
-    .pillar-card:hover .p-bar { transform:scaleX(1); }
-    .pillar-card .p-watermark {
-        position:absolute; top:.5rem; right:.75rem;
-        font-size:5rem; line-height:1; opacity:.04;
-        pointer-events:none; select:none;
-        transition:opacity .3s, transform .3s;
-    }
-    .pillar-card:hover .p-watermark { opacity:.08; transform:scale(1.1) rotate(-5deg); }
+.sec-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 900; text-transform: uppercase; letter-spacing: .02em;
+  color: var(--navy); line-height: 1.15;
+}
 
-    /* ── TABS ───────────────────────────────────────── */
-    .tab-btn {
-        position:relative;
-        display:flex; align-items:center; gap:6px;
-        padding:9px 22px;
-        border-radius:999px;
-        font-size:.75rem; font-weight:700;
-        letter-spacing:.06em; text-transform:uppercase;
-        border:2px solid transparent;
-        cursor:pointer;
-        background:transparent; color:#64748b;
-        transition:background .22s, color .22s, transform .18s, box-shadow .2s;
-        white-space:nowrap; overflow:hidden;
-    }
-    .tab-btn:hover { background:#f1f5f9; color:#1e293b; transform:translateY(-1px); }
-    /* ripple on click */
-    .tab-btn .t-ripple {
-        position:absolute; border-radius:50%;
-        width:8px; height:8px;
-        pointer-events:none; display:none;
-    }
+.acc-bar {
+  height: 4px; width: 0; border-radius: 4px;
+  background: linear-gradient(90deg, var(--red), var(--navy));
+  animation: barGrow .8s cubic-bezier(.4,0,.2,1) .25s forwards;
+  margin-top: .75rem;
+}
 
-    .tab-btn.t-employ.active  { background:#E14D2A; color:#fff; border-color:#E14D2A; box-shadow:0 6px 20px rgba(225,77,42,.35); }
-    .tab-btn.t-ethics.active  { background:#162850; color:#fff; border-color:#162850; box-shadow:0 6px 20px rgba(22,40,80,.35); }
-    .tab-btn.t-sustain.active { background:#10B981; color:#fff; border-color:#10B981; box-shadow:0 6px 20px rgba(16,185,129,.35); }
+/* ═══════════════════════════════════════════════
+   GLASS CARD BASE
+═══════════════════════════════════════════════ */
+.glass {
+  background: var(--glass); backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid var(--border); border-radius: 26px;
+  box-shadow: var(--shadow); overflow: hidden;
+}
+.glass-lift {
+  transition: transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+}
+.glass-lift:hover { transform: translateY(-6px); box-shadow: 0 28px 52px rgba(22,40,80,.15); }
 
-    /* ── INIT CARD ──────────────────────────────────── */
-    .init-card {
-        position:relative; overflow:hidden;
-        transition:transform .28s cubic-bezier(.34,1.4,.64,1),
-                   box-shadow .25s ease;
-        cursor:default;
-    }
-    .init-card:hover { transform:translateY(-5px) scale(1.02); box-shadow:0 22px 44px rgba(22,40,80,.13); }
-    .init-card .i-shine {
-        position:absolute; inset:0;
-        background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
-        transform:translateX(-100%) rotate(12deg);
-        pointer-events:none;
-    }
-    .init-card:hover .i-shine { animation: shimmerSlide .55s ease forwards; }
-    .init-card .i-bar {
-        position:absolute; bottom:0; left:0; right:0; height:3px;
-        opacity:0; transform:scaleX(0); transform-origin:left;
-        transition:opacity .25s, transform .35s cubic-bezier(.34,1.4,.64,1);
-        border-radius:0 0 20px 20px;
-    }
-    .init-card:hover .i-bar { opacity:1; transform:scaleX(1); }
-    .init-card .i-emoji {
-        display:inline-block; font-size:1.8rem; margin-bottom:.6rem;
-        transition:transform .3s cubic-bezier(.34,1.4,.64,1);
-    }
-    .init-card:hover .i-emoji { transform:scale(1.3) rotate(-8deg); }
+/* ═══════════════════════════════════════════════
+   KPI CARDS
+═══════════════════════════════════════════════ */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1.25rem; }
 
-    /* ── METER ──────────────────────────────────────── */
-    .meter-track { height:6px; background:#e2e8f0; border-radius:4px; overflow:hidden; }
-    .meter-fill  { height:100%; border-radius:4px; width:0; animation: barGrow .95s cubic-bezier(.4,0,.2,1) .5s forwards; }
+.kpi-card {
+  position: relative; padding: 1.75rem; border-radius: 26px; cursor: default;
+  background: var(--glass); backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  transition: transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+  overflow: hidden;
+}
+.kpi-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 28px 52px rgba(22,40,80,.16); }
 
-    /* ── IMPACT ROW ─────────────────────────────────── */
-    .impact-row {
-        padding:1.25rem 1rem; border-radius:18px;
-        background:rgba(255,255,255,.55);
-        border:1px solid rgba(255,255,255,.75);
-        transition:background .2s, transform .22s;
-    }
-    .impact-row:hover { background:rgba(255,255,255,.88); transform:translateX(4px); }
+.kpi-orb {
+  position: absolute; width: 96px; height: 96px; border-radius: 50%;
+  filter: blur(55px); pointer-events: none; opacity: .18;
+  top: -24px; right: -24px;
+  animation: orb 8s ease-in-out infinite;
+}
+.kpi-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);
+  transform: translateX(-100%) rotate(12deg); pointer-events: none;
+}
+.kpi-card:hover .kpi-shine { animation: shimmer .6s ease forwards; }
 
-    /* ── VISION CARD ────────────────────────────────── */
-    .vision-card {
-        position:relative; overflow:hidden;
-        border-radius:32px;
-        background:linear-gradient(125deg,#162850 0%,#1a3068 40%,#E14D2A 115%);
-        color:#fff; padding:3rem;
-        box-shadow:0 28px 64px rgba(22,40,80,.28);
-    }
-    .vision-card::before {
-        content:"";
-        position:absolute; inset:0;
-        background-image:
-            linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
-            linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
-        background-size:30px 30px;
-        pointer-events:none;
-    }
-    .vision-card .v-orb1 { position:absolute; width:320px; height:320px; top:-80px; right:-60px; background:rgba(245,158,11,.22); border-radius:50%; filter:blur(80px); pointer-events:none; animation:floatOrb 10s ease-in-out infinite; }
-    .vision-card .v-orb2 { position:absolute; width:260px; height:260px; bottom:-60px; left:-40px; background:rgba(16,185,129,.18); border-radius:50%; filter:blur(70px); pointer-events:none; animation:floatOrb 12s ease-in-out infinite reverse; }
-    .vision-card .v-watermark { position:absolute; right:-10px; bottom:-20px; font-size:12rem; opacity:.05; pointer-events:none; line-height:1; }
+.kpi-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.1rem; }
+.kpi-meta { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #94a3b8; margin-bottom: .2rem; }
+.kpi-sub  { font-size: .68rem; color: #94a3b8; margin-bottom: .75rem; }
+.kpi-num  { font-size: 3.8rem; font-weight: 900; line-height: 1; display: inline-block; animation: countUp .6s cubic-bezier(.34,1.4,.64,1) .35s both; transition: transform .2s; }
+.kpi-card:hover .kpi-num { transform: scale(1.08); }
+.kpi-note { font-size: .68rem; color: #94a3b8; font-weight: 600; margin-top: .3rem; }
+.kpi-status { display: flex; align-items: center; gap: 6px; margin-top: 1rem; }
+.kpi-dot { width: 8px; height: 8px; border-radius: 50%; animation: nepPulse 2.6s ease-in-out infinite; flex-shrink: 0; }
+.kpi-status-label { font-size: .7rem; font-weight: 700; }
+.kpi-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; border-radius: 0 0 26px 26px; transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.34,1.4,.64,1); }
+.kpi-card:hover .kpi-bar { transform: scaleX(1); }
 
-    /* ── NEP BADGE ──────────────────────────────────── */
-    .nep-badge { animation: nepPulse 2.6s ease-in-out infinite; }
+.gt-red    { background: linear-gradient(135deg,#E14D2A,#c0391c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.gt-navy   { background: linear-gradient(135deg,#162850,#1d3d72); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.gt-green  { background: linear-gradient(135deg,#10B981,#047857); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.gt-purple { background: linear-gradient(135deg,#8B5CF6,#6D28D9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-    /* ── SECTION LABEL ──────────────────────────────── */
-    .sec-label {
-        display:inline-flex; align-items:center; gap:6px;
-        font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
-        padding:4px 12px; border-radius:999px;
-        background:rgba(225,77,42,.1); border:1px solid rgba(225,77,42,.22); color:#E14D2A;
-        margin-bottom:.5rem;
-    }
+/* ═══════════════════════════════════════════════
+   TOTAL BANNER
+═══════════════════════════════════════════════ */
+.total-banner {
+  margin-top: 1.5rem; padding: 2rem 2.5rem;
+  background: linear-gradient(135deg, var(--navy) 0%, #1d3068 55%, #2a4080 100%);
+  border-radius: 26px; border: none; color: #fff; position: relative; overflow: hidden;
+}
+.total-banner .orb1 { position:absolute; width:260px; height:260px; border-radius:50%; background:rgba(255,255,255,.06); filter:blur(60px); top:-80px; right:-40px; animation:orb 10s ease-in-out infinite; pointer-events:none; }
+.total-banner .orb2 { position:absolute; width:180px; height:180px; border-radius:50%; background:rgba(16,185,129,.15); filter:blur(50px); bottom:-60px; left:-20px; animation:orb 12s ease-in-out infinite reverse; pointer-events:none; }
+.banner-inner { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; }
+.banner-num { font-size: 5rem; font-weight: 900; line-height: 1; color: #fff; }
+.banner-label { font-size: 1.5rem; font-weight: 900; color: rgba(255,255,255,.75); }
+.banner-sub { font-size: .8rem; color: rgba(255,255,255,.55); font-weight: 600; margin-top: .2rem; }
+.badge { display: inline-block; padding: 6px 14px; border-radius: 999px; font-size: .7rem; font-weight: 700; border: 1px solid; }
+.badge-green  { background: rgba(16,185,129,.2); color: #6ee7b7; border-color: rgba(16,185,129,.35); animation: nepPulse 2.6s ease-in-out infinite; }
+.badge-white  { background: rgba(255,255,255,.12); color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.2); }
+.badge-amber  { background: rgba(245,158,11,.2); color: #fcd34d; border-color: rgba(245,158,11,.3); }
 
-    /* panel transition */
-    .panel-enter { animation: fadeUp .4s ease forwards; }
+/* ═══════════════════════════════════════════════
+   DATA TABLE
+═══════════════════════════════════════════════ */
+.tbl-wrap { overflow-x: auto; }
+table.dtbl { width: 100%; border-collapse: collapse; font-size: .78rem; }
+table.dtbl th {
+  background: linear-gradient(135deg, var(--navy), #1e3a6e);
+  color: #fff; padding: 10px 12px; text-align: left;
+  font-weight: 700; font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap;
+}
+table.dtbl th:first-child { border-radius: 12px 0 0 0; }
+table.dtbl th:last-child  { border-radius: 0 12px 0 0; }
+table.dtbl td { padding: 9px 12px; border-bottom: 1px solid rgba(22,40,80,.07); color: #334155; vertical-align: top; }
+table.dtbl tr:last-child td { border-bottom: none; }
+table.dtbl tbody tr:hover td { background: rgba(225,77,42,.04); }
+table.dtbl tr.total-row td { background: #f8fafc; font-weight: 900; }
+
+.pct-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.pct-track { width: 80px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.pct-fill  { height: 100%; border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════
+   PILLAR CARDS
+═══════════════════════════════════════════════ */
+.pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.25rem; }
+.pillar-card {
+  position: relative; padding: 2rem; border-radius: 26px; overflow: hidden;
+  background: var(--glass); backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  transition: transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+}
+.pillar-card:hover { transform: translateY(-5px); box-shadow: 0 26px 50px rgba(22,40,80,.14); }
+.pillar-accent { width: 4px; height: 100%; position: absolute; left: 0; top: 0; border-radius: 26px 0 0 26px; }
+.pillar-watermark { position: absolute; top: .5rem; right: .75rem; font-size: 5rem; opacity: .04; line-height: 1; pointer-events: none; transition: opacity .3s, transform .3s; }
+.pillar-card:hover .pillar-watermark { opacity: .09; transform: scale(1.12) rotate(-6deg); }
+.pillar-title { font-size: .85rem; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .85rem; display: flex; align-items: center; gap: 8px; }
+.pillar-body { font-size: .82rem; color: #475569; line-height: 1.7; }
+.pillar-foot { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.34,1.4,.64,1); border-radius: 0 0 26px 26px; }
+.pillar-card:hover .pillar-foot { transform: scaleX(1); }
+
+/* ═══════════════════════════════════════════════
+   CHART PANELS
+═══════════════════════════════════════════════ */
+.chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px,1fr)); gap: 1.75rem; }
+.chart-panel { padding: 1.75rem; }
+.chart-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 1.25rem; }
+.chart-vbar { width: 5px; border-radius: 3px; background: linear-gradient(to bottom, var(--red), var(--navy)); flex-shrink: 0; align-self: stretch; }
+.chart-title { font-size: .88rem; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: .03em; }
+.chart-sub   { font-size: .7rem; color: #94a3b8; margin-top: 3px; }
+.chart-wrap  { position: relative; height: 280px; }
+.chart-wrap-sm { position: relative; height: 180px; }
+
+/* ═══════════════════════════════════════════════
+   REVISION SUMMARY CARDS
+═══════════════════════════════════════════════ */
+.rev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.25rem; }
+.rev-card { padding: 1.5rem; border-radius: 22px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform .25s cubic-bezier(.34,1.4,.64,1); }
+.rev-card:hover { transform: translateY(-4px); }
+.rev-card.featured { border-color: rgba(225,77,42,.25); }
+.rev-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #94a3b8; margin-bottom: 1rem; }
+.rev-label.featured { color: var(--red); }
+.rev-row { font-size: .75rem; margin-bottom: .5rem; line-height: 1.5; }
+.rev-dim { font-weight: 700; }
+
+/* ═══════════════════════════════════════════════
+   REVISION TAB SWITCHER
+═══════════════════════════════════════════════ */
+.rev-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+.rev-tab-btn {
+  padding: 8px 20px; border-radius: 999px; font-size: .72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em; border: none; cursor: pointer;
+  background: #e2e8f0; color: #475569;
+  transition: background .2s, color .2s, transform .18s;
+}
+.rev-tab-btn:hover { transform: translateY(-1px); background: #cbd5e1; }
+.rev-tab-btn.active { background: var(--navy); color: #fff; box-shadow: 0 6px 20px rgba(22,40,80,.3); }
+.rev-panel { display: none; }
+.rev-panel.active { display: block; animation: fadeUp .35s ease forwards; }
+
+/* ═══════════════════════════════════════════════
+   INITIATIVE TABS (4-colour)
+═══════════════════════════════════════════════ */
+.init-tab-bar { display: inline-flex; flex-wrap: wrap; gap: 8px; background: rgba(255,255,255,.72); backdrop-filter: blur(18px); border: 1px solid var(--border); border-radius: 18px; padding: 8px; box-shadow: var(--shadow); }
+.init-tab-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 9px 20px; border-radius: 999px; font-size: .72rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; border: 2px solid transparent;
+  cursor: pointer; background: transparent; color: #64748b;
+  transition: background .22s, color .22s, transform .18s, box-shadow .2s; white-space: nowrap;
+}
+.init-tab-btn:hover { background: #f1f5f9; color: #1e293b; transform: translateY(-1px); }
+.init-tab-btn.t-employ.on  { background: var(--red);    color: #fff; border-color: var(--red);    box-shadow: 0 6px 20px rgba(225,77,42,.35); }
+.init-tab-btn.t-ethics.on  { background: var(--navy);   color: #fff; border-color: var(--navy);   box-shadow: 0 6px 20px rgba(22,40,80,.35); }
+.init-tab-btn.t-gender.on  { background: var(--purple); color: #fff; border-color: var(--purple); box-shadow: 0 6px 20px rgba(139,92,246,.35); }
+.init-tab-btn.t-sustain.on { background: var(--green);  color: #fff; border-color: var(--green);  box-shadow: 0 6px 20px rgba(16,185,129,.35); }
+
+.init-panel { display: none; }
+.init-panel.active { display: block; animation: fadeUp .35s ease forwards; }
+
+.init-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1rem; }
+.init-card {
+  position: relative; padding: 1.4rem; border-radius: 20px; overflow: hidden;
+  background: var(--glass); backdrop-filter: blur(18px); border: 1px solid var(--border);
+  box-shadow: var(--shadow); cursor: default;
+  transition: transform .28s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease;
+}
+.init-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 22px 44px rgba(22,40,80,.14); }
+.init-shine { position:absolute; inset:0; background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%); transform:translateX(-100%) rotate(12deg); pointer-events:none; }
+.init-card:hover .init-shine { animation: shimmer .55s ease forwards; }
+.init-foot { position:absolute; bottom:0; left:0; right:0; height:3px; opacity:0; transform:scaleX(0); transform-origin:left; transition:opacity .25s,transform .35s cubic-bezier(.34,1.4,.64,1); border-radius:0 0 20px 20px; }
+.init-card:hover .init-foot { opacity:1; transform:scaleX(1); }
+.init-emoji { font-size: 1.6rem; display: inline-block; margin-bottom: .5rem; transition: transform .3s cubic-bezier(.34,1.4,.64,1); }
+.init-card:hover .init-emoji { transform: scale(1.3) rotate(-8deg); }
+.init-name { font-size: .82rem; font-weight: 700; color: #1e293b; line-height: 1.35; }
+.init-meta { font-size: .68rem; color: #94a3b8; font-weight: 600; margin-top: .6rem; display: flex; align-items: center; gap: 5px; }
+.init-meta-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════
+   SDG BADGE
+═══════════════════════════════════════════════ */
+.sdg { display:inline-block; padding:2px 8px; border-radius:999px; font-size:.65rem; font-weight:700; white-space:nowrap; margin:1px; }
+.sdg-employ  { background:#fff4ee; color:#c0391c; }
+.sdg-ethics  { background:#eef2fa; color:#162850; }
+.sdg-gender  { background:#f5f3ff; color:#6d28d9; }
+.sdg-sustain { background:#ecfdf5; color:#047857; }
+.sdg-sdg     { background:#f0faf5; color:#065f46; }
+
+/* ═══════════════════════════════════════════════
+   IMPACT METERS
+═══════════════════════════════════════════════ */
+.meter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 2rem; }
+.meter-track { height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+.meter-fill  { height: 100%; border-radius: 4px; width: 0; animation: barGrow .95s cubic-bezier(.4,0,.2,1) .55s forwards; }
+.meter-label { font-size: .68rem; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: #334155; }
+.meter-icon  { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1rem; margin-bottom: .75rem; }
+.meter-val   { font-size: .72rem; font-weight: 700; }
+.meter-desc  { font-size: .75rem; color: #64748b; line-height: 1.6; margin-top: .4rem; }
+
+/* ═══════════════════════════════════════════════
+   OBSERVATION & VISION CARDS
+═══════════════════════════════════════════════ */
+.obs-card { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 24px; padding: 1.75rem 2rem; display: flex; gap: 1rem; align-items: flex-start; }
+.obs-icon { font-size: 2rem; flex-shrink: 0; margin-top: .1rem; }
+.obs-title { font-weight: 900; color: #92400e; font-size: .9rem; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
+.obs-body  { color: #334155; font-size: .85rem; line-height: 1.75; }
+
+.vision-card {
+  position: relative; overflow: hidden; border-radius: 32px;
+  background: linear-gradient(125deg, var(--navy) 0%, #1a3068 45%, #E14D2A 115%);
+  color: #fff; padding: 3rem; box-shadow: 0 28px 64px rgba(22,40,80,.28);
+}
+.vision-card::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size: 30px 30px; pointer-events: none;
+}
+.vision-orb1 { position:absolute; width:320px; height:320px; top:-80px; right:-60px; background:rgba(245,158,11,.22); border-radius:50%; filter:blur(80px); pointer-events:none; animation:orb 10s ease-in-out infinite; }
+.vision-orb2 { position:absolute; width:260px; height:260px; bottom:-60px; left:-40px; background:rgba(16,185,129,.18); border-radius:50%; filter:blur(70px); pointer-events:none; animation:orb 12s ease-in-out infinite reverse; }
+.vision-wm { position:absolute; right:-10px; bottom:-20px; font-size:11rem; opacity:.05; pointer-events:none; line-height:1; }
+.vision-inner { position: relative; z-index: 1; }
+.vision-tag { display:inline-block; padding:6px 14px; border-radius:999px; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.75); font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; margin-bottom:1.5rem; }
+.vision-heading { font-family: var(--font-display); font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 900; line-height: 1.2; color: #fff; }
+.vision-body { margin-top: 1.25rem; font-size: .92rem; line-height: 1.8; color: rgba(255,255,255,.85); max-width: 720px; }
+.vision-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2rem; }
+.vision-badge { padding: 7px 18px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); color: #fff; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+
+/* ═══════════════════════════════════════════════
+   OPPORTUNITY BOX
+═══════════════════════════════════════════════ */
+.opp-box { background: #f5f3ff; border: 1px solid #c4b5fd; border-radius: 18px; padding: 1.25rem 1.5rem; display: flex; gap: 12px; align-items: flex-start; margin-top: 1rem; }
+.opp-icon { font-size: 1.5rem; flex-shrink: 0; }
+.opp-title { font-weight: 900; color: #5b21b6; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .3rem; }
+.opp-body  { font-size: .8rem; color: #4b5563; line-height: 1.65; }
+
+/* ═══════════════════════════════════════════════
+   SPACERS
+═══════════════════════════════════════════════ */
+.mt-s  { margin-top: 1.5rem; }
+.mt-m  { margin-top: 2.5rem; }
+.mt-l  { margin-top: 3.5rem; }
+.mb-s  { margin-bottom: 1rem; }
+.mb-m  { margin-bottom: 1.75rem; }
+.flex-wrap-gap { display:flex; flex-wrap:wrap; gap:8px; }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width:640px) {
+  .eegs-page { padding: 1.25rem .75rem 3rem; }
+  .total-banner { padding: 1.5rem; }
+  .banner-num { font-size: 3.5rem; }
+  .vision-card { padding: 2rem 1.5rem; }
+  .obs-card { flex-direction: column; }
+}
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 </style>
 {% endblock %}
 
+
 {% block content %}
+<div class="eegs-page">
 
-<!-- ══ HEADER ═════════════════════════════════════════ -->
-<div class="anim-fade d1 mb-10">
-    <div class="sec-label">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-        Curriculum Quality
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<div class="anim-fade d1 mb-m">
+  <div class="sec-label"><span class="sec-dot"></span> Curriculum Quality</div>
+  <h2 class="sec-heading">
+    Employability, Ethics, Gender &amp;<br>
+    Sustainability
+  </h2>
+  <div class="acc-bar" style="--w:32rem;"></div>
+  <p style="margin-top:1rem;color:#64748b;font-size:.875rem;line-height:1.75;max-width:740px;">
+    Courses mapped against four UN SDG-aligned dimensions:
+    <strong>Employability (SDG 8)</strong>,
+    <strong>Ethics &amp; Governance (SDG 16)</strong>,
+    <strong>Gender Equality &amp; Inclusion (SDG 5)</strong>, and
+    <strong>Environmental Sustainability (SDG 13)</strong> — aligned with
+    <strong>NEP 2020</strong>, AICTE model curriculum, and ACM/IEEE recommendations.
+  </p>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     KPI CARDS
+══════════════════════════════════════════ -->
+<div class="kpi-grid">
+
+  <!-- EMPLOYABILITY -->
+  <div class="kpi-card anim-pop d1">
+    <div class="kpi-orb" style="background:var(--red);"></div>
+    <div class="kpi-shine"></div>
+    <div class="kpi-icon" style="background:rgba(225,77,42,.1);">💼</div>
+    <p class="kpi-meta">Employability</p>
+    <p class="kpi-sub">SDG 8 · NEP 2024</p>
+    <div class="kpi-num gt-red">54</div>
+    <p class="kpi-note">credits · <strong style="color:var(--red);">32.1%</strong> of curriculum</p>
+    <div class="kpi-status">
+      <span class="kpi-dot" style="background:#22c55e;"></span>
+      <span class="kpi-status-label" style="color:#16a34a;">Industry Readiness</span>
     </div>
-    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-wide text-secondary leading-tight"
-        style="font-family:'DM Serif Display',serif;">
-        Employability, Ethics<br class="hidden md:block"> &amp; Sustainability
-    </h2>
-    <div class="acc-bar mt-3 bg-gradient-to-r from-primary to-secondary" style="--w:32rem;"></div>
-    <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
-        Evaluation of curriculum initiatives focused on employability enhancement,
-        ethical computing practices, sustainability awareness and responsible technology adoption.
+    <div class="kpi-bar" style="background:var(--red);"></div>
+  </div>
+
+  <!-- ETHICS -->
+  <div class="kpi-card anim-pop d2">
+    <div class="kpi-orb" style="background:var(--navy);animation-delay:.5s;"></div>
+    <div class="kpi-shine"></div>
+    <div class="kpi-icon" style="background:rgba(22,40,80,.08);">⚖️</div>
+    <p class="kpi-meta">Ethics &amp; Governance</p>
+    <p class="kpi-sub">SDG 16 · NEP 2024</p>
+    <div class="kpi-num gt-navy">16</div>
+    <p class="kpi-note">credits · <strong style="color:var(--navy);">9.5%</strong> of curriculum</p>
+    <div class="kpi-status">
+      <span class="kpi-dot" style="background:var(--navy);"></span>
+      <span class="kpi-status-label" style="color:var(--navy);">Responsible Computing</span>
+    </div>
+    <div class="kpi-bar" style="background:var(--navy);"></div>
+  </div>
+
+  <!-- GENDER & INCLUSION -->
+  <div class="kpi-card anim-pop d3">
+    <div class="kpi-orb" style="background:var(--purple);animation-delay:1s;"></div>
+    <div class="kpi-shine"></div>
+    <div class="kpi-icon" style="background:rgba(139,92,246,.1);">♀️</div>
+    <p class="kpi-meta">Gender &amp; Inclusion</p>
+    <p class="kpi-sub">SDG 5 · NEP 2024</p>
+    <div class="kpi-num gt-purple">6</div>
+    <p class="kpi-note">credits · <strong style="color:var(--purple);">3.6%</strong> of curriculum</p>
+    <div class="kpi-status">
+      <span class="kpi-dot" style="background:var(--purple);"></span>
+      <span class="kpi-status-label" style="color:var(--purple);">Opportunity Area</span>
+    </div>
+    <div class="kpi-bar" style="background:var(--purple);"></div>
+  </div>
+
+  <!-- SUSTAINABILITY -->
+  <div class="kpi-card anim-pop d4">
+    <div class="kpi-orb" style="background:var(--green);animation-delay:1.5s;"></div>
+    <div class="kpi-shine"></div>
+    <div class="kpi-icon" style="background:rgba(16,185,129,.1);">🌿</div>
+    <p class="kpi-meta">Sustainability</p>
+    <p class="kpi-sub">SDG 13 · NEP 2024</p>
+    <div class="kpi-num gt-green">10</div>
+    <p class="kpi-note">credits · <strong style="color:var(--green);">6.0%</strong> of curriculum</p>
+    <div class="kpi-status">
+      <span class="kpi-dot" style="background:var(--green);"></span>
+      <span class="kpi-status-label" style="color:var(--green);">Green Technology</span>
+    </div>
+    <div class="kpi-bar" style="background:var(--green);"></div>
+  </div>
+
+</div><!-- /kpi-grid -->
+
+<!-- TOTAL BANNER -->
+<div class="total-banner anim-pop d5 mt-s">
+  <div class="orb1"></div>
+  <div class="orb2"></div>
+  <div class="banner-inner">
+    <div>
+      <p style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.45);margin-bottom:.4rem;">Total EEGS Credits — 2024 NEP</p>
+      <div style="display:flex;align-items:baseline;gap:14px;">
+        <div class="banner-num">86</div>
+        <div>
+          <div class="banner-label">credits</div>
+          <div class="banner-sub">51.2% of estimated 168 total credits</div>
+        </div>
+      </div>
+    </div>
+    <div class="flex-wrap-gap">
+      <span class="badge badge-green">✓ NEP 2020 Aligned</span>
+      <span class="badge badge-white">SDG 5 · 8 · 13 · 16</span>
+      <span class="badge badge-amber">🎯 Future Ready</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     EEGS DIMENSION SUMMARY TABLE
+══════════════════════════════════════════ -->
+<div class="mt-l anim-fade d1 mb-m">
+  <div class="sec-label"><span class="sec-dot"></span> Framework</div>
+  <h3 class="sec-heading" style="font-size:1.4rem;">EEGS Dimension Summary — 2024 NEP</h3>
+  <div class="acc-bar" style="--w:22rem;"></div>
+</div>
+
+<div class="glass glass-lift anim-fade d2">
+  <div class="tbl-wrap" style="padding:1.75rem;">
+    <table class="dtbl">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Est. Credits</th>
+          <th>% of Curriculum</th>
+          <th>Example Courses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--red);">💼 Employability</strong><br><span style="font-size:.68rem;color:#94a3b8;">SDG 8</span></td>
+          <td style="font-size:1.2rem;font-weight:900;color:var(--red);">54</td>
+          <td>
+            <div class="pct-bar-wrap">
+              <div class="pct-track"><div class="pct-fill" style="width:32.1%;background:var(--red);"></div></div>
+              <strong style="font-size:.72rem;color:var(--red);">32.1%</strong>
+            </div>
+          </td>
+          <td style="color:#475569;font-size:.75rem;">Python, DBMS, Web Technologies, IoT, Data Science, AI, ML, Cloud, Android, UI-UX, Projects, Internship</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--navy);">⚖️ Ethics &amp; Governance</strong><br><span style="font-size:.68rem;color:#94a3b8;">SDG 16</span></td>
+          <td style="font-size:1.2rem;font-weight:900;color:var(--navy);">16</td>
+          <td>
+            <div class="pct-bar-wrap">
+              <div class="pct-track"><div class="pct-fill" style="width:9.5%;background:var(--navy);"></div></div>
+              <strong style="font-size:.72rem;color:var(--navy);">9.5%</strong>
+            </div>
+          </td>
+          <td style="color:#475569;font-size:.75rem;">Professional Writing, Research Methodology, Cybersecurity Essentials, Digital Literacy, Technology Training of Society</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--purple);">♀️ Gender &amp; Inclusion</strong><br><span style="font-size:.68rem;color:#94a3b8;">SDG 5</span></td>
+          <td style="font-size:1.2rem;font-weight:900;color:var(--purple);">6</td>
+          <td>
+            <div class="pct-bar-wrap">
+              <div class="pct-track"><div class="pct-fill" style="width:3.6%;background:var(--purple);"></div></div>
+              <strong style="font-size:.72rem;color:var(--purple);">3.6%</strong>
+            </div>
+          </td>
+          <td style="color:#475569;font-size:.75rem;">English, Modern Indian Language, Technology Training of Society, interdisciplinary learning</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--green);">🌿 Sustainability</strong><br><span style="font-size:.68rem;color:#94a3b8;">SDG 13</span></td>
+          <td style="font-size:1.2rem;font-weight:900;color:var(--green);">10</td>
+          <td>
+            <div class="pct-bar-wrap">
+              <div class="pct-track"><div class="pct-fill" style="width:6%;background:var(--green);"></div></div>
+              <strong style="font-size:.72rem;color:var(--green);">6.0%</strong>
+            </div>
+          </td>
+          <td style="color:#475569;font-size:.75rem;">Environmental Studies, Green Computing, IoT Analytics, Digital Transformation</td>
+        </tr>
+        <tr class="total-row">
+          <td style="color:var(--navy);">Total EEGS Credits</td>
+          <td style="color:var(--red);font-size:1.2rem;">86</td>
+          <td><strong style="font-size:.72rem;color:var(--red);">51.2% of ~168 credits</strong></td>
+          <td style="color:#475569;font-size:.75rem;font-weight:400;">Combined SDG-oriented curriculum exposure</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FOUR PILLARS
+══════════════════════════════════════════ -->
+<div class="mt-l anim-fade d1 mb-m">
+  <div class="sec-label"><span class="sec-dot"></span> Core Framework</div>
+  <h3 class="sec-heading" style="font-size:1.4rem;">Four Pillars — EEGS</h3>
+  <div class="acc-bar" style="--w:14rem;"></div>
+</div>
+
+<div class="pillar-grid">
+
+  <div class="pillar-card anim-flip d1">
+    <div class="pillar-accent" style="background:var(--red);"></div>
+    <div class="pillar-watermark">💼</div>
+    <div class="pillar-title" style="color:var(--red);">💼 Employability</div>
+    <p class="pillar-body">Projects, industry orientation, AI, ML, IoT, Cloud, Web, mobile development, communication and practical skills. VU shows strongest alignment with employability and industry readiness across all revisions — growing from 30.3% in 2018 to 36.3% in 2024 NEP.</p>
+    <div class="pillar-foot" style="background:var(--red);"></div>
+  </div>
+
+  <div class="pillar-card anim-flip d2">
+    <div class="pillar-accent" style="background:var(--navy);"></div>
+    <div class="pillar-watermark">⚖️</div>
+    <div class="pillar-title" style="color:var(--navy);">⚖️ Ethics &amp; Governance</div>
+    <p class="pillar-body">Research practices, cybersecurity, responsible technology use, and professional communication. Ethics coverage grew from 0% in 2018–2021 to 3.3% in 2023 NEP and 6.3% in 2024 NEP — a significant curriculum maturity improvement.</p>
+    <div class="pillar-foot" style="background:var(--navy);"></div>
+  </div>
+
+  <div class="pillar-card anim-flip d3">
+    <div class="pillar-accent" style="background:var(--purple);"></div>
+    <div class="pillar-watermark">♀️</div>
+    <div class="pillar-title" style="color:var(--purple);">♀️ Gender &amp; Inclusion</div>
+    <p class="pillar-body">Current exposure exists mainly through language, societal and interdisciplinary components. An opportunity area — grew from 0% (2018–2019) to 5.0% in 2023 NEP and 3.8% in 2024 NEP. Further integration of inclusion-focused curriculum elements is recommended.</p>
+    <div class="pillar-foot" style="background:var(--purple);"></div>
+  </div>
+
+  <div class="pillar-card anim-flip d4">
+    <div class="pillar-accent" style="background:var(--green);"></div>
+    <div class="pillar-watermark">🌿</div>
+    <div class="pillar-title" style="color:var(--green);">🌿 Sustainability</div>
+    <p class="pillar-body">Environmental Studies and Green Computing provide a stronger sustainability footprint than many conventional CS curricula. Coverage grew from 0.8% in 2018 to 6.7% in 2023 NEP and 5.0% in 2024 NEP — ahead of the national average for CS programs.</p>
+    <div class="pillar-foot" style="background:var(--green);"></div>
+  </div>
+
+</div><!-- /pillar-grid -->
+
+
+<!-- ══════════════════════════════════════════
+     CHARTS
+══════════════════════════════════════════ -->
+<div class="mt-l anim-fade d1 mb-m">
+  <div class="sec-label"><span class="sec-dot"></span> Analytics</div>
+  <h3 class="sec-heading" style="font-size:1.4rem;">EEGS Trends Across Revisions</h3>
+  <div class="acc-bar" style="--w:18rem;"></div>
+</div>
+
+<div class="chart-grid">
+
+  <!-- STACKED BAR -->
+  <div class="glass glass-lift chart-panel anim-fade d2">
+    <div class="chart-header">
+      <div class="chart-vbar"></div>
+      <div>
+        <div class="chart-title">EEGS Credit Distribution — All Revisions</div>
+        <div class="chart-sub">Employability · Ethics · Gender &amp; Inclusion · Sustainability</div>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="stackedBarChart"></canvas>
+    </div>
+  </div>
+
+  <!-- LINE TREND -->
+  <div class="glass glass-lift chart-panel anim-fade d3">
+    <div class="chart-header">
+      <div class="chart-vbar" style="background:linear-gradient(to bottom,var(--navy),var(--red));"></div>
+      <div>
+        <div class="chart-title">EEGS % of Curriculum — Trend</div>
+        <div class="chart-sub">Employability · Ethics · Gender &amp; Inclusion · Sustainability</div>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="trendLineChart"></canvas>
+    </div>
+  </div>
+
+</div><!-- /chart-grid -->
+
+<!-- TOTAL % BAR -->
+<div class="glass glass-lift chart-panel anim-fade d4 mt-s">
+  <div class="chart-header">
+    <div class="chart-vbar" style="background:linear-gradient(to bottom,var(--green),var(--navy));"></div>
+    <div>
+      <div class="chart-title">Total EEGS % of Curriculum — Revision Comparison</div>
+      <div class="chart-sub">Growth from 31.1% (2018) → 51.3% (2024 NEP)</div>
+    </div>
+  </div>
+  <div class="chart-wrap-sm">
+    <canvas id="totalBarChart"></canvas>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     REVISION COMPARISON TABLE
+══════════════════════════════════════════ -->
+<div class="mt-l anim-fade d1 mb-m">
+  <div class="sec-label"><span class="sec-dot"></span> Revisions</div>
+  <h3 class="sec-heading" style="font-size:1.4rem;">EEGS Credit % — All Revisions</h3>
+  <div class="acc-bar" style="--w:18rem;"></div>
+</div>
+
+<div class="glass glass-lift anim-fade d2">
+  <div class="tbl-wrap" style="padding:1.75rem;">
+    <table class="dtbl">
+      <thead>
+        <tr>
+          <th>Revision</th><th>Total Credits</th><th>Employability</th><th>Ethics</th>
+          <th>Gender &amp; Inclusion</th><th>Sustainability</th><th>Total EEGS</th><th>EEGS %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;">2018 Pattern</td><td>132</td>
+          <td>40 cr <span style="font-size:.68rem;color:#94a3b8;">(30.3%)</span></td>
+          <td>0 cr <span style="font-size:.68rem;color:#94a3b8;">(0%)</span></td>
+          <td>0 cr <span style="font-size:.68rem;color:#94a3b8;">(0%)</span></td>
+          <td>1 cr <span style="font-size:.68rem;color:#94a3b8;">(0.8%)</span></td>
+          <td style="font-weight:900;">41</td>
+          <td style="font-weight:900;">31.1%</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">2019 Pattern</td><td>133</td>
+          <td>25 cr <span style="font-size:.68rem;color:#94a3b8;">(18.8%)</span></td>
+          <td>0 cr <span style="font-size:.68rem;color:#94a3b8;">(0%)</span></td>
+          <td>0 cr <span style="font-size:.68rem;color:#94a3b8;">(0%)</span></td>
+          <td>4 cr <span style="font-size:.68rem;color:#94a3b8;">(3.0%)</span></td>
+          <td style="font-weight:900;">29</td>
+          <td style="font-weight:900;">21.8%</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">2021 Pattern</td><td>141</td>
+          <td>38 cr <span style="font-size:.68rem;color:#94a3b8;">(27.0%)</span></td>
+          <td>0 cr <span style="font-size:.68rem;color:#94a3b8;">(0%)</span></td>
+          <td>2 cr <span style="font-size:.68rem;color:#94a3b8;">(1.4%)</span></td>
+          <td>4 cr <span style="font-size:.68rem;color:#94a3b8;">(2.8%)</span></td>
+          <td style="font-weight:900;">44</td>
+          <td style="font-weight:900;">31.2%</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">2023 NEP</td><td>120</td>
+          <td>25 cr <span style="font-size:.68rem;color:#94a3b8;">(20.8%)</span></td>
+          <td>4 cr <span style="font-size:.68rem;color:#94a3b8;">(3.3%)</span></td>
+          <td>6 cr <span style="font-size:.68rem;color:#94a3b8;">(5.0%)</span></td>
+          <td>8 cr <span style="font-size:.68rem;color:#94a3b8;">(6.7%)</span></td>
+          <td style="font-weight:900;">43</td>
+          <td style="font-weight:900;color:var(--green);">35.8%</td>
+        </tr>
+        <tr style="background:rgba(225,77,42,.04);">
+          <td style="font-weight:900;color:var(--red);">⭐ 2024 NEP</td><td>160</td>
+          <td>58 cr <span style="font-size:.68rem;color:#94a3b8;">(36.3%)</span></td>
+          <td>10 cr <span style="font-size:.68rem;color:#94a3b8;">(6.3%)</span></td>
+          <td>6 cr <span style="font-size:.68rem;color:#94a3b8;">(3.8%)</span></td>
+          <td>8 cr <span style="font-size:.68rem;color:#94a3b8;">(5.0%)</span></td>
+          <td style="font-weight:900;color:var(--red);">82</td>
+          <td style="font-weight:900;color:var(--red);">51.3%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     SUBJECT MAPPING — REVISION CARDS
+══════════════════════════════════════════ -->
+<div class="mt-l anim-fade d1 mb-m">
+  <div class="sec-label"><span class="sec-dot"></span> Subject Mapping</div>
+  <h3 class="sec-heading" style="font-size:1.4rem;">EEGS Subject Mapping — All Revisions</h3>
+  <div class="acc-bar" style="--w:22rem;"></div>
+</div>
+
+<div class="rev-grid mb-m">
+
+  <div class="rev-card anim-pop d1">
+    <div class="rev-label">2018 Pattern</div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--red);">💼 Employability (5):</span> <span style="color:#475569;">Soft Skills, Business Communication, Software Engineering, Major Project, Internship</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--navy);">⚖️ Ethics (0):</span> <span style="color:#94a3b8;">—</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--purple);">♀️ Gender (0):</span> <span style="color:#94a3b8;">—</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--green);">🌿 Sustainability (1):</span> <span style="color:#475569;">Environmental Science</span></div>
+  </div>
+
+  <div class="rev-card anim-pop d2">
+    <div class="rev-label">2019 Pattern</div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--red);">💼 Employability (6):</span> <span style="color:#475569;">Soft Skills, Business Communication, Quantitative Aptitude, Project Stage–I, Project Stage–II, Internship</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--navy);">⚖️ Ethics (0):</span> <span style="color:#94a3b8;">—</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--purple);">♀️ Gender (0):</span> <span style="color:#94a3b8;">—</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--green);">🌿 Sustainability (1):</span> <span style="color:#475569;">Environmental Science</span></div>
+  </div>
+
+  <div class="rev-card anim-pop d3">
+    <div class="rev-label">2021 Pattern</div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--red);">💼 Employability (11):</span> <span style="color:#475569;">English &amp; Soft Skills, Finance &amp; Accounting, Qual. &amp; Quant. Aptitude, Business Communication, Aptitude &amp; Personality Dev., Winter Internship–I, Project Stage–I, Aptitude Dev. &amp; Programming, Project Stage–II, Winter Internship–II, Internship</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--navy);">⚖️ Ethics (0):</span> <span style="color:#94a3b8;">—</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--purple);">♀️ Gender (1):</span> <span style="color:#475569;">Aptitude &amp; Personality Development</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--green);">🌿 Sustainability (1):</span> <span style="color:#475569;">Environmental Science</span></div>
+  </div>
+
+  <div class="rev-card anim-pop d4">
+    <div class="rev-label">2023 NEP Pattern</div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--red);">💼 Employability (9):</span> <span style="color:#475569;">Digital Technology Solutions, English, Digital Literacy, Professional Writing, Industry Project, Data Science Using Python, Research Methodology, Software Project Management, Minor Track Project</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--navy);">⚖️ Ethics (2):</span> <span style="color:#475569;">Digital Technology Solutions, Technology Training of Society</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--purple);">♀️ Gender (2):</span> <span style="color:#475569;">Technology Training of Society, Modern Indian Language</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--green);">🌿 Sustainability (2):</span> <span style="color:#475569;">Environmental Studies, Green Computing</span></div>
+  </div>
+
+  <div class="rev-card featured anim-pop d5">
+    <div class="rev-label featured">⭐ 2024 NEP Pattern</div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--red);">💼 Employability (15):</span> <span style="color:#475569;">Capstone Project–I, English, Digital Literacy, Professional Writing, Industry Project, Data Science Using Python, Research Methodology, Software Project Management, Cybersecurity Essentials, Minor Track Project, Major Project–I, Internship, Entrepreneurship Development, Research Internship, Research Project–II</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--navy);">⚖️ Ethics (4):</span> <span style="color:#475569;">Digital Technology Solutions, Technology Training of Society, Cybersecurity Essentials, IPR &amp; Innovation Management</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--purple);">♀️ Gender (2):</span> <span style="color:#475569;">Technology Training of Society, Modern Indian Language</span></div>
+    <div class="rev-row"><span class="rev-dim" style="color:var(--green);">🌿 Sustainability (2):</span> <span style="color:#475569;">Environmental Studies, Green Computing</span></div>
+  </div>
+
+</div><!-- /rev-grid -->
+
+
+<!-- ══════════════════════════════════════════
+     FULL COURSE MAPPING TABLES (TABBED)
+══════════════════════════════════════════ -->
+<div class="rev-tabs">
+  <button class="rev-tab-btn active" onclick="showRevTab('r2018',this)">2018</button>
+  <button class="rev-tab-btn" onclick="showRevTab('r2019',this)">2019</button>
+  <button class="rev-tab-btn" onclick="showRevTab('r2021',this)">2021</button>
+  <button class="rev-tab-btn" onclick="showRevTab('r2023',this)">2023 NEP</button>
+  <button class="rev-tab-btn" onclick="showRevTab('r2024',this)">2024 NEP</button>
+</div>
+
+<!-- 2018 -->
+<div id="r2018" class="rev-panel active">
+  <div class="glass glass-lift">
+    <div class="tbl-wrap" style="padding:1.75rem;">
+      <p style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#94a3b8;margin-bottom:1rem;">2018 Pattern — EEGS Course Mapping</p>
+      <table class="dtbl">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cr</th><th>Sem</th><th>Dimension</th><th>SDG</th></tr></thead>
+        <tbody>
+          <tr><td>Environmental Science</td><td>—</td><td>Audit</td><td>I</td><td><span class="sdg sdg-sustain">🌿 Sustainability</span></td><td><span class="sdg sdg-sdg">SDG 13,15</span></td></tr>
+          <tr><td>Soft Skills</td><td>—</td><td>2</td><td>III</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 4,8</span></td></tr>
+          <tr><td>Business Communication</td><td>—</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Software Engineering</td><td>—</td><td>4</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Major Project</td><td>—</td><td>10</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8,9</span></td></tr>
+          <tr><td>Internship</td><td>—</td><td>22</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 2019 -->
+<div id="r2019" class="rev-panel">
+  <div class="glass glass-lift">
+    <div class="tbl-wrap" style="padding:1.75rem;">
+      <p style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#94a3b8;margin-bottom:1rem;">2019 Pattern — EEGS Course Mapping</p>
+      <table class="dtbl">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cr</th><th>Sem</th><th>Dimension</th><th>SDG</th></tr></thead>
+        <tbody>
+          <tr><td>Environmental Science</td><td>BSCCS19110</td><td>4</td><td>I</td><td><span class="sdg sdg-sustain">🌿 Sustainability</span></td><td><span class="sdg sdg-sdg">SDG 13,15</span></td></tr>
+          <tr><td>Soft Skills</td><td>BSCCS19310</td><td>2</td><td>III</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 4,8</span></td></tr>
+          <tr><td>Business Communication</td><td>BSCCS19410</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Quantitative Aptitude</td><td>BSCCS19411</td><td>Audit</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Project Stage–I</td><td>BSCCS19510</td><td>4</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8,9</span></td></tr>
+          <tr><td>Project Stage–II</td><td>BSCCS19510</td><td>5</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8,9</span></td></tr>
+          <tr><td>Internship</td><td>BSCCS19511</td><td>12</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 2021 -->
+<div id="r2021" class="rev-panel">
+  <div class="glass glass-lift">
+    <div class="tbl-wrap" style="padding:1.75rem;">
+      <p style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#94a3b8;margin-bottom:1rem;">2021 Pattern — EEGS Course Mapping</p>
+      <table class="dtbl">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cr</th><th>Sem</th><th>Dimension</th><th>SDG</th></tr></thead>
+        <tbody>
+          <tr><td>Environmental Science</td><td>BSCCS21110</td><td>4</td><td>I</td><td><span class="sdg sdg-sustain">🌿 Sustainability</span></td><td><span class="sdg sdg-sdg">SDG 13,15</span></td></tr>
+          <tr><td>English &amp; Soft Skills</td><td>BSCCS21210</td><td>2</td><td>II</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 4,8</span></td></tr>
+          <tr><td>Finance &amp; Accounting</td><td>BSCCS21305</td><td>3</td><td>III</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Qualitative &amp; Quantitative Aptitude</td><td>BSCCS21310</td><td>2</td><td>III</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Business Communication</td><td>BSCCS21410</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Aptitude &amp; Personality Development</td><td>BSCCS21411</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employ.</span> <span class="sdg sdg-gender">♀️ Inclusion</span></td><td><span class="sdg sdg-sdg">SDG 5,8</span></td></tr>
+          <tr><td>Winter Internship–I</td><td>BSCCS21412</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Project Stage–I</td><td>BSCCS21510</td><td>4</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Aptitude Development &amp; Programming</td><td>BSCCS21511</td><td>2</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Project Stage–II</td><td>BSCCS21607</td><td>5</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Winter Internship–II</td><td>BSCCS21608</td><td>2</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Internship</td><td>BSCCS21610</td><td>12</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 2023 NEP -->
+<div id="r2023" class="rev-panel">
+  <div class="glass glass-lift">
+    <div class="tbl-wrap" style="padding:1.75rem;">
+      <p style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#94a3b8;margin-bottom:1rem;">2023 NEP Pattern — EEGS Course Mapping</p>
+      <table class="dtbl">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cr</th><th>Sem</th><th>Dimension</th><th>SDG</th></tr></thead>
+        <tbody>
+          <tr><td>Digital Technology Solutions</td><td>VE23CS01A</td><td>2</td><td>I</td><td><span class="sdg sdg-employ">💼 Employ.</span> <span class="sdg sdg-ethics">⚖️ Ethics</span></td><td><span class="sdg sdg-sdg">SDG 8,16</span></td></tr>
+          <tr><td>English</td><td>AE23CS01A</td><td>4</td><td>I</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 4,8</span></td></tr>
+          <tr><td>Environmental Studies</td><td>VE23CS02A</td><td>4</td><td>II</td><td><span class="sdg sdg-sustain">🌿 Sustainability</span></td><td><span class="sdg sdg-sdg">SDG 13</span></td></tr>
+          <tr><td>Digital Literacy</td><td>SE23CS02A</td><td>2</td><td>II</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Technology Training of Society</td><td>CES23CS01</td><td>2</td><td>III</td><td><span class="sdg sdg-gender">♀️ Inclusion</span> <span class="sdg sdg-ethics">⚖️ Ethics</span></td><td><span class="sdg sdg-sdg">SDG 5,10,16</span></td></tr>
+          <tr><td>Green Computing</td><td>OE23CS03A</td><td>4</td><td>III</td><td><span class="sdg sdg-sustain">🌿 Sustainability</span></td><td><span class="sdg sdg-sdg">SDG 13</span></td></tr>
+          <tr><td>Professional Writing</td><td>SE23CS03A</td><td>2</td><td>III</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Industry Project</td><td>FP23CS01</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Modern Indian Language</td><td>AE23CS02A</td><td>4</td><td>IV</td><td><span class="sdg sdg-gender">♀️ Gender &amp; Inclusion</span></td><td><span class="sdg sdg-sdg">SDG 5,10</span></td></tr>
+          <tr><td>Data Science Using Python</td><td>VSC23CS01</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Research Methodology</td><td>BSCCS24504</td><td>3</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 9</span></td></tr>
+          <tr><td>Software Project Management</td><td>BSCCS24507</td><td>3</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Minor Track Project</td><td>MT24CS06A</td><td>3</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 2024 NEP -->
+<div id="r2024" class="rev-panel">
+  <div class="glass glass-lift">
+    <div class="tbl-wrap" style="padding:1.75rem;">
+      <p style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#94a3b8;margin-bottom:1rem;">2024 NEP Pattern — EEGS Course Mapping</p>
+      <table class="dtbl">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cr</th><th>Sem</th><th>Dimension</th><th>SDG</th></tr></thead>
+        <tbody>
+          <tr><td>Capstone Project–I</td><td>BSCCS24103</td><td>2</td><td>I</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Digital Technology Solutions</td><td>VE24CS01A</td><td>2</td><td>I</td><td><span class="sdg sdg-ethics">⚖️ Ethics</span> <span class="sdg sdg-employ">💼 Employ.</span></td><td><span class="sdg sdg-sdg">SDG 8,16</span></td></tr>
+          <tr><td>English</td><td>AE24CS01A</td><td>4</td><td>I</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 4,8</span></td></tr>
+          <tr><td>Digital Literacy</td><td>SE24CS02A</td><td>2</td><td>II</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Environmental Studies</td><td>VE24CS02A</td><td>4</td><td>II</td><td><span class="sdg sdg-sustain">🌿 Sustainability</span></td><td><span class="sdg sdg-sdg">SDG 13</span></td></tr>
+          <tr><td>Technology Training of Society</td><td>BSCCS24306</td><td>2</td><td>III</td><td><span class="sdg sdg-ethics">⚖️ Ethics</span> <span class="sdg sdg-gender">♀️ Inclusion</span></td><td><span class="sdg sdg-sdg">SDG 5,10,16</span></td></tr>
+          <tr><td>Green Computing</td><td>OE24CS03A</td><td>4</td><td>III</td><td><span class="sdg sdg-sustain">🌿 Sustainability</span></td><td><span class="sdg sdg-sdg">SDG 13</span></td></tr>
+          <tr><td>Professional Writing</td><td>SE24CS03A</td><td>2</td><td>III</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Industry Project</td><td>BSCCS24405</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Modern Indian Language</td><td>AE24CS02A</td><td>4</td><td>IV</td><td><span class="sdg sdg-gender">♀️ Gender &amp; Inclusion</span></td><td><span class="sdg sdg-sdg">SDG 5,10</span></td></tr>
+          <tr><td>Data Science Using Python</td><td>BSCCS24406</td><td>2</td><td>IV</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Research Methodology</td><td>BSCCS24504</td><td>3</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 9</span></td></tr>
+          <tr><td>Software Project Management</td><td>BSCCS24507</td><td>3</td><td>V</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Cybersecurity Essentials</td><td>BSCCS24607</td><td>3</td><td>VI</td><td><span class="sdg sdg-ethics">⚖️ Ethics</span> <span class="sdg sdg-employ">💼 Employ.</span></td><td><span class="sdg sdg-sdg">SDG 8,16</span></td></tr>
+          <tr><td>Minor Track Project</td><td>MT24CS06A</td><td>3</td><td>VI</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Major Project–I</td><td>BSCCS24H708</td><td>6</td><td>VII</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8,9</span></td></tr>
+          <tr><td>Internship</td><td>BSCCS24H806</td><td>8</td><td>VIII</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>IPR &amp; Innovation Management</td><td>BSCCS24R701</td><td>4</td><td>VII</td><td><span class="sdg sdg-ethics">⚖️ Ethics</span> <span class="sdg sdg-employ">💼 Employ.</span></td><td><span class="sdg sdg-sdg">SDG 9,16</span></td></tr>
+          <tr><td>Entrepreneurship Development</td><td>BSCCS24R801</td><td>2</td><td>VIII</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8,9</span></td></tr>
+          <tr><td>Research Internship</td><td>BSCCS24R804</td><td>8</td><td>VIII</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 8</span></td></tr>
+          <tr><td>Research Project–II</td><td>BSCCS24R805</td><td>7</td><td>VIII</td><td><span class="sdg sdg-employ">💼 Employability</span></td><td><span class="sdg sdg-sdg">SDG 9</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- /r2024 -->
+
+
+<!-- ══════════════════════════════════════════
+     INITIATIVE EXPLORER (4 TABS)
+══════════════════════════════════════════ -->
+<div class="mt-l anim-fade d1 mb-m">
+  <div class="sec-label"><span class="sec-dot"></span> Deep Dive</div>
+  <h3 class="sec-heading" style="font-size:1.4rem;">Initiative Explorer</h3>
+  <div class="acc-bar" style="--w:14rem;"></div>
+</div>
+
+<div class="init-tab-bar mb-m">
+  <button id="btn-employ"  class="init-tab-btn t-employ  on" onclick="switchInitTab('employ')"><span>💼</span> Employability</button>
+  <button id="btn-ethics"  class="init-tab-btn t-ethics"     onclick="switchInitTab('ethics')"><span>⚖️</span> Ethics</button>
+  <button id="btn-gender"  class="init-tab-btn t-gender"     onclick="switchInitTab('gender')"><span>♀️</span> Gender &amp; Inclusion</button>
+  <button id="btn-sustain" class="init-tab-btn t-sustain"    onclick="switchInitTab('sustain')"><span>🌿</span> Sustainability</button>
+</div>
+
+<!-- EMPLOYABILITY -->
+<div id="panel-employ" class="init-panel active">
+  <div class="init-grid">
+    {% with cards_employ="Capstone Project–I|SDG 8,Capstone Project–II English|SDG 4 8,Digital Literacy|SDG 8,Professional Writing|SDG 8,Industry Project|SDG 8,Data Science Using Python|SDG 8,Research Methodology|SDG 9,Software Project Management|SDG 8,Cybersecurity Essentials|SDG 8 16,Minor Track Project|SDG 8,Major Project–I|SDG 8 9,Internship|SDG 8,Entrepreneurship Development|SDG 8 9,Research Internship|SDG 8,Research Project–II|SDG 9" %}
+    {% endwith %}
+    <div class="init-card" style="--d:.10s;animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .10s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Capstone Project–I</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .17s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">English</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 4,8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .24s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Digital Literacy</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .31s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Professional Writing</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .38s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Industry Project</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .45s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Data Science Using Python</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .52s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Research Methodology</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 9</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .59s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Software Project Management</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .66s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Cybersecurity Essentials</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8,16</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .73s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Minor Track Project</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .80s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Major Project–I</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8,9</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .87s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Internship</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) .94s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Entrepreneurship Development</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8,9</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) 1.01s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Research Internship</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 8</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+    <div class="init-card" style="animation:popIn .5s cubic-bezier(.34,1.4,.64,1) 1.08s both"><div class="init-shine"></div><span class="init-emoji">💼</span><div class="init-name">Research Project–II</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--red);"></span>2024 NEP · SDG 9</div><div class="init-foot" style="background:linear-gradient(90deg,var(--red),rgba(225,77,42,.4));"></div></div>
+  </div>
+</div>
+
+<!-- ETHICS -->
+<div id="panel-ethics" class="init-panel">
+  <div class="init-grid">
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">⚖️</span><div class="init-name">Digital Technology Solutions</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--navy);"></span>2024 NEP · SDG 8,16</div><div class="init-foot" style="background:linear-gradient(90deg,var(--navy),rgba(22,40,80,.4));"></div></div>
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">⚖️</span><div class="init-name">Technology Training of Society</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--navy);"></span>2024 NEP · SDG 5,10,16</div><div class="init-foot" style="background:linear-gradient(90deg,var(--navy),rgba(22,40,80,.4));"></div></div>
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">⚖️</span><div class="init-name">Cybersecurity Essentials</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--navy);"></span>2024 NEP · SDG 8,16</div><div class="init-foot" style="background:linear-gradient(90deg,var(--navy),rgba(22,40,80,.4));"></div></div>
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">⚖️</span><div class="init-name">IPR &amp; Innovation Management</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--navy);"></span>2024 NEP · SDG 9,16</div><div class="init-foot" style="background:linear-gradient(90deg,var(--navy),rgba(22,40,80,.4));"></div></div>
+  </div>
+</div>
+
+<!-- GENDER & INCLUSION -->
+<div id="panel-gender" class="init-panel">
+  <div class="init-grid">
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">♀️</span><div class="init-name">Technology Training of Society</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--purple);"></span>2024 NEP · SDG 5,10,16</div><div class="init-foot" style="background:linear-gradient(90deg,var(--purple),rgba(139,92,246,.4));"></div></div>
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">♀️</span><div class="init-name">Modern Indian Language</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--purple);"></span>2024 NEP · SDG 5,10</div><div class="init-foot" style="background:linear-gradient(90deg,var(--purple),rgba(139,92,246,.4));"></div></div>
+  </div>
+  <div class="opp-box mt-s">
+    <span class="opp-icon">💡</span>
+    <div>
+      <div class="opp-title">Opportunity Area</div>
+      <p class="opp-body">Current Gender &amp; Inclusion exposure exists mainly through language, societal and interdisciplinary components. Further integration of inclusion-focused curriculum elements — such as responsible AI, accessible design, and diversity in tech — is recommended to strengthen SDG 5 alignment.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SUSTAINABILITY -->
+<div id="panel-sustain" class="init-panel">
+  <div class="init-grid">
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">🌿</span><div class="init-name">Environmental Studies</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--green);"></span>2024 NEP · SDG 13</div><div class="init-foot" style="background:linear-gradient(90deg,var(--green),rgba(16,185,129,.4));"></div></div>
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">🌿</span><div class="init-name">Green Computing</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--green);"></span>2024 NEP · SDG 13</div><div class="init-foot" style="background:linear-gradient(90deg,var(--green),rgba(16,185,129,.4));"></div></div>
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">🌿</span><div class="init-name">IoT Analytics &amp; Visualization</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--green);"></span>2024 NEP · SDG 13</div><div class="init-foot" style="background:linear-gradient(90deg,var(--green),rgba(16,185,129,.4));"></div></div>
+    <div class="init-card"><div class="init-shine"></div><span class="init-emoji">🌿</span><div class="init-name">Digital Transformation</div><div class="init-meta"><span class="init-meta-dot" style="background:var(--green);"></span>2024 NEP · SDG 13</div><div class="init-foot" style="background:linear-gradient(90deg,var(--green),rgba(16,185,129,.4));"></div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CURRICULUM IMPACT
+══════════════════════════════════════════ -->
+<div class="mt-l anim-fade d1 mb-m">
+  <div class="sec-label" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);color:var(--amber);">
+    <span style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;"></span> Outcomes
+  </div>
+  <h3 class="sec-heading" style="font-size:1.4rem;">Curriculum Impact</h3>
+  <div class="acc-bar" style="--w:13rem;background:linear-gradient(90deg,var(--amber),var(--red));"></div>
+</div>
+
+<div class="glass anim-fade d2" style="padding:2rem;">
+  <div class="meter-grid">
+
+    <div>
+      <div class="meter-icon" style="background:#fff4ee;">💼</div>
+      <div class="meter-label">Employability Growth</div>
+      <div class="meter-track mt-s" style="margin-top:.75rem;">
+        <div class="meter-fill" style="--w:36.3%;background:linear-gradient(90deg,var(--red),rgba(225,77,42,.5));"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;margin-bottom:.4rem;">
+        <span style="font-size:.68rem;color:#94a3b8;font-weight:600;">2024 NEP</span>
+        <span class="meter-val" style="color:var(--red);">36.3%</span>
+      </div>
+      <p class="meter-desc">Up from 30.3% in 2018 — strongest dimension across all revisions.</p>
+    </div>
+
+    <div>
+      <div class="meter-icon" style="background:#eef2fa;">⚖️</div>
+      <div class="meter-label">Ethics Coverage</div>
+      <div class="meter-track" style="margin-top:.75rem;">
+        <div class="meter-fill" style="--w:6.3%;background:linear-gradient(90deg,var(--navy),rgba(22,40,80,.5));"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;margin-bottom:.4rem;">
+        <span style="font-size:.68rem;color:#94a3b8;font-weight:600;">2024 NEP</span>
+        <span class="meter-val" style="color:var(--navy);">6.3%</span>
+      </div>
+      <p class="meter-desc">Grew from 0% in 2018–2021 to 6.3% — significant maturity improvement.</p>
+    </div>
+
+    <div>
+      <div class="meter-icon" style="background:#f5f3ff;">♀️</div>
+      <div class="meter-label">Gender &amp; Inclusion</div>
+      <div class="meter-track" style="margin-top:.75rem;">
+        <div class="meter-fill" style="--w:3.8%;background:linear-gradient(90deg,var(--purple),rgba(139,92,246,.5));"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;margin-bottom:.4rem;">
+        <span style="font-size:.68rem;color:#94a3b8;font-weight:600;">2024 NEP</span>
+        <span class="meter-val" style="color:var(--purple);">3.8%</span>
+      </div>
+      <p class="meter-desc">Opportunity area — grew from 0% (2018) to 3.8% in 2024 NEP.</p>
+    </div>
+
+    <div>
+      <div class="meter-icon" style="background:#ecfdf5;">🌿</div>
+      <div class="meter-label">Sustainability</div>
+      <div class="meter-track" style="margin-top:.75rem;">
+        <div class="meter-fill" style="--w:5%;background:linear-gradient(90deg,var(--green),rgba(16,185,129,.5));"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;margin-bottom:.4rem;">
+        <span style="font-size:.68rem;color:#94a3b8;font-weight:600;">2024 NEP</span>
+        <span class="meter-val" style="color:var(--green);">5.0%</span>
+      </div>
+      <p class="meter-desc">Stronger sustainability footprint than many conventional CS curricula.</p>
+    </div>
+
+  </div>
+</div><!-- /impact -->
+
+
+<!-- ══════════════════════════════════════════
+     KEY OBSERVATION
+══════════════════════════════════════════ -->
+<div class="obs-card mt-s anim-fade d3 glass-lift">
+  <span class="obs-icon">🔍</span>
+  <div>
+    <div class="obs-title">Key Observation</div>
+    <p class="obs-body">
+      VU shows strongest alignment with <strong>Employability and Industry Readiness</strong>,
+      moderate coverage in <strong>Ethics &amp; Governance</strong>, and an opportunity to further
+      strengthen <strong>Gender, Inclusion, and responsible AI-related curriculum elements</strong>.
+      The total EEGS % grew from 31.1% in 2018 to <strong>51.3% in 2024 NEP</strong> —
+      reflecting consistent curriculum evolution toward holistic graduate outcomes.
     </p>
+  </div>
 </div>
 
-<!-- ══ KPI CARDS ══════════════════════════════════════ -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
-    <!-- EMPLOYABILITY -->
-    <div class="kpi-card anim-pop d1">
-        <div class="float-orb w-24 h-24 -top-6 -right-6 bg-primary"></div>
-        <div class="k-shine"></div>
-        <div class="w-11 h-11 rounded-2xl bg-primary/10 flex items-center justify-center text-xl mb-5">💼</div>
-        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Employability</p>
-        <p class="text-xs text-slate-400 mb-3">Initiatives</p>
-        <h2 class="k-num text-6xl font-black gt-red leading-none">{{ employability_items|length }}</h2>
-        <div class="mt-4 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span class="text-xs font-semibold text-green-600">Industry Readiness</span>
-        </div>
-        <div class="k-bar bg-primary"></div>
-    </div>
-
-    <!-- ETHICS -->
-    <div class="kpi-card anim-pop d2">
-        <div class="float-orb w-24 h-24 -top-6 -right-6 bg-secondary" style="animation-delay:.5s;"></div>
-        <div class="k-shine"></div>
-        <div class="w-11 h-11 rounded-2xl bg-secondary/10 flex items-center justify-center text-xl mb-5">⚖️</div>
-        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Ethics</p>
-        <p class="text-xs text-slate-400 mb-3">Practices</p>
-        <h2 class="k-num text-6xl font-black gt-navy leading-none">{{ ethics_items|length }}</h2>
-        <div class="mt-4 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-            <span class="text-xs font-semibold text-secondary">Responsible Computing</span>
-        </div>
-        <div class="k-bar bg-secondary"></div>
-    </div>
-
-    <!-- SUSTAINABILITY -->
-    <div class="kpi-card anim-pop d3">
-        <div class="float-orb w-24 h-24 -top-6 -right-6 bg-green-400" style="animation-delay:1s;"></div>
-        <div class="k-shine"></div>
-        <div class="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center text-xl mb-5">🌱</div>
-        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Sustainability</p>
-        <p class="text-xs text-slate-400 mb-3">Areas</p>
-        <h2 class="k-num text-6xl font-black gt-grn leading-none">{{ sustainability_items|length }}</h2>
-        <div class="mt-4 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span class="text-xs font-semibold text-green-600">Green Technology</span>
-        </div>
-        <div class="k-bar bg-green-500"></div>
-    </div>
-
-    <!-- FUTURE READY -->
-    <div class="kpi-card anim-pop d4 !bg-gradient-to-br !from-secondary !to-secondary/80 text-white border-0" style="border:none;">
-        <div class="float-orb w-24 h-24 -top-5 -right-5 bg-white" style="opacity:.08;animation-delay:1.5s;filter:none;"></div>
-        <div class="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center text-xl mb-5">🎯</div>
-        <p class="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">Curriculum Focus</p>
-        <p class="text-xs text-white/40 mb-3">Alignment</p>
-        <h2 class="k-num text-4xl font-black text-white leading-tight">Future<br>Ready</h2>
-        <div class="mt-5">
-            <span class="nep-badge inline-block px-3 py-1.5 rounded-full bg-green-500/25 text-green-300 text-xs font-bold border border-green-400/40">
-                ✓ NEP Aligned
-            </span>
-        </div>
-    </div>
-
-</div>
-
-<!-- ══ THREE PILLARS ══════════════════════════════════ -->
-<div class="mt-12 anim-fade d1 mb-6">
-    <div class="sec-label">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-        Core Framework
-    </div>
-    <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-        Three Pillars
+<!-- ══════════════════════════════════════════
+     VISION BANNER
+══════════════════════════════════════════ -->
+<div class="vision-card anim-fade d2 mt-l">
+  <div class="vision-orb1"></div>
+  <div class="vision-orb2"></div>
+  <div class="vision-wm">🌍</div>
+  <div class="vision-inner">
+    <span class="vision-tag">Department Vision</span>
+    <h3 class="vision-heading">
+      Responsible Innovation.<br>
+      Sustainable Future.
     </h3>
-    <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:12rem;"></div>
+    <p class="vision-body">
+      Vishwakarma University's BSc Computer Science curriculum integrates SDG-aligned employability,
+      ethics, gender inclusion, and sustainability dimensions — growing from 31.1% EEGS coverage in
+      2018 to 51.3% in 2024 NEP. With 86 credits dedicated to holistic graduate outcomes, VU is
+      building responsible, future-ready technology professionals aligned with NEP 2020 and global
+      workforce demands.
+    </p>
+    <div class="vision-badges">
+      <span class="vision-badge">NEP 2020 Compliant</span>
+      <span class="vision-badge">Industry Aligned</span>
+      <span class="vision-badge">Future Ready</span>
+      <span class="vision-badge">Globally Competitive</span>
+      <span class="vision-badge">SDG 5 · 8 · 13 · 16</span>
+    </div>
+  </div>
 </div>
 
-<div class="grid grid-cols-1 xl:grid-cols-3 gap-7">
+</div><!-- /eegs-page -->
 
-    <div class="pillar-card anim-flip d1">
-        <div class="p-watermark">💼</div>
-        <div class="flex items-center gap-3 mb-5">
-            <div class="w-1 self-stretch rounded-full bg-primary"></div>
-            <h3 class="text-base font-black text-primary uppercase tracking-wide">💼 Employability</h3>
-        </div>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.employability_text }}</p>
-        <div class="p-bar bg-primary"></div>
-    </div>
 
-    <div class="pillar-card anim-flip d2">
-        <div class="p-watermark">⚖️</div>
-        <div class="flex items-center gap-3 mb-5">
-            <div class="w-1 self-stretch rounded-full bg-secondary"></div>
-            <h3 class="text-base font-black text-secondary uppercase tracking-wide">⚖️ Ethics</h3>
-        </div>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.ethics_text }}</p>
-        <div class="p-bar bg-secondary"></div>
-    </div>
-
-    <div class="pillar-card anim-flip d3">
-        <div class="p-watermark">🌱</div>
-        <div class="flex items-center gap-3 mb-5">
-            <div class="w-1 self-stretch rounded-full bg-green-600"></div>
-            <h3 class="text-base font-black text-green-600 uppercase tracking-wide">🌱 Sustainability</h3>
-        </div>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.sustainability_text }}</p>
-        <div class="p-bar bg-green-500"></div>
-    </div>
-
-</div>
-
-<!-- ══ INITIATIVE EXPLORER (TABS) ════════════════════ -->
-<div class="mt-14">
-
-    <div class="anim-fade d1 mb-6">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
-            <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Deep Dive</span>
-        </div>
-        <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-            Initiative Explorer
-        </h3>
-        <div class="acc-bar mt-2 bg-gradient-to-r from-primary to-secondary" style="--w:14rem;"></div>
-    </div>
-
-    <!-- TAB BAR -->
-    <div class="anim-fade d2 inline-flex flex-wrap gap-2 bg-white/72 backdrop-blur-xl border border-white/60 rounded-2xl p-2 shadow-lg mb-8">
-        <button id="btn-employ"  class="tab-btn t-employ  active" onclick="switchTab('employ')">
-            <span>💼</span> Employability
-        </button>
-        <button id="btn-ethics"  class="tab-btn t-ethics"         onclick="switchTab('ethics')">
-            <span>⚖️</span> Ethics
-        </button>
-        <button id="btn-sustain" class="tab-btn t-sustain"        onclick="switchTab('sustain')">
-            <span>🌱</span> Sustainability
-        </button>
-    </div>
-
-    <!-- EMPLOYABILITY PANEL -->
-    <div id="panel-employ">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-            {% for item in employability_items %}
-            <div class="init-card anim-pop rounded-[20px] bg-white/82 backdrop-blur-xl border border-primary/15 p-6 shadow-lg"
-                 style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
-                <div class="i-shine"></div>
-                <span class="i-emoji">💼</span>
-                <h4 class="font-bold text-slate-800 text-sm leading-snug">{{ item.title }}</h4>
-                <div class="mt-3 flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-primary/50 inline-block"></span>
-                    <span class="text-xs text-slate-400 font-medium">Employability</span>
-                </div>
-                <div class="i-bar bg-gradient-to-r from-primary to-primary/40"></div>
-            </div>
-            {% empty %}
-            <p class="col-span-4 text-center text-slate-400 py-10">No employability items found.</p>
-            {% endfor %}
-        </div>
-    </div>
-
-    <!-- ETHICS PANEL (hidden) -->
-    <div id="panel-ethics" style="display:none;">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-            {% for item in ethics_items %}
-            <div class="init-card anim-pop rounded-[20px] bg-white/82 backdrop-blur-xl border border-secondary/15 p-6 shadow-lg"
-                 style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
-                <div class="i-shine"></div>
-                <span class="i-emoji">⚖️</span>
-                <h4 class="font-bold text-slate-800 text-sm leading-snug">{{ item.title }}</h4>
-                <div class="mt-3 flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-secondary/50 inline-block"></span>
-                    <span class="text-xs text-slate-400 font-medium">Ethics</span>
-                </div>
-                <div class="i-bar bg-gradient-to-r from-secondary to-secondary/40"></div>
-            </div>
-            {% empty %}
-            <p class="col-span-4 text-center text-slate-400 py-10">No ethics items found.</p>
-            {% endfor %}
-        </div>
-    </div>
-
-    <!-- SUSTAINABILITY PANEL (hidden) -->
-    <div id="panel-sustain" style="display:none;">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-            {% for item in sustainability_items %}
-            <div class="init-card anim-pop rounded-[20px] bg-white/82 backdrop-blur-xl border border-green-300/40 p-6 shadow-lg"
-                 style="animation-delay:{{ forloop.counter0 | add:1 }}00ms;">
-                <div class="i-shine"></div>
-                <span class="i-emoji">🌱</span>
-                <h4 class="font-bold text-slate-800 text-sm leading-snug">{{ item.title }}</h4>
-                <div class="mt-3 flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-500/50 inline-block"></span>
-                    <span class="text-xs text-slate-400 font-medium">Sustainability</span>
-                </div>
-                <div class="i-bar bg-gradient-to-r from-green-500 to-green-300"></div>
-            </div>
-            {% empty %}
-            <p class="col-span-4 text-center text-slate-400 py-10">No sustainability items found.</p>
-            {% endfor %}
-        </div>
-    </div>
-
-</div>
-
-<!-- ══ IMPACT DASHBOARD ═══════════════════════════════ -->
-{% if impact_items %}
-<div class="mt-14">
-
-    <div class="anim-fade d1 mb-6">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
-            <span class="text-xs font-bold uppercase tracking-widest text-amber-600/80">Outcomes</span>
-        </div>
-        <h3 class="text-xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-            Curriculum Impact
-        </h3>
-        <div class="acc-bar mt-2 bg-gradient-to-r from-accent to-primary" style="--w:12rem;"></div>
-    </div>
-
-    <div class="lift rounded-[26px] bg-white/82 backdrop-blur-xl border border-white/60 shadow-xl p-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
-            {% for item in impact_items %}
-            <div class="anim-fade" style="animation-delay:{{ forloop.counter0 }}00ms;">
-                <div class="flex items-center gap-2 mb-4">
-                    <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-base">
-                        {{ item.icon }}
-                    </div>
-                    <p class="text-xs font-black text-slate-700 uppercase tracking-wide">{{ item.title }}</p>
-                </div>
-                {% if item.percent %}
-                <div class="meter-track">
-                    <div class="meter-fill bg-gradient-to-r from-primary to-primary/50" style="--w:{{ item.percent }}%;"></div>
-                </div>
-                <div class="flex justify-between mt-1.5 mb-2">
-                    <span class="text-xs text-slate-400 font-semibold">Progress</span>
-                    <span class="text-xs font-bold text-primary">{{ item.percent }}%</span>
-                </div>
-                {% endif %}
-                {% if item.description %}
-                <p class="text-xs text-slate-500 leading-relaxed">{{ item.description }}</p>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-</div>
-{% endif %}
-
-<!-- ══ VISION BANNER ══════════════════════════════════ -->
-<div class="anim-fade d2 vision-card mt-12">
-    <div class="v-orb1"></div>
-    <div class="v-orb2"></div>
-    <div class="v-watermark">🌍</div>
-    <div class="relative z-10">
-        <span class="inline-block px-3 py-1.5 rounded-full bg-white/18 text-white/75 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">
-            Department Vision
-        </span>
-        <h3 class="text-3xl md:text-4xl font-black leading-tight text-white" style="font-family:'DM Serif Display',serif;">
-            Responsible Innovation.<br class="hidden md:block"> Sustainable Future.
-        </h3>
-        <p class="mt-5 text-base leading-relaxed text-white/85 max-w-3xl">
-            {{ summary.vision_statement }}
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">NEP 2020 Compliant</span>
-            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">Industry Aligned</span>
-            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">Future Ready</span>
-            <span class="bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full backdrop-blur-sm">Globally Competitive</span>
-        </div>
-    </div>
-</div>
-
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
 <script>
-function switchTab(key) {
-    var tabs    = ['employ','ethics','sustain'];
-    var colors  = { employ:'#E14D2A', ethics:'#162850', sustain:'#10B981' };
+(function() {
+  'use strict';
 
-    /* deactivate all */
-    tabs.forEach(function(k) {
-        document.getElementById('panel-' + k).style.display = 'none';
-        var btn = document.getElementById('btn-' + k);
-        btn.classList.remove('active');
+  /* ── Chart defaults ── */
+  Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+  Chart.defaults.color = '#64748b';
+
+  const revs = ['2018','2019','2021','2023 NEP','2024 NEP'];
+
+  /* ── Stacked Bar ── */
+  new Chart(document.getElementById('stackedBarChart'), {
+    type: 'bar',
+    data: {
+      labels: revs,
+      datasets: [
+        { label:'Employability',      data:[40,25,38,25,58], backgroundColor:'rgba(225,77,42,0.85)',   borderRadius:4 },
+        { label:'Ethics',             data:[ 0, 0, 0, 4,10], backgroundColor:'rgba(22,40,80,0.82)',    borderRadius:4 },
+        { label:'Gender & Inclusion', data:[ 0, 0, 2, 6, 6], backgroundColor:'rgba(139,92,246,0.82)', borderRadius:4 },
+        { label:'Sustainability',     data:[ 1, 4, 4, 8, 8], backgroundColor:'rgba(16,185,129,0.82)',  borderRadius:4 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, ticks: { stepSize: 20 } }
+      },
+      plugins: {
+        legend: { position:'bottom', labels:{ padding:14, usePointStyle:true, pointStyleWidth:10, font:{size:11} } }
+      }
+    }
+  });
+
+  /* ── Trend Line ── */
+  new Chart(document.getElementById('trendLineChart'), {
+    type: 'line',
+    data: {
+      labels: revs,
+      datasets: [
+        { label:'Employability %',      data:[30.3,18.8,27.0,20.8,36.3], borderColor:'#E14D2A', backgroundColor:'rgba(225,77,42,0.07)',   pointBackgroundColor:'#E14D2A', borderWidth:2.5, pointRadius:5, fill:true, tension:.35 },
+        { label:'Ethics %',             data:[ 0,   0,   0,  3.3, 6.3], borderColor:'#162850', backgroundColor:'rgba(22,40,80,0.07)',    pointBackgroundColor:'#162850', borderWidth:2.5, pointRadius:5, fill:true, tension:.35 },
+        { label:'Gender & Inclusion %', data:[ 0,   0,   1.4, 5.0, 3.8], borderColor:'#8B5CF6', backgroundColor:'rgba(139,92,246,0.07)', pointBackgroundColor:'#8B5CF6', borderWidth:2.5, pointRadius:5, fill:true, tension:.35 },
+        { label:'Sustainability %',     data:[ 0.8, 3.0, 2.8, 6.7, 5.0], borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.07)', pointBackgroundColor:'#10B981', borderWidth:2.5, pointRadius:5, fill:true, tension:.35 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { y: { min:0, max:45, ticks:{ callback: v => v + '%' } } },
+      plugins: {
+        legend: { position:'bottom', labels:{ padding:14, usePointStyle:true, pointStyleWidth:10, font:{size:11} } }
+      }
+    }
+  });
+
+  /* ── Total EEGS % Bar ── */
+  new Chart(document.getElementById('totalBarChart'), {
+    type: 'bar',
+    data: {
+      labels: revs,
+      datasets: [{
+        label: 'Total EEGS %',
+        data: [31.1, 21.8, 31.2, 35.8, 51.3],
+        backgroundColor: [
+          'rgba(148,163,184,.7)','rgba(148,163,184,.7)',
+          'rgba(148,163,184,.7)','rgba(16,185,129,.75)',
+          'rgba(225,77,42,.9)'
+        ],
+        borderRadius: 8, borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { y: { min:0, max:60, ticks:{ callback: v => v + '%' } } },
+      plugins: {
+        legend: { display:false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw}% of curriculum` } }
+      }
+    }
+  });
+
+  /* ── Revision Table Tabs ── */
+  window.showRevTab = function(id, btn) {
+    document.querySelectorAll('.rev-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.rev-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  };
+
+  /* ── Initiative Explorer Tabs ── */
+  window.switchInitTab = function(key) {
+    var keys = ['employ','ethics','gender','sustain'];
+    keys.forEach(function(k) {
+      document.getElementById('panel-' + k).classList.remove('active');
+      document.getElementById('btn-' + k).classList.remove('on');
     });
-
-    /* activate chosen */
     var panel = document.getElementById('panel-' + key);
-    panel.style.display = 'block';
-    panel.classList.add('panel-enter');
-    setTimeout(function(){ panel.classList.remove('panel-enter'); }, 500);
+    panel.classList.add('active');
+    document.getElementById('btn-' + key).classList.add('on');
 
-    document.getElementById('btn-' + key).classList.add('active');
-
-    /* re-fire card animations */
-    var cards = panel.querySelectorAll('.init-card');
-    cards.forEach(function(card, i) {
-        card.style.animation = 'none';
-        card.style.opacity   = '0';
-        void card.offsetWidth;
-        card.style.animation = '';
-        card.style.animationName    = 'popIn';
-        card.style.animationDuration = '.5s';
-        card.style.animationTimingFunction = 'cubic-bezier(.34,1.4,.64,1)';
-        card.style.animationFillMode = 'forwards';
-        card.style.animationDelay   = (i * 0.07) + 's';
+    /* re-trigger card animations */
+    panel.querySelectorAll('.init-card').forEach(function(card, i) {
+      card.style.animation = 'none';
+      card.style.opacity   = '0';
+      void card.offsetWidth;
+      card.style.animation = 'popIn .5s cubic-bezier(.34,1.4,.64,1) ' + (i * .07) + 's both';
     });
-}
+  };
+
+})();
 </script>
 
 {% endblock %}

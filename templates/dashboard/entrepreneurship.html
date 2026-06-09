@@ -4,7 +4,6 @@
 
 {% block extra_head %}
 <style>
-    /* ── STAGGERED KPI REVEALS ───────────────────────── */
     .kpi-card {
         opacity: 0;
         transform: translateY(30px) scale(0.96);
@@ -14,35 +13,17 @@
     .kpi-card:nth-child(2) { animation-delay: 0.14s; }
     .kpi-card:nth-child(3) { animation-delay: 0.23s; }
     .kpi-card:nth-child(4) { animation-delay: 0.32s; }
+    @keyframes popUp { to { opacity: 1; transform: translateY(0) scale(1); } }
 
-    @keyframes popUp {
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    /* ── PILLAR CARDS ────────────────────────────────── */
-    .pillar-card {
-        opacity: 0;
-        transform: translateY(22px);
-        animation: popUp 0.55s ease forwards;
-    }
+    .pillar-card { opacity: 0; transform: translateY(22px); animation: popUp 0.55s ease forwards; }
     .pillar-card:nth-child(1) { animation-delay: 0.08s; }
     .pillar-card:nth-child(2) { animation-delay: 0.18s; }
     .pillar-card:nth-child(3) { animation-delay: 0.28s; }
 
-    /* ── INITIATIVE ITEMS ────────────────────────────── */
-    .init-item {
-        opacity: 0;
-        transform: translateX(-12px);
-        animation: slideIn 0.4s ease forwards;
-    }
+    .init-item { opacity: 0; transform: translateX(-12px); animation: slideIn 0.4s ease forwards; }
     @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
 
-    /* ── JOURNEY STEPS ───────────────────────────────── */
-    .journey-step {
-        opacity: 0;
-        transform: translateY(18px) scale(0.94);
-        animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
-    }
+    .journey-step { opacity: 0; transform: translateY(18px) scale(0.94); animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
     .journey-step:nth-child(1) { animation-delay: 0.05s; }
     .journey-step:nth-child(2) { animation-delay: 0.12s; }
     .journey-step:nth-child(3) { animation-delay: 0.19s; }
@@ -50,190 +31,215 @@
     .journey-step:nth-child(5) { animation-delay: 0.33s; }
     .journey-step:nth-child(6) { animation-delay: 0.40s; }
 
-    /* ── HOVER LIFT ──────────────────────────────────── */
-    .lift {
-        transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
-                    box-shadow 0.25s ease;
-    }
-    .lift:hover {
-        transform: translateY(-6px) scale(1.015);
-        box-shadow: 0 28px 56px rgba(22,40,80,0.14);
-    }
+    .lift { transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease; }
+    .lift:hover { transform: translateY(-6px) scale(1.015); box-shadow: 0 28px 56px rgba(22,40,80,0.14); }
 
-    /* ── GRADIENT NUMBER ─────────────────────────────── */
-    .num-primary {
-        background: linear-gradient(135deg,#E14D2A,#c23d1f);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .num-secondary {
-        background: linear-gradient(135deg,#162850,#243b6e);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .num-green {
-        background: linear-gradient(135deg,#10B981,#059669);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .num-accent {
-        background: linear-gradient(135deg,#F59E0B,#d97706);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+    .num-primary { background: linear-gradient(135deg,#E14D2A,#c23d1f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .num-secondary { background: linear-gradient(135deg,#162850,#243b6e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .num-green { background: linear-gradient(135deg,#10B981,#059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-    /* ── TROPHY BOUNCE ───────────────────────────────── */
-    .trophy-bounce {
-        display: inline-block;
-        animation: trophyAnim 2.4s ease-in-out infinite;
-    }
-    @keyframes trophyAnim {
-        0%,100% { transform: translateY(0) rotate(0deg); }
-        25%      { transform: translateY(-6px) rotate(-5deg); }
-        75%      { transform: translateY(-3px) rotate(4deg); }
-    }
-
-    /* ── SECTION HEADING ─────────────────────────────── */
-    .section-head {
-        opacity: 0; transform: translateX(-14px);
-        animation: headIn 0.5s ease forwards;
-    }
+    .section-head { opacity: 0; transform: translateX(-14px); animation: headIn 0.5s ease forwards; }
     @keyframes headIn { to { opacity: 1; transform: translateX(0); } }
 
-    /* ── ACCENT BAR ──────────────────────────────────── */
     .accent-bar { width:0; animation: barGrow 0.7s ease 0.2s forwards; }
     @keyframes barGrow { to { width: 30rem; } }
 
-    /* ── SPOTLIGHT SHIMMER ───────────────────────────── */
-    .spotlight {
-        position: relative; overflow: hidden;
-        opacity: 0; animation: popUp 0.65s ease 0.2s forwards;
-    }
-    .spotlight::before {
-        content:"";
-        position:absolute; top:-80%; left:-60%;
-        width:50%; height:220%;
-        background: linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.13) 50%,transparent 60%);
-        animation: shimmer 5s ease-in-out infinite;
-    }
-    @keyframes shimmer {
-        0%   { transform:translateX(-60%) rotate(15deg); }
-        60%,100% { transform:translateX(350%) rotate(15deg); }
-    }
+    .spotlight { position: relative; overflow: hidden; opacity: 0; animation: popUp 0.65s ease 0.2s forwards; }
+    .spotlight::before { content:""; position:absolute; top:-80%; left:-60%; width:50%; height:220%; background: linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.13) 50%,transparent 60%); animation: shimmer 5s ease-in-out infinite; }
+    @keyframes shimmer { 0% { transform:translateX(-60%) rotate(15deg); } 60%,100% { transform:translateX(350%) rotate(15deg); } }
 
-    /* ── VISION BANNER ───────────────────────────────── */
-    .vision-banner {
-        opacity:0; animation: popUp 0.7s ease 0.25s forwards;
-        position: relative; overflow: hidden;
-    }
-    .vision-banner::after {
-        content:"🚀";
-        position:absolute; right:-10px; bottom:-20px;
-        font-size:10rem; opacity:0.06; line-height:1;
-        pointer-events:none;
-    }
+    .vision-banner { opacity:0; animation: popUp 0.7s ease 0.25s forwards; position: relative; overflow: hidden; }
+    .vision-banner::after { content:"🚀"; position:absolute; right:-10px; bottom:-20px; font-size:10rem; opacity:0.06; line-height:1; pointer-events:none; }
 
-    /* ── CHART CARD ──────────────────────────────────── */
     .chart-card { opacity:0; animation: popUp 0.6s ease 0.12s forwards; }
 
-    /* ── JOURNEY CONNECTOR ───────────────────────────── */
-    .journey-connector {
-        position: absolute;
-        top: 50%; right: -24px;
-        width: 24px; height: 2px;
-        background: linear-gradient(90deg, #E14D2A, #162850);
-        z-index: 1;
-    }
+    .journey-connector { position: absolute; top: 50%; right: -24px; width: 24px; height: 2px; background: linear-gradient(90deg, #E14D2A, #162850); z-index: 1; }
     .journey-step:last-child .journey-connector { display: none; }
 
-    /* ── INITIATIVE BADGE HOVER ──────────────────────── */
-    .init-badge {
-        transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
-        cursor: default;
-    }
+    .init-badge { transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s; cursor: default; }
     .init-badge:hover { transform: translateX(5px); box-shadow: 3px 0 0 0 currentColor; }
 
-    /* ── ICON RING ───────────────────────────────────── */
-    .icon-ring {
-        width: 52px; height: 52px;
-        border-radius: 16px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.6rem;
-        animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
-    }
+    .icon-ring { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
 
-    /* ── FADE FOR MISC SECTIONS ──────────────────────── */
     .fade-in { opacity:0; animation: popUp 0.6s ease forwards; }
+
+    .erh-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.78rem; }
+    .erh-table thead th { background: linear-gradient(135deg, #162850, #1e3a6e); color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; font-size: 0.7rem; white-space: nowrap; }
+    .erh-table thead th:first-child { border-radius: 12px 0 0 0; }
+    .erh-table thead th:last-child { border-radius: 0 12px 0 0; }
+    .erh-table tbody tr:nth-child(even) { background: rgba(22,40,80,0.03); }
+    .erh-table tbody tr:hover { background: rgba(225,77,42,0.06); transition: background 0.15s; }
+    .erh-table tbody td { padding: 9px 14px; border-bottom: 1px solid rgba(22,40,80,0.07); color: #334155; vertical-align: top; }
+
+    .pw-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 1px 2px; white-space: nowrap; }
+    .pw-entrepreneur { background: #fef3f2; color: #E14D2A; border: 1px solid #fca89a; }
+    .pw-research { background: #eff6ff; color: #162850; border: 1px solid #bfdbfe; }
+    .pw-higher { background: #f0fdf4; color: #059669; border: 1px solid #86efac; }
+    .pw-employ { background: #fefce8; color: #92400e; border: 1px solid #fde68a; }
+    .pw-sustain { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+
+    .tab-btn { padding: 8px 18px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; background: transparent; color: #64748b; }
+    .tab-btn:hover { background: rgba(225,77,42,0.08); color: #E14D2A; }
+    .tab-btn.active { background: linear-gradient(135deg, #E14D2A, #c23d1f); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(225,77,42,0.3); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    .summary-table { width: 100%; border-collapse: collapse; }
+    .summary-table th { background: linear-gradient(135deg,#162850,#1e3a6e); color: #fff; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 18px; }
+    .summary-table td { padding: 10px 18px; font-size: 0.82rem; border-bottom: 1px solid rgba(22,40,80,0.06); }
+    .summary-table tbody tr:nth-child(even) { background: rgba(22,40,80,0.04); }
+    .summary-table tfoot tr { background: linear-gradient(135deg,#E14D2A,#c23d1f); color: #fff; font-weight: 800; }
+    .summary-table tfoot td { padding: 12px 18px; font-size: 0.85rem; }
+
+    .obs-box { border-left: 4px solid; border-radius: 0 14px 14px 0; padding: 14px 18px; font-size: 0.82rem; line-height: 1.65; }
+
+    .table-scroll { overflow-x: auto; border-radius: 14px; }
+    .table-scroll::-webkit-scrollbar { height: 5px; }
+    .table-scroll::-webkit-scrollbar-thumb { background: rgba(22,40,80,0.2); border-radius: 4px; }
+
+    .trend-bar-wrap { display: flex; align-items: center; gap: 8px; font-size: 0.72rem; margin-bottom: 8px; }
+    .trend-bar-bg { flex: 1; height: 8px; background: rgba(22,40,80,0.08); border-radius: 99px; overflow: hidden; }
+    .trend-bar-fill { height: 100%; border-radius: 99px; }
+    .trend-label { width: 120px; font-weight: 600; color: #475569; text-align: right; }
+    .trend-val { width: 50px; font-weight: 700; color: #1e293b; }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- ══ PAGE HEADER ══ -->
+<!-- PAGE HEADER -->
 <div class="mb-10 section-head">
     <div class="flex items-center gap-3 mb-2">
         <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
-        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Innovation Ecosystem</span>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Credit Analysis · NEP 2020</span>
     </div>
     <h2 class="text-2xl md:text-4xl font-black uppercase tracking-wide text-secondary leading-tight" style="font-family:'DM Serif Display',serif;">
-        Entrepreneurship, Research<br class="hidden md:block"> & Higher Studies
+        Entrepreneurship, Research<br class="hidden md:block"> &amp; Higher Studies
     </h2>
     <div class="mt-3 h-1 rounded-full bg-gradient-to-r from-primary to-secondary accent-bar"></div>
     <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
-        Analysis of entrepreneurship development, research ecosystem,
-        innovation culture, higher education opportunities and future-ready
-        career pathways within the Computer Science curriculum.
+        Courses mapped across three career pathway dimensions: <strong>Entrepreneurship</strong> (startup mindset, product thinking, business skills),
+        <strong>Research</strong> (methodology, inquiry, innovation, publication readiness), and <strong>Higher Studies</strong>
+        (graduate exam prep, theoretical depth, academic rigour) &middot; Referenced against NASSCOM Startup Report, UGC NEP 2020,
+        and IEEE/ACM curriculum guidelines.
     </p>
 </div>
 
-<!-- ══ KPI CARDS ══ -->
+<!-- KPI CARDS -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
-    <!-- ENTREPRENEURSHIP -->
     <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-primary/8 blur-2xl group-hover:bg-primary/14 transition-all duration-500"></div>
         <div class="icon-ring bg-primary/10 mb-4">🚀</div>
         <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Entrepreneurship</p>
-        <h2 class="mt-3 text-6xl font-black num-primary leading-none">{{ entrepreneurship_count }}</h2>
-        <p class="mt-3 text-xs text-slate-500 font-semibold">Innovation Initiatives</p>
+        <h2 class="mt-3 text-6xl font-black num-primary leading-none">13</h2>
+        <p class="mt-1 text-xs text-primary/70 font-bold">10.8% of curriculum</p>
+        <p class="mt-2 text-xs text-slate-500 font-semibold">Credits &middot; Expanded under NEP</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- RESEARCH -->
     <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-secondary/8 blur-2xl group-hover:bg-secondary/14 transition-all duration-500"></div>
         <div class="icon-ring bg-secondary/10 mb-4">🔬</div>
         <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Research</p>
-        <h2 class="mt-3 text-6xl font-black num-secondary leading-none">{{ research_count }}</h2>
-        <p class="mt-3 text-xs text-slate-500 font-semibold">Research Activities</p>
+        <h2 class="mt-3 text-6xl font-black num-secondary leading-none">27</h2>
+        <p class="mt-1 text-xs text-secondary/70 font-bold">22.5% of curriculum</p>
+        <p class="mt-2 text-xs text-slate-500 font-semibold">Credits &middot; Major increase</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-secondary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- HIGHER STUDIES -->
     <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-green-400/8 blur-2xl group-hover:bg-green-400/16 transition-all duration-500"></div>
         <div class="icon-ring bg-green-100 mb-4">🎓</div>
         <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Higher Studies</p>
-        <h2 class="mt-3 text-6xl font-black num-green leading-none">{{ higher_studies_count }}</h2>
-        <p class="mt-3 text-xs text-slate-500 font-semibold">Growth Opportunities</p>
+        <h2 class="mt-3 text-6xl font-black num-green leading-none">22</h2>
+        <p class="mt-1 text-xs text-green-600/80 font-bold">18.3% of curriculum</p>
+        <p class="mt-2 text-xs text-slate-500 font-semibold">Credits &middot; Sustained depth</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- TOTAL ECOSYSTEM -->
     <div class="kpi-card lift relative rounded-[28px] bg-gradient-to-br from-secondary via-secondary/95 to-secondary/80 p-7 shadow-xl overflow-hidden group text-white">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
         <div class="w-[52px] h-[52px] rounded-2xl bg-white/15 flex items-center justify-center text-2xl mb-4">⚡</div>
-        <p class="uppercase tracking-widest text-xs text-white/50 font-bold">Total Ecosystem</p>
-        <h2 class="mt-3 text-6xl font-black text-white leading-none">{{ total_count }}</h2>
-        <p class="mt-3 text-xs text-white/50 font-semibold">Strategic Activities</p>
+        <p class="uppercase tracking-widest text-xs text-white/50 font-bold">Total ERH Credits</p>
+        <h2 class="mt-3 text-6xl font-black text-white leading-none">62</h2>
+        <p class="mt-1 text-xs text-white/60 font-bold">51.7% of 120-credit curriculum</p>
+        <p class="mt-2 text-xs text-white/50 font-semibold">2023 NEP &middot; Strategic Activities</p>
     </div>
 
 </div>
 
-<!-- ══ CHART + FOUNDER SPOTLIGHT ══ -->
+<!-- SUMMARY TABLE + CHART -->
 <div class="mt-12 grid grid-cols-1 xl:grid-cols-2 gap-8">
 
-    <!-- CHART -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+            <div>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">ERH as % of Curriculum — 2023 NEP</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Credit distribution across pathways</p>
+            </div>
+        </div>
+        <div class="table-scroll rounded-2xl border border-slate-100 overflow-hidden">
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th class="text-left" style="border-radius:12px 0 0 0;">Dimension</th>
+                        <th class="text-center">Credits</th>
+                        <th class="text-center" style="border-radius:0 12px 0 0;">% of Curriculum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-semibold text-primary">🚀 Entrepreneurship</td>
+                        <td class="text-center font-bold">13</td>
+                        <td class="text-center font-bold text-primary">10.8%</td>
+                    </tr>
+                    <tr>
+                        <td class="font-semibold text-secondary">🔬 Research</td>
+                        <td class="text-center font-bold">27</td>
+                        <td class="text-center font-bold text-secondary">22.5%</td>
+                    </tr>
+                    <tr>
+                        <td class="font-semibold text-green-600">🎓 Higher Studies</td>
+                        <td class="text-center font-bold">22</td>
+                        <td class="text-center font-bold text-green-600">18.3%</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td style="border-radius:0 0 0 12px;">⚡ Total ERH Credits</td>
+                        <td class="text-center">62</td>
+                        <td class="text-center" style="border-radius:0 0 12px 0;">51.7%</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="mt-6 space-y-1">
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Credit Share Visual</p>
+            <div class="trend-bar-wrap">
+                <span class="trend-label">Entrepreneurship</span>
+                <div class="trend-bar-bg"><div class="trend-bar-fill bg-primary" style="width:10.8%"></div></div>
+                <span class="trend-val text-primary">10.8%</span>
+            </div>
+            <div class="trend-bar-wrap">
+                <span class="trend-label">Research</span>
+                <div class="trend-bar-bg"><div class="trend-bar-fill bg-secondary" style="width:22.5%"></div></div>
+                <span class="trend-val text-secondary">22.5%</span>
+            </div>
+            <div class="trend-bar-wrap">
+                <span class="trend-label">Higher Studies</span>
+                <div class="trend-bar-bg"><div class="trend-bar-fill bg-green-500" style="width:18.3%"></div></div>
+                <span class="trend-val text-green-600">18.3%</span>
+            </div>
+            <div class="trend-bar-wrap">
+                <span class="trend-label font-bold text-slate-700">Total ERH</span>
+                <div class="trend-bar-bg"><div class="trend-bar-fill bg-gradient-to-r from-primary to-secondary" style="width:51.7%"></div></div>
+                <span class="trend-val font-bold">51.7%</span>
+            </div>
+        </div>
+    </div>
+
     <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
@@ -247,77 +253,89 @@
         </div>
     </div>
 
-    <!-- FOUNDER SPOTLIGHT -->
-    <div class="spotlight rounded-[28px] bg-gradient-to-br from-primary via-primary/90 to-secondary text-white p-8 shadow-2xl">
-        <span class="trophy-bounce text-5xl block mb-5">🏆</span>
-        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/75 text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">
-            Founder Spotlight
-        </span>
-        <h3 class="text-2xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
-            Outstanding Achievement
-        </h3>
-        <p class="mt-4 leading-relaxed text-white/85 text-sm">
-            {{ summary.notable_achievement }}
-        </p>
-        <div class="mt-7 bg-white/15 rounded-2xl p-5 border border-white/20">
-            <div class="flex items-center gap-2 mb-2">
-                <span class="text-lg">💡</span>
-                <h4 class="font-bold text-base">Success Story</h4>
-            </div>
-            <p class="text-sm text-white/75 leading-relaxed">
-                Entrepreneurship culture and innovation mindset leading
-                to startup creation and industry contribution.
-            </p>
-        </div>
-    </div>
-
 </div>
 
-<!-- ══ THREE PILLARS ══ -->
+<!-- THREE PILLARS -->
 <div class="mt-12 grid grid-cols-1 xl:grid-cols-3 gap-8">
 
-    <!-- ENTREPRENEURSHIP PILLAR -->
     <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
         <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">🚀</div>
         <div class="w-1 h-7 rounded-full bg-primary mb-4"></div>
-        <h3 class="text-lg font-black text-primary uppercase tracking-wide mb-1 flex items-center gap-2">
-            <span>🚀</span> Entrepreneurship
-        </h3>
-        <div class="w-10 h-0.5 rounded-full bg-primary/30 mb-5"></div>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.entrepreneurship_text }}</p>
+        <h3 class="text-lg font-black text-primary uppercase tracking-wide mb-1 flex items-center gap-2"><span>🚀</span> Entrepreneurship</h3>
+        <p class="text-xs font-bold text-primary/60 mb-1">13 credits &middot; 10.8%</p>
+        <div class="w-10 h-0.5 rounded-full bg-primary/30 mb-4"></div>
+        <p class="text-slate-600 leading-relaxed text-sm mb-4">Expanded under NEP — includes Industry Project, Software Project Management, Technology Training of Society, innovation-oriented electives, and entrepreneurship-linked specialization tracks.</p>
+        <div class="space-y-2 mb-5">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Mapped Subjects</p>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>Technology Training of Society — <strong>2 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>Industry Project — <strong>2 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>Software Project Management — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>IoT / Specialization elective — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>Entrepreneurship-oriented project exposure — <strong>3 cr</strong></div>
+        </div>
+        <div class="obs-box bg-primary/5 border-primary/40 text-slate-600">
+            <span class="font-bold text-primary text-xs uppercase tracking-wide block mb-1">Observation</span>
+            Stronger industry and product orientation through project-based learning, community engagement, specialization tracks, and vocational courses. Dedicated entrepreneurship starts after Semester III and can be strengthened through startup incubation exposure.
+        </div>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- RESEARCH PILLAR -->
     <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
         <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">🔬</div>
         <div class="w-1 h-7 rounded-full bg-secondary mb-4"></div>
-        <h3 class="text-lg font-black text-secondary uppercase tracking-wide mb-1 flex items-center gap-2">
-            <span>🔬</span> Research
-        </h3>
-        <div class="w-10 h-0.5 rounded-full bg-secondary/30 mb-5"></div>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.research_text }}</p>
+        <h3 class="text-lg font-black text-secondary uppercase tracking-wide mb-1 flex items-center gap-2"><span>🔬</span> Research</h3>
+        <p class="text-xs font-bold text-secondary/60 mb-1">27 credits &middot; 22.5%</p>
+        <div class="w-10 h-0.5 rounded-full bg-secondary/30 mb-4"></div>
+        <p class="text-slate-600 leading-relaxed text-sm mb-4">Includes research methodology, capstone projects, AI/ML, analytics, sustainability-driven inquiry, and project-based learning.</p>
+        <div class="space-y-2 mb-5">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Mapped Subjects</p>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Capstone Project – I — <strong>2 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Capstone Project – II — <strong>2 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Green Computing — <strong>4 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Big Data Analytics — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Artificial Intelligence — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Research Methodology — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Machine Learning — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>Minor Track Project — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></span>IoT / Advanced elective pathway — <strong>4 cr</strong></div>
+        </div>
+        <div class="obs-box bg-secondary/5 border-secondary/30 text-slate-600">
+            <span class="font-bold text-secondary text-xs uppercase tracking-wide block mb-1">Observation</span>
+            Research exposure starts from first year through capstone learning, continuing through analytics, AI, and project work. Unlike earlier patterns, research is no longer limited to the final year.
+        </div>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- HIGHER STUDIES PILLAR -->
     <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
         <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">🎓</div>
         <div class="w-1 h-7 rounded-full bg-green-600 mb-4"></div>
-        <h3 class="text-lg font-black text-green-600 uppercase tracking-wide mb-1 flex items-center gap-2">
-            <span>🎓</span> Higher Studies
-        </h3>
-        <div class="w-10 h-0.5 rounded-full bg-green-600/30 mb-5"></div>
-        <p class="text-slate-600 leading-relaxed text-sm">{{ summary.higher_studies_text }}</p>
+        <h3 class="text-lg font-black text-green-600 uppercase tracking-wide mb-1 flex items-center gap-2"><span>🎓</span> Higher Studies</h3>
+        <p class="text-xs font-bold text-green-600/60 mb-1">22 credits &middot; 18.3%</p>
+        <div class="w-10 h-0.5 rounded-full bg-green-600/30 mb-4"></div>
+        <p class="text-slate-600 leading-relaxed text-sm mb-4">Includes mathematics, statistics, data modelling, AI, ML, analytics, computing foundations, and specialization preparation useful for M.Tech/MS/PhD/GATE pathways.</p>
+        <div class="space-y-2 mb-5">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Mapped Subjects</p>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Statistical Methods — <strong>2 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Data Modeling and Visualization — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Data Science Using Python — <strong>2 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Big Data Analytics — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Artificial Intelligence — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Machine Learning — <strong>3 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Green Computing — <strong>4 cr</strong></div>
+            <div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Specialization electives — <strong>2 cr</strong></div>
+        </div>
+        <div class="obs-box bg-green-50 border-green-400 text-slate-600">
+            <span class="font-bold text-green-600 text-xs uppercase tracking-wide block mb-1">Observation</span>
+            Higher-study preparation is increasingly interdisciplinary and application-driven. AI, ML, analytics, and advanced electives strengthen readiness for postgraduate study and research rather than classical theory alone.
+        </div>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
 </div>
 
-<!-- ══ INNOVATION JOURNEY ══ -->
+<!-- INNOVATION JOURNEY -->
 <div class="mt-14 fade-in" style="animation-delay:0.1s;">
     <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-8">
-
         <div class="flex items-center gap-3 mb-8">
             <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
             <div>
@@ -325,141 +343,222 @@
                 <p class="text-xs text-slate-400 mt-0.5">From idea to technology leadership</p>
             </div>
         </div>
-
         <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-
-            {% with steps="Problem Solving,Innovation,Research,Startup Creation,Higher Studies,Technology Leadership" %}
-            {% with icons="💡,✨,🔬,🏢,🎓,🌐" %}
-            {% with colors="primary,secondary,accent,primary,green-600,secondary" %}
-
             <div class="journey-step group relative rounded-2xl bg-primary/8 border border-primary/15 p-5 text-center hover:bg-primary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">💡</div>
                 <p class="text-xs font-bold text-primary uppercase tracking-wide leading-tight">Problem Solving</p>
                 <div class="journey-connector hidden xl:block"></div>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-secondary/8 border border-secondary/15 p-5 text-center hover:bg-secondary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">✨</div>
                 <p class="text-xs font-bold text-secondary uppercase tracking-wide leading-tight">Innovation</p>
                 <div class="journey-connector hidden xl:block"></div>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-amber-50 border border-amber-200 p-5 text-center hover:bg-amber-100 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">🔬</div>
                 <p class="text-xs font-bold text-amber-700 uppercase tracking-wide leading-tight">Research</p>
                 <div class="journey-connector hidden xl:block"></div>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-primary/8 border border-primary/15 p-5 text-center hover:bg-primary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">🏢</div>
                 <p class="text-xs font-bold text-primary uppercase tracking-wide leading-tight">Startup Creation</p>
                 <div class="journey-connector hidden xl:block"></div>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-green-50 border border-green-200 p-5 text-center hover:bg-green-100 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">🎓</div>
                 <p class="text-xs font-bold text-green-700 uppercase tracking-wide leading-tight">Higher Studies</p>
                 <div class="journey-connector hidden xl:block"></div>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-secondary/8 border border-secondary/15 p-5 text-center hover:bg-secondary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">🌐</div>
                 <p class="text-xs font-bold text-secondary uppercase tracking-wide leading-tight">Tech Leadership</p>
             </div>
-
-            {% endwith %}{% endwith %}{% endwith %}
-
         </div>
-
     </div>
 </div>
 
-<!-- ══ INITIATIVE EXPLORER ══ -->
+<!-- DETAILED COURSE TABLES -->
 <div class="mt-14">
     <div class="section-head mb-8" style="animation-delay:0.05s;">
         <div class="flex items-center gap-3 mb-2">
             <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
-            <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Explorer</span>
+            <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Course Mapping</span>
         </div>
-        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-            Initiative Explorer
-        </h3>
-        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:14rem;"></div>
+        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">ERH Credits — All Revisions</h3>
+        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:16rem;"></div>
+        <p class="mt-3 text-slate-500 text-sm">Detailed course-level credit analysis across 2018, 2019, 2021, 2023 NEP, and 2024 NEP patterns.</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="mb-6 flex flex-wrap gap-2 items-center">
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-wide mr-2">Pathway Legend:</span>
+        <span class="pw-badge pw-entrepreneur">Entrepreneurship</span>
+        <span class="pw-badge pw-research">Research</span>
+        <span class="pw-badge pw-higher">Higher Studies</span>
+        <span class="pw-badge pw-employ">Employability</span>
+        <span class="pw-badge pw-sustain">Sustainability</span>
+    </div>
 
-        <!-- ENTREPRENEURSHIP LIST -->
-        <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-7">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-lg">🚀</div>
-                <h4 class="text-base font-black text-primary uppercase tracking-wide">Entrepreneurship</h4>
-            </div>
-            <div class="space-y-2.5">
-                {% for item in entrepreneurship_items %}
-                <div class="init-item init-badge flex items-center gap-3 rounded-xl bg-primary/8 border border-primary/12 px-4 py-3 text-primary group"
-                     style="animation-delay: {{ forloop.counter0 }}00ms;">
-                    <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0 group-hover:scale-150 transition-transform"></span>
-                    <span class="text-sm font-semibold text-slate-700">{{ item.title }}</span>
-                </div>
-                {% empty %}
-                <p class="text-slate-400 text-sm text-center py-4">No items found.</p>
-                {% endfor %}
+    <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-7 fade-in" style="animation-delay:0.15s;">
+        <div class="flex flex-wrap gap-2 mb-7 border-b border-slate-100 pb-5">
+            <button class="tab-btn active" onclick="showTab('tab2018',this)">2018 Pattern</button>
+            <button class="tab-btn" onclick="showTab('tab2019',this)">2019 Pattern</button>
+            <button class="tab-btn" onclick="showTab('tab2021',this)">2021 Pattern</button>
+            <button class="tab-btn" onclick="showTab('tab2023',this)">2023 NEP</button>
+            <button class="tab-btn" onclick="showTab('tab2024',this)">2024 NEP</button>
+        </div>
+
+        <!-- 2018 -->
+        <div id="tab2018" class="tab-pane active">
+            <div class="table-scroll">
+                <table class="erh-table">
+                    <thead><tr><th class="text-left">Course Name</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Pathway(s)</th><th>% Rev.</th><th class="text-left">Rationale</th></tr></thead>
+                    <tbody>
+                        <tr><td>Statistical Methods – I</td><td class="text-center">BSC</td><td class="text-center font-bold">4</td><td class="text-center">I</td><td><span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">3.03%</td><td>Statistics foundation for analytics and postgraduate entrance</td></tr>
+                        <tr><td>Discrete Mathematics</td><td class="text-center">BSC</td><td class="text-center font-bold">3</td><td class="text-center">I</td><td><span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">2.27%</td><td>Logic, graph theory, computational thinking</td></tr>
+                        <tr><td>Data Mining &amp; Predictive Modelling</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">III</td><td><span class="pw-badge pw-higher">Higher Studies</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">3.03%</td><td>Analytics and research-oriented modelling</td></tr>
+                        <tr><td>Computer Network</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">IV</td><td><span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">3.03%</td><td>Core CS foundation</td></tr>
+                        <tr><td>Software Engineering</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-employ">Employability</span> <span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">3.03%</td><td>SDLC and project execution</td></tr>
+                        <tr><td>Cloud Computing</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">3.03%</td><td>Industry-aligned cloud skills</td></tr>
+                        <tr><td>Internet of Things</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-employ">Employability</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">3.03%</td><td>Emerging technology</td></tr>
+                        <tr><td>Artificial Intelligence</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-higher">Higher Studies</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">3.03%</td><td>AI foundation</td></tr>
+                        <tr><td>Major Project</td><td class="text-center">PRJ</td><td class="text-center font-bold">10</td><td class="text-center">VI</td><td><span class="pw-badge pw-research">Research</span> <span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">7.58%</td><td>Independent project development</td></tr>
+                        <tr><td>Internship</td><td class="text-center">INT</td><td class="text-center font-bold">12</td><td class="text-center">VI</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">9.09%</td><td>Industry immersion</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- RESEARCH LIST -->
-        <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-7">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-9 h-9 rounded-xl bg-secondary/10 flex items-center justify-center text-lg">🔬</div>
-                <h4 class="text-base font-black text-secondary uppercase tracking-wide">Research</h4>
-            </div>
-            <div class="space-y-2.5">
-                {% for item in research_items %}
-                <div class="init-item init-badge flex items-center gap-3 rounded-xl bg-secondary/8 border border-secondary/12 px-4 py-3 group"
-                     style="animation-delay: {{ forloop.counter0 }}00ms;">
-                    <span class="w-1.5 h-1.5 rounded-full bg-secondary shrink-0 group-hover:scale-150 transition-transform"></span>
-                    <span class="text-sm font-semibold text-slate-700">{{ item.title }}</span>
-                </div>
-                {% empty %}
-                <p class="text-slate-400 text-sm text-center py-4">No items found.</p>
-                {% endfor %}
+        <!-- 2019 -->
+        <div id="tab2019" class="tab-pane">
+            <div class="table-scroll">
+                <table class="erh-table">
+                    <thead><tr><th class="text-left">Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Pathway(s)</th><th>% Rev.</th><th class="text-left">Rationale</th></tr></thead>
+                    <tbody>
+                        <tr><td>Introduction to Business Analytics</td><td class="font-mono text-xs text-center">BSCCS19104</td><td class="text-center">PC</td><td class="text-center font-bold">3</td><td class="text-center">I</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">2.26%</td><td>Business and analytics exposure</td></tr>
+                        <tr><td>Data Mining &amp; Predictive Modeling</td><td class="font-mono text-xs text-center">BSCCS19204</td><td class="text-center">PC</td><td class="text-center font-bold">3</td><td class="text-center">II</td><td><span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">2.26%</td><td>Analytical modelling foundation</td></tr>
+                        <tr><td>Soft Skills</td><td class="font-mono text-xs text-center">BSCCS19310</td><td class="text-center">AECC</td><td class="text-center font-bold">2</td><td class="text-center">III</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.50%</td><td>Communication readiness</td></tr>
+                        <tr><td>Business Communication</td><td class="font-mono text-xs text-center">BSCCS19410</td><td class="text-center">AECC</td><td class="text-center font-bold">2</td><td class="text-center">IV</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.50%</td><td>Workplace communication</td></tr>
+                        <tr><td>Big Data Analytics</td><td class="font-mono text-xs text-center">BSCCS19404</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">IV</td><td><span class="pw-badge pw-higher">Higher Studies</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">3.01%</td><td>Data analytics and advanced computing</td></tr>
+                        <tr><td>Artificial Intelligence</td><td class="font-mono text-xs text-center">BSCCS19502</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-research">Research</span> <span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">3.01%</td><td>AI and intelligent systems</td></tr>
+                        <tr><td>Social Media Analytics</td><td class="font-mono text-xs text-center">BSCCS19504</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">3.01%</td><td>Industry analytics</td></tr>
+                        <tr><td>Software Engineering</td><td class="font-mono text-xs text-center">BSCCS19505</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">3.01%</td><td>Product and software delivery</td></tr>
+                        <tr><td>Project Stage – I</td><td class="font-mono text-xs text-center">BSCCS19510</td><td class="text-center">PRJ</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">3.01%</td><td>Research execution</td></tr>
+                        <tr><td>Project Stage – II</td><td class="font-mono text-xs text-center">BSCCS19510</td><td class="text-center">PRJ</td><td class="text-center font-bold">5</td><td class="text-center">VI</td><td><span class="pw-badge pw-research">Research</span> <span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">3.76%</td><td>Final implementation and evaluation</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- HIGHER STUDIES LIST -->
-        <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-7">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center text-lg">🎓</div>
-                <h4 class="text-base font-black text-green-600 uppercase tracking-wide">Higher Studies</h4>
+        <!-- 2021 -->
+        <div id="tab2021" class="tab-pane">
+            <div class="table-scroll">
+                <table class="erh-table">
+                    <thead><tr><th class="text-left">Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Pathway(s)</th><th>% Rev.</th><th class="text-left">Rationale</th></tr></thead>
+                    <tbody>
+                        <tr><td>Data Modelling and Visualization</td><td class="font-mono text-xs text-center">BSCCS21204</td><td class="text-center">PC</td><td class="text-center font-bold">3</td><td class="text-center">II</td><td><span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">2.13%</td><td>Data science preparation</td></tr>
+                        <tr><td>English and Soft Skills</td><td class="font-mono text-xs text-center">BSCCS21210</td><td class="text-center">AECC</td><td class="text-center font-bold">2</td><td class="text-center">II</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.42%</td><td>Communication skills</td></tr>
+                        <tr><td>Practical Approach to Data Mining</td><td class="font-mono text-xs text-center">BSCCS21304</td><td class="text-center">PC</td><td class="text-center font-bold">3</td><td class="text-center">III</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">2.13%</td><td>Applied analytics</td></tr>
+                        <tr><td>Business Communication</td><td class="font-mono text-xs text-center">BSCCS21410</td><td class="text-center">AECC</td><td class="text-center font-bold">2</td><td class="text-center">IV</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.42%</td><td>Corporate communication</td></tr>
+                        <tr><td>Aptitude &amp; Personality Development</td><td class="font-mono text-xs text-center">BSCCS21411</td><td class="text-center">AECC</td><td class="text-center font-bold">2</td><td class="text-center">IV</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.42%</td><td>Placement preparation</td></tr>
+                        <tr><td>Winter Internship – I</td><td class="font-mono text-xs text-center">BSCCS21412</td><td class="text-center">PRJ</td><td class="text-center font-bold">2</td><td class="text-center">IV</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.42%</td><td>Industry engagement</td></tr>
+                        <tr><td>Machine Learning for Real World Applications</td><td class="font-mono text-xs text-center">BSCCS21504</td><td class="text-center">PC</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-higher">Higher Studies</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">2.84%</td><td>Applied AI</td></tr>
+                        <tr><td>Project Stage – I</td><td class="font-mono text-xs text-center">BSCCS21510</td><td class="text-center">PRJ</td><td class="text-center font-bold">4</td><td class="text-center">V</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">2.84%</td><td>Capstone implementation</td></tr>
+                        <tr><td>Internship</td><td class="font-mono text-xs text-center">BSCCS21610</td><td class="text-center">INT</td><td class="text-center font-bold">12</td><td class="text-center">VI</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">8.51%</td><td>Industry training</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="space-y-2.5">
-                {% for item in higher_studies_items %}
-                <div class="init-item init-badge flex items-center gap-3 rounded-xl bg-green-50 border border-green-200 px-4 py-3 group"
-                     style="animation-delay: {{ forloop.counter0 }}00ms;">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0 group-hover:scale-150 transition-transform"></span>
-                    <span class="text-sm font-semibold text-slate-700">{{ item.title }}</span>
-                </div>
-                {% empty %}
-                <p class="text-slate-400 text-sm text-center py-4">No items found.</p>
-                {% endfor %}
+        </div>
+
+        <!-- 2023 NEP -->
+        <div id="tab2023" class="tab-pane">
+            <div class="table-scroll">
+                <table class="erh-table">
+                    <thead><tr><th class="text-left">Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Pathway(s)</th><th>% Rev.</th><th class="text-left">Rationale</th></tr></thead>
+                    <tbody>
+                        <tr><td>Capstone Project – I</td><td class="font-mono text-xs text-center">CCCS01</td><td class="text-center">CC</td><td class="text-center font-bold">2</td><td class="text-center">I</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">1.67%</td><td>Early project-based inquiry and problem solving</td></tr>
+                        <tr><td>Capstone Project – II</td><td class="font-mono text-xs text-center">CCCS02</td><td class="text-center">CC</td><td class="text-center font-bold">2</td><td class="text-center">II</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">1.67%</td><td>Applied implementation and project execution</td></tr>
+                        <tr><td>Statistical Methods</td><td class="font-mono text-xs text-center">BSCCS23305</td><td class="text-center">CC</td><td class="text-center font-bold">2</td><td class="text-center">III</td><td><span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">1.67%</td><td>Statistics foundation for analytics and postgraduate study</td></tr>
+                        <tr><td>Data Modeling and Visualization</td><td class="font-mono text-xs text-center">BSCCS23301</td><td class="text-center">DSC</td><td class="text-center font-bold">3</td><td class="text-center">III</td><td><span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">2.50%</td><td>Data analysis and analytical reasoning</td></tr>
+                        <tr><td>Green Computing</td><td class="font-mono text-xs text-center">OE23CS03</td><td class="text-center">OE</td><td class="text-center font-bold">4</td><td class="text-center">III</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">3.33%</td><td>Sustainable computing and research orientation</td></tr>
+                        <tr><td>Industry Project</td><td class="font-mono text-xs text-center">BSCCS23405</td><td class="text-center">FP</td><td class="text-center font-bold">2</td><td class="text-center">IV</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">1.67%</td><td>Real-world project exposure</td></tr>
+                        <tr><td>Data Science Using Python</td><td class="font-mono text-xs text-center">BSCCS23406</td><td class="text-center">VSC</td><td class="text-center font-bold">2</td><td class="text-center">IV</td><td><span class="pw-badge pw-higher">Higher Studies</span> <span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.67%</td><td>Analytical and computational skill development</td></tr>
+                        <tr><td>Big Data Analytics</td><td class="font-mono text-xs text-center">BSCCS23501</td><td class="text-center">DSC</td><td class="text-center font-bold">3</td><td class="text-center">V</td><td><span class="pw-badge pw-higher">Higher Studies</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">2.50%</td><td>Advanced analytics and research readiness</td></tr>
+                        <tr><td>Artificial Intelligence</td><td class="font-mono text-xs text-center">BSCCS23503</td><td class="text-center">DSC</td><td class="text-center font-bold">3</td><td class="text-center">V</td><td><span class="pw-badge pw-research">Research</span> <span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">2.50%</td><td>AI theory and innovation</td></tr>
+                        <tr><td>Research Methodology</td><td class="font-mono text-xs text-center">BSCCS23504</td><td class="text-center">DSC</td><td class="text-center font-bold">3</td><td class="text-center">V</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">2.50%</td><td>Formal research methods and scientific writing</td></tr>
+                        <tr><td>Internet of Things / Computer Graphics</td><td class="font-mono text-xs text-center">BSCCS23505</td><td class="text-center">DSE</td><td class="text-center font-bold">3</td><td class="text-center">V</td><td><span class="pw-badge pw-research">Research</span> <span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">2.50%</td><td>Specialization and product development</td></tr>
+                        <tr><td>Software Project Management</td><td class="font-mono text-xs text-center">BSCCS23507</td><td class="text-center">VSC</td><td class="text-center font-bold">3</td><td class="text-center">V</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">2.50%</td><td>Agile, PM and startup execution</td></tr>
+                        <tr><td>Machine Learning</td><td class="font-mono text-xs text-center">BSCCS23603</td><td class="text-center">DSC</td><td class="text-center font-bold">3</td><td class="text-center">VI</td><td><span class="pw-badge pw-research">Research</span> <span class="pw-badge pw-higher">Higher Studies</span></td><td class="text-center">2.50%</td><td>Applied AI and advanced computing</td></tr>
+                        <tr><td>Minor Track Project</td><td class="font-mono text-xs text-center">MT23CS06</td><td class="text-center">MT</td><td class="text-center font-bold">3</td><td class="text-center">VI</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">2.50%</td><td>Independent applied specialization</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 2024 NEP -->
+        <div id="tab2024" class="tab-pane">
+            <div class="table-scroll">
+                <table class="erh-table">
+                    <thead><tr><th class="text-left">Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Pathway(s)</th><th>% Rev.</th><th class="text-left">Rationale</th></tr></thead>
+                    <tbody>
+                        <tr><td>Capstone Project – I</td><td class="font-mono text-xs text-center">BSCCS24103</td><td class="text-center">CC</td><td class="text-center font-bold">2</td><td class="text-center">I</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">1.67%</td><td>Project-based learning</td></tr>
+                        <tr><td>English</td><td class="font-mono text-xs text-center">AE24CS01A</td><td class="text-center">AEC</td><td class="text-center font-bold">4</td><td class="text-center">I</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">3.33%</td><td>Professional communication</td></tr>
+                        <tr><td>Digital Technology Solutions</td><td class="font-mono text-xs text-center">VE24CS01A</td><td class="text-center">VEC</td><td class="text-center font-bold">2</td><td class="text-center">I</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.67%</td><td>Digital readiness</td></tr>
+                        <tr><td>Digital Literacy</td><td class="font-mono text-xs text-center">SE24CS02A</td><td class="text-center">SEC</td><td class="text-center font-bold">2</td><td class="text-center">II</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.67%</td><td>Industry digital skills</td></tr>
+                        <tr><td>Environmental Studies</td><td class="font-mono text-xs text-center">VE24CS02A</td><td class="text-center">VEC</td><td class="text-center font-bold">4</td><td class="text-center">II</td><td><span class="pw-badge pw-research">Research</span> <span class="pw-badge pw-sustain">Sustainability</span></td><td class="text-center">3.33%</td><td>Sustainability integration</td></tr>
+                        <tr><td>Technology Training of Society</td><td class="font-mono text-xs text-center">BSCCS24306</td><td class="text-center">CES</td><td class="text-center font-bold">2</td><td class="text-center">III</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span> <span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.67%</td><td>Community and outreach</td></tr>
+                        <tr><td>Green Computing</td><td class="font-mono text-xs text-center">OE24CS03A</td><td class="text-center">OE</td><td class="text-center font-bold">4</td><td class="text-center">III</td><td><span class="pw-badge pw-sustain">Sustainability</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">3.33%</td><td>Green ICT</td></tr>
+                        <tr><td>Industry Project</td><td class="font-mono text-xs text-center">BSCCS24405</td><td class="text-center">FP</td><td class="text-center font-bold">2</td><td class="text-center">IV</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">1.67%</td><td>Industry problem-solving</td></tr>
+                        <tr><td>Research Methodology</td><td class="font-mono text-xs text-center">BSCCS24504</td><td class="text-center">DSC</td><td class="text-center font-bold">3</td><td class="text-center">V</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">2.50%</td><td>Formal research methods</td></tr>
+                        <tr><td>Software Project Management</td><td class="font-mono text-xs text-center">BSCCS24507</td><td class="text-center">VSC</td><td class="text-center font-bold">3</td><td class="text-center">V</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">2.50%</td><td>Agile and PM</td></tr>
+                        <tr><td>Minor Track Project</td><td class="font-mono text-xs text-center">MT24CS06A</td><td class="text-center">MC</td><td class="text-center font-bold">3</td><td class="text-center">VI</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">2.50%</td><td>Applied specialization</td></tr>
+                        <tr><td>Software Testing &amp; Quality Assurance</td><td class="font-mono text-xs text-center">BSCCS24H701</td><td class="text-center">DSC</td><td class="text-center font-bold">3</td><td class="text-center">VII</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.88%</td><td>QA and testing practices</td></tr>
+                        <tr><td>IoT Security</td><td class="font-mono text-xs text-center">BSCCS24H707</td><td class="text-center">DSE</td><td class="text-center font-bold">3</td><td class="text-center">VII</td><td><span class="pw-badge pw-employ">Employability</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">1.88%</td><td>Secure system development</td></tr>
+                        <tr><td>Major Project – I</td><td class="font-mono text-xs text-center">BSCCS24H708</td><td class="text-center">PROJ</td><td class="text-center font-bold">6</td><td class="text-center">VII</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">3.75%</td><td>Advanced project</td></tr>
+                        <tr><td>Android Programming</td><td class="font-mono text-xs text-center">BSCCS24H801</td><td class="text-center">DSC</td><td class="text-center font-bold">2</td><td class="text-center">VIII</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">1.25%</td><td>Mobile application development</td></tr>
+                        <tr><td>IoT Product Development</td><td class="font-mono text-xs text-center">BSCCS24H803</td><td class="text-center">DSE</td><td class="text-center font-bold">2</td><td class="text-center">VIII</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">1.25%</td><td>Product innovation</td></tr>
+                        <tr><td>Internship</td><td class="font-mono text-xs text-center">BSCCS24H806</td><td class="text-center">INT</td><td class="text-center font-bold">8</td><td class="text-center">VIII</td><td><span class="pw-badge pw-employ">Employability</span></td><td class="text-center">5.00%</td><td>Work-integrated learning</td></tr>
+                        <tr><td>IPR &amp; Innovation Management</td><td class="font-mono text-xs text-center">BSCCS24R701</td><td class="text-center">DSC</td><td class="text-center font-bold">4</td><td class="text-center">VII</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span> <span class="pw-badge pw-research">Research</span></td><td class="text-center">2.50%</td><td>Innovation and IP</td></tr>
+                        <tr><td>Entrepreneurship Development</td><td class="font-mono text-xs text-center">BSCCS24R801</td><td class="text-center">DSC</td><td class="text-center font-bold">2</td><td class="text-center">VIII</td><td><span class="pw-badge pw-entrepreneur">Entrepreneurship</span></td><td class="text-center">1.25%</td><td>Startup readiness</td></tr>
+                        <tr><td>Research Internship</td><td class="font-mono text-xs text-center">BSCCS24R804</td><td class="text-center">INT</td><td class="text-center font-bold">8</td><td class="text-center">VIII</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">5.00%</td><td>Research immersion</td></tr>
+                        <tr><td>Research Project – II</td><td class="font-mono text-xs text-center">BSCCS24R805</td><td class="text-center">PROJ</td><td class="text-center font-bold">7</td><td class="text-center">VIII</td><td><span class="pw-badge pw-research">Research</span></td><td class="text-center">4.38%</td><td>Thesis-equivalent work</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
     </div>
 </div>
 
-<!-- ══ VISION BANNER ══ -->
+<!-- VISION BANNER -->
 <div class="vision-banner mt-12 rounded-[32px] bg-gradient-to-r from-primary via-primary/90 to-secondary text-white p-10 shadow-2xl">
     <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/70 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">
         Department Vision
     </span>
     <h3 class="text-3xl md:text-4xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
-        Shaping Future-Ready<br class="hidden md:block"> Innovators & Leaders
+        Shaping Future-Ready<br class="hidden md:block"> Innovators &amp; Leaders
     </h3>
     <p class="mt-5 text-lg leading-relaxed text-white/85 max-w-3xl">
-        {{ summary.vision_statement }}
+        With 51.7% of the curriculum aligned to Entrepreneurship, Research, and Higher Studies pathways,
+        the department fosters an innovation ecosystem that bridges academic rigour with startup readiness,
+        research depth with industry practice, and theoretical foundations with graduate-level ambition.
     </p>
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white/15 rounded-2xl p-5 border border-white/20">
+            <div class="text-2xl mb-2">🚀</div>
+            <h4 class="font-bold text-base mb-1">Startup Mindset</h4>
+            <p class="text-sm text-white/70">Project-based learning, industry exposure, and product thinking woven throughout the curriculum.</p>
+        </div>
+        <div class="bg-white/15 rounded-2xl p-5 border border-white/20">
+            <div class="text-2xl mb-2">🔬</div>
+            <h4 class="font-bold text-base mb-1">Research Excellence</h4>
+            <p class="text-sm text-white/70">Research begins from Year 1 — capstone projects, methodology, AI/ML, and publication readiness.</p>
+        </div>
+        <div class="bg-white/15 rounded-2xl p-5 border border-white/20">
+            <div class="text-2xl mb-2">🎓</div>
+            <h4 class="font-bold text-base mb-1">Graduate Readiness</h4>
+            <p class="text-sm text-white/70">Strong foundation in statistics, AI, analytics, and theory supporting M.Tech/MS/PhD/GATE pathways.</p>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -469,9 +568,9 @@ Chart.defaults.color = "#64748b";
 new Chart(document.getElementById('ecosystemChart'), {
     type: 'doughnut',
     data: {
-        labels: ['Entrepreneurship', 'Research', 'Higher Studies'],
+        labels: ['Entrepreneurship (13 cr)', 'Research (27 cr)', 'Higher Studies (22 cr)'],
         datasets: [{
-            data: [{{ entrepreneurship_count }}, {{ research_count }}, {{ higher_studies_count }}],
+            data: [13, 27, 22],
             backgroundColor: ['#E14D2A', '#162850', '#10B981'],
             borderWidth: 0,
             hoverOffset: 12
@@ -482,14 +581,25 @@ new Chart(document.getElementById('ecosystemChart'), {
         maintainAspectRatio: false,
         cutout: '70%',
         plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10 }
+            legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10 } },
+            tooltip: {
+                callbacks: {
+                    label: function(ctx) {
+                        return ' ' + ctx.parsed + ' credits (' + ((ctx.parsed/62)*100).toFixed(1) + '% of ERH)';
+                    }
+                }
             }
         },
         animation: { animateRotate: true, duration: 1000, easing: 'easeOutQuart' }
     }
 });
+
+function showTab(id, btn) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
 </script>
 
 {% endblock %}

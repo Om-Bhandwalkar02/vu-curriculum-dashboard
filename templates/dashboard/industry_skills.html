@@ -4,7 +4,6 @@
 
 {% block extra_head %}
 <style>
-    /* ── STAGGERED KPI REVEALS ───────────────────────── */
     .kpi-card {
         opacity: 0;
         transform: translateY(30px) scale(0.96);
@@ -14,173 +13,89 @@
     .kpi-card:nth-child(2) { animation-delay: 0.14s; }
     .kpi-card:nth-child(3) { animation-delay: 0.23s; }
     .kpi-card:nth-child(4) { animation-delay: 0.32s; }
+    .kpi-card:nth-child(5) { animation-delay: 0.41s; }
+    .kpi-card:nth-child(6) { animation-delay: 0.50s; }
 
-    @keyframes popUp {
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
+    @keyframes popUp { to { opacity: 1; transform: translateY(0) scale(1); } }
 
-    /* ── SECTION HEAD ────────────────────────────────── */
-    .section-head {
-        opacity: 0; transform: translateX(-14px);
-        animation: headIn 0.5s ease forwards;
-    }
+    .section-head { opacity: 0; transform: translateX(-14px); animation: headIn 0.5s ease forwards; }
     @keyframes headIn { to { opacity: 1; transform: translateX(0); } }
 
-    /* ── ACCENT BAR ──────────────────────────────────── */
     .accent-bar { width: 0; animation: barGrow 0.7s ease 0.2s forwards; }
     @keyframes barGrow { to { width: 30rem; } }
 
-    /* ── HOVER LIFT ──────────────────────────────────── */
     .lift {
-        transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
-                    box-shadow 0.25s ease;
+        transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
     }
-    .lift:hover {
-        transform: translateY(-6px) scale(1.015);
-        box-shadow: 0 28px 56px rgba(22,40,80,0.14);
-    }
+    .lift:hover { transform: translateY(-6px) scale(1.015); box-shadow: 0 28px 56px rgba(22,40,80,0.14); }
 
-    /* ── GRADIENT NUMBERS ────────────────────────────── */
-    .num-primary {
-        background: linear-gradient(135deg,#E14D2A,#c23d1f);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .num-secondary {
-        background: linear-gradient(135deg,#162850,#243b6e);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .num-green {
-        background: linear-gradient(135deg,#10B981,#059669);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .num-accent {
-        background: linear-gradient(135deg,#F59E0B,#d97706);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+    .num-primary { background: linear-gradient(135deg,#E14D2A,#c23d1f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .num-secondary { background: linear-gradient(135deg,#162850,#243b6e); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .num-green { background: linear-gradient(135deg,#10B981,#059669); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .num-accent { background: linear-gradient(135deg,#F59E0B,#d97706); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
-    /* ── ICON RING ───────────────────────────────────── */
-    .icon-ring {
-        width: 52px; height: 52px;
-        border-radius: 16px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.6rem;
-        animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
-    }
+    .icon-ring { width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
 
-    /* ── PILLAR CARDS ────────────────────────────────── */
-    .pillar-card {
-        opacity: 0;
-        transform: translateY(22px);
-        animation: popUp 0.55s ease forwards;
-    }
-    .pillar-card:nth-child(1) { animation-delay: 0.08s; }
-    .pillar-card:nth-child(2) { animation-delay: 0.18s; }
-    .pillar-card:nth-child(3) { animation-delay: 0.28s; }
-    .pillar-card:nth-child(4) { animation-delay: 0.38s; }
+    .pillar-card { opacity:0; transform:translateY(22px); animation: popUp 0.55s ease forwards; }
+    .pillar-card:nth-child(1) { animation-delay:0.08s; }
+    .pillar-card:nth-child(2) { animation-delay:0.18s; }
+    .pillar-card:nth-child(3) { animation-delay:0.28s; }
+    .pillar-card:nth-child(4) { animation-delay:0.38s; }
 
-    /* ── ITEM SLIDE-IN ───────────────────────────────── */
-    .item-card {
-        opacity: 0;
-        transform: translateX(-12px);
-        animation: slideIn 0.42s ease forwards;
-    }
-    @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+    .item-card { opacity:0; transform:translateX(-12px); animation: slideIn 0.42s ease forwards; }
+    @keyframes slideIn { to { opacity:1; transform:translateX(0); } }
 
-    /* ── ITEM BADGE HOVER ────────────────────────────── */
-    .item-badge {
-        transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
-        cursor: default;
-    }
-    .item-badge:hover { transform: translateX(5px); }
+    .chart-card { opacity:0; animation: popUp 0.6s ease 0.12s forwards; }
 
-    /* ── CHART CARD ──────────────────────────────────── */
-    .chart-card { opacity: 0; animation: popUp 0.6s ease 0.12s forwards; }
+    .journey-step { opacity:0; transform:translateY(18px) scale(0.94); animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    .journey-step:nth-child(1){animation-delay:0.05s;} .journey-step:nth-child(2){animation-delay:0.12s;}
+    .journey-step:nth-child(3){animation-delay:0.19s;} .journey-step:nth-child(4){animation-delay:0.26s;}
+    .journey-step:nth-child(5){animation-delay:0.33s;} .journey-step:nth-child(6){animation-delay:0.40s;}
 
-    /* ── JOURNEY STEP ────────────────────────────────── */
-    .journey-step {
-        opacity: 0;
-        transform: translateY(18px) scale(0.94);
-        animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
-    }
-    .journey-step:nth-child(1) { animation-delay: 0.05s; }
-    .journey-step:nth-child(2) { animation-delay: 0.12s; }
-    .journey-step:nth-child(3) { animation-delay: 0.19s; }
-    .journey-step:nth-child(4) { animation-delay: 0.26s; }
-    .journey-step:nth-child(5) { animation-delay: 0.33s; }
-    .journey-step:nth-child(6) { animation-delay: 0.40s; }
+    .spotlight { position:relative; overflow:hidden; opacity:0; animation: popUp 0.65s ease 0.2s forwards; }
+    .spotlight::before { content:""; position:absolute; top:-80%; left:-60%; width:50%; height:220%; background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.13) 50%,transparent 60%); animation: shimmer 5s ease-in-out infinite; }
+    @keyframes shimmer { 0%{transform:translateX(-60%) rotate(15deg);} 60%,100%{transform:translateX(350%) rotate(15deg);} }
 
-    /* ── SPOTLIGHT SHIMMER ───────────────────────────── */
-    .spotlight {
-        position: relative; overflow: hidden;
-        opacity: 0; animation: popUp 0.65s ease 0.2s forwards;
-    }
-    .spotlight::before {
-        content:"";
-        position:absolute; top:-80%; left:-60%;
-        width:50%; height:220%;
-        background: linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.13) 50%,transparent 60%);
-        animation: shimmer 5s ease-in-out infinite;
-    }
-    @keyframes shimmer {
-        0%   { transform:translateX(-60%) rotate(15deg); }
-        60%,100% { transform:translateX(350%) rotate(15deg); }
-    }
+    .vision-banner { opacity:0; animation: popUp 0.7s ease 0.25s forwards; position:relative; overflow:hidden; }
+    .vision-banner::after { content:"💻"; position:absolute; right:-10px; bottom:-20px; font-size:10rem; opacity:0.06; line-height:1; pointer-events:none; }
 
-    /* ── VISION BANNER ───────────────────────────────── */
-    .vision-banner {
-        opacity:0; animation: popUp 0.7s ease 0.25s forwards;
-        position: relative; overflow: hidden;
-    }
-    .vision-banner::after {
-        content:"💻";
-        position:absolute; right:-10px; bottom:-20px;
-        font-size:10rem; opacity:0.06; line-height:1;
-        pointer-events:none;
-    }
-
-    /* ── FADE IN ─────────────────────────────────────── */
     .fade-in { opacity:0; animation: popUp 0.6s ease forwards; }
 
-    /* ── SKILL TAG ───────────────────────────────────── */
-    .skill-tag {
-        transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
-                    box-shadow 0.2s ease,
-                    background 0.2s;
-    }
-    .skill-tag:hover {
-        transform: translateY(-4px) scale(1.04);
-        box-shadow: 0 12px 24px rgba(22,40,80,0.12);
-    }
+    .skill-tag { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease, background 0.2s; }
+    .skill-tag:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 12px 24px rgba(22,40,80,0.12); }
 
-    /* ── STAT BAR ────────────────────────────────────── */
-    .stat-bar-fill {
-        height: 100%;
-        border-radius: 6px;
-        animation: fillBar 1.2s cubic-bezier(0.4,0,0.2,1) 0.5s both;
-        transform-origin: left;
-    }
-    @keyframes fillBar {
-        from { transform: scaleX(0); }
-        to   { transform: scaleX(1); }
-    }
+    .stat-bar-fill { height:100%; border-radius:6px; animation: fillBar 1.2s cubic-bezier(0.4,0,0.2,1) 0.5s both; transform-origin:left; }
+    @keyframes fillBar { from{transform:scaleX(0);} to{transform:scaleX(1);} }
 
-    /* ── COUNTER PULSE ───────────────────────────────── */
-    @keyframes counterPop {
-        0% { transform: scale(0.7); opacity: 0; }
-        70% { transform: scale(1.08); }
-        100% { transform: scale(1); opacity: 1; }
-    }
+    @keyframes counterPop { 0%{transform:scale(0.7);opacity:0;} 70%{transform:scale(1.08);} 100%{transform:scale(1);opacity:1;} }
     .counter-pop { animation: counterPop 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
 
-    /* ── PLATFORM ICON BOUNCE ────────────────────────── */
-    .platform-icon {
-        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    }
+    .platform-icon { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
     .platform-icon:hover { transform: scale(1.3) rotate(-8deg); }
+
+    /* ── TABLE STYLES ── */
+    .data-table { width:100%; border-collapse:collapse; font-size:0.78rem; }
+    .data-table th { background:linear-gradient(135deg,#162850,#1e3a6e); color:#fff; padding:9px 11px; text-align:left; font-weight:700; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em; white-space:nowrap; }
+    .data-table td { padding:8px 11px; border-bottom:1px solid rgba(22,40,80,0.07); color:#334155; }
+    .data-table tr:last-child td { border-bottom:none; }
+    .data-table tbody tr:hover td { background:rgba(225,77,42,0.04); }
+
+    .badge-full { background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:2px 9px; border-radius:999px; font-size:0.68rem; font-weight:700; white-space:nowrap; }
+    .badge-partial { background:#fef9c3; color:#a16207; border:1px solid #fde047; padding:2px 9px; border-radius:999px; font-size:0.68rem; font-weight:700; white-space:nowrap; }
+    .badge-gap { background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:2px 9px; border-radius:999px; font-size:0.68rem; font-weight:700; white-space:nowrap; }
+    .badge-strong { background:#dbeafe; color:#1d4ed8; border:1px solid #93c5fd; padding:2px 9px; border-radius:999px; font-size:0.68rem; font-weight:700; white-space:nowrap; }
+    .badge-moderate { background:#f3e8ff; color:#7e22ce; border:1px solid #c4b5fd; padding:2px 9px; border-radius:999px; font-size:0.68rem; font-weight:700; white-space:nowrap; }
+
+    .cluster-card { opacity:0; transform:translateY(20px); animation: popUp 0.55s ease forwards; }
+    .cluster-card:nth-child(1){animation-delay:0.06s;} .cluster-card:nth-child(2){animation-delay:0.13s;}
+    .cluster-card:nth-child(3){animation-delay:0.20s;} .cluster-card:nth-child(4){animation-delay:0.27s;}
+    .cluster-card:nth-child(5){animation-delay:0.34s;} .cluster-card:nth-child(6){animation-delay:0.41s;}
+
+    .gap-card { opacity:0; transform:translateY(18px); animation: popUp 0.55s ease forwards; }
+    .gap-card:nth-child(1){animation-delay:0.05s;} .gap-card:nth-child(2){animation-delay:0.15s;}
+    .gap-card:nth-child(3){animation-delay:0.25s;} .gap-card:nth-child(4){animation-delay:0.35s;}
+
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; } }
 </style>
 {% endblock %}
 
@@ -197,66 +112,89 @@
     </h2>
     <div class="mt-3 h-1 rounded-full bg-gradient-to-r from-primary to-secondary accent-bar"></div>
     <p class="mt-4 text-slate-500 max-w-3xl text-sm leading-relaxed">
-        Analysis of industry-oriented learning, certifications, coding platforms,
-        project exposure, collaborative development, and technology skill alignment
-        within the Computer Science curriculum.
+        Courses mapped to 6 industry skill clusters derived from <strong>NASSCOM Future Skills 2024</strong>,
+        <strong>LinkedIn Jobs on the Rise India 2025</strong>, <strong>Stack Overflow Developer Survey 2024</strong>,
+        <strong>WEF Future of Jobs 2025</strong>, and <strong>Gartner Top Technology Trends 2025</strong>.
+        Coverage rating: <span class="text-green-700 font-bold">Full</span> = dedicated course &nbsp;
+        <span class="text-amber-700 font-bold">Partial</span> = topic within a course &nbsp;
+        <span class="text-red-700 font-bold">Gap</span> = not covered.
     </p>
 </div>
 
 <!-- ══ KPI CARDS ══ -->
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-    <!-- PLATFORMS -->
+    <!-- INDUSTRY-ALIGNED CREDITS -->
     <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-primary/8 blur-2xl group-hover:bg-primary/14 transition-all duration-500"></div>
-        <div class="icon-ring bg-primary/10 mb-4">🚀</div>
-        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Platforms</p>
-        <h2 class="mt-3 text-6xl font-black num-primary leading-none counter-pop">{{ platform_count }}</h2>
-        <p class="mt-3 text-xs text-slate-500 font-semibold">Learning Platforms</p>
+        <div class="icon-ring bg-primary/10 mb-4">📚</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Industry-Aligned Credits (2024)</p>
+        <h2 class="mt-3 text-6xl font-black num-primary leading-none counter-pop">91</h2>
+        <p class="mt-2 text-xs text-slate-500 font-semibold">credits &nbsp;·&nbsp; <strong>56.9%</strong> of 160 total credits</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- SKILL DOMAINS -->
+    <!-- SKILL CLUSTERS COVERED -->
     <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-secondary/8 blur-2xl group-hover:bg-secondary/14 transition-all duration-500"></div>
-        <div class="icon-ring bg-secondary/10 mb-4">💻</div>
-        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Skill Domains</p>
-        <h2 class="mt-3 text-6xl font-black num-secondary leading-none counter-pop">{{ skill_count }}</h2>
-        <p class="mt-3 text-xs text-slate-500 font-semibold">Technical Skills</p>
+        <div class="icon-ring bg-secondary/10 mb-4">🎯</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Skill Clusters Covered</p>
+        <h2 class="mt-3 text-6xl font-black num-secondary leading-none counter-pop">6</h2>
+        <p class="mt-2 text-xs text-slate-500 font-semibold">of 8 total industry clusters</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-secondary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- PROJECTS -->
+    <!-- COVERAGE GROWTH -->
     <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-green-400/8 blur-2xl group-hover:bg-green-400/16 transition-all duration-500"></div>
-        <div class="icon-ring bg-green-100 mb-4">🏗️</div>
-        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Projects</p>
-        <h2 class="mt-3 text-6xl font-black num-green leading-none counter-pop">{{ project_count }}</h2>
-        <p class="mt-3 text-xs text-slate-500 font-semibold">Industry Projects</p>
+        <div class="icon-ring bg-green-100 mb-4">📈</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Coverage Growth (2018 → 2024)</p>
+        <h2 class="mt-3 text-6xl font-black num-green leading-none counter-pop">+72%</h2>
+        <p class="mt-2 text-xs text-slate-500 font-semibold">53 cr → 91 cr</p>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
-    <!-- TOTAL -->
+    <!-- FULLY COVERED TOP-10 SKILLS -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-amber-400/8 blur-2xl group-hover:bg-amber-400/16 transition-all duration-500"></div>
+        <div class="icon-ring bg-amber-100 mb-4">✅</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Fully Covered Top-10 Skills</p>
+        <h2 class="mt-3 text-6xl font-black num-accent leading-none counter-pop">7/10</h2>
+        <p class="mt-2 text-xs text-slate-500 font-semibold">NASSCOM top-10 demanded skills</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- SKILL GAP INDEX -->
+    <div class="kpi-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-purple-400/8 blur-2xl group-hover:bg-purple-400/16 transition-all duration-500"></div>
+        <div class="icon-ring bg-purple-100 mb-4">📉</div>
+        <p class="uppercase tracking-widest text-xs text-slate-400 font-bold">Skill Gap Index (2024)</p>
+        <h2 class="mt-3 text-5xl font-black leading-none counter-pop" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">28%</h2>
+        <p class="mt-2 text-xs text-green-600 font-semibold">↓ from ~65% in 2018</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-400 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- DARK TOTAL CARD -->
     <div class="kpi-card lift relative rounded-[28px] bg-gradient-to-br from-secondary via-secondary/95 to-secondary/80 p-7 shadow-xl overflow-hidden group text-white">
         <div class="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
         <div class="w-[52px] h-[52px] rounded-2xl bg-white/15 flex items-center justify-center text-2xl mb-4">⚡</div>
-        <p class="uppercase tracking-widest text-xs text-white/50 font-bold">Total</p>
-        <h2 class="mt-3 text-6xl font-black text-white leading-none counter-pop">{{ total_count }}</h2>
-        <p class="mt-3 text-xs text-white/50 font-semibold">Industry Initiatives</p>
+        <p class="uppercase tracking-widest text-xs text-white/50 font-bold">References</p>
+        <h2 class="mt-3 text-4xl font-black text-white leading-none counter-pop">5</h2>
+        <p class="mt-2 text-xs text-white/60 font-semibold leading-relaxed">NASSCOM · LinkedIn · Stack Overflow · WEF · Gartner</p>
     </div>
 
 </div>
 
-<!-- ══ CHARTS + SKILL RADAR ══ -->
+<!-- ══ CHARTS ══ -->
 <div class="mt-12 grid grid-cols-1 xl:grid-cols-2 gap-8">
 
-    <!-- RADAR CHART -->
+    <!-- RADAR -->
     <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
             <div>
                 <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Industry Skills Radar</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Alignment across technical domains</p>
+                <p class="text-xs text-slate-400 mt-0.5">Alignment across technical domains — 2024 NEP</p>
             </div>
         </div>
         <div class="relative h-[280px]">
@@ -264,256 +202,536 @@
         </div>
     </div>
 
-    <!-- DOUGHNUT CHART -->
+    <!-- CLUSTER DOUGHNUT -->
     <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl" style="animation-delay:0.18s;">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
             <div>
-                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Skill Ecosystem Distribution</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Breakdown by category</p>
+                <h3 class="text-lg font-black uppercase tracking-wide text-slate-700">Skill Cluster Credit Distribution</h3>
+                <p class="text-xs text-slate-400 mt-0.5">91 industry-aligned credits by cluster</p>
             </div>
         </div>
         <div class="relative h-[280px]">
-            <canvas id="doughnutChart"></canvas>
+            <canvas id="clusterDoughnut"></canvas>
         </div>
     </div>
 
 </div>
 
-<!-- ══ INDUSTRY SECTIONS ══ -->
-<div class="mt-14">
-    <div class="section-head mb-8" style="animation-delay:0.05s;">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
-            <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Partnerships</span>
+<!-- NASSCOM BAR + LINKEDIN BAR -->
+<div class="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- NASSCOM BAR -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl" style="animation-delay:0.1s;">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+            <div>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">NASSCOM Top-10 Skills Coverage %</h3>
+                <p class="text-xs text-slate-400 mt-0.5">VU 2024 curriculum vs. industry demand</p>
+            </div>
         </div>
-        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-            Industry Tie-Ups & Programs
-        </h3>
-        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:18rem;"></div>
+        <div class="relative h-[260px]">
+            <canvas id="nasscomBar"></canvas>
+        </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-        <!-- TCS -->
-        <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
-            <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">🏢</div>
-            <div class="w-1 h-7 rounded-full bg-primary mb-4"></div>
-            <h3 class="text-lg font-black text-primary uppercase tracking-wide mb-1 flex items-center gap-2">
-                <span class="platform-icon inline-block">🏢</span> TCS Initiatives
-            </h3>
-            <div class="w-10 h-0.5 rounded-full bg-primary/30 mb-5"></div>
-            <p class="text-slate-600 leading-relaxed text-sm">{{ summary.tcs_text }}</p>
-            <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    <!-- LINKEDIN ROLES BAR -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl" style="animation-delay:0.18s;">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-green-500 to-secondary"></div>
+            <div>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">LinkedIn Role Skill Match %</h3>
+                <p class="text-xs text-slate-400 mt-0.5">VU 2024 NEP vs top hiring roles</p>
+            </div>
         </div>
-
-        <!-- CERTIFICATIONS -->
-        <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
-            <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">📜</div>
-            <div class="w-1 h-7 rounded-full bg-secondary mb-4"></div>
-            <h3 class="text-lg font-black text-secondary uppercase tracking-wide mb-1 flex items-center gap-2">
-                <span class="platform-icon inline-block">📜</span> Certifications & MOOCs
-            </h3>
-            <div class="w-10 h-0.5 rounded-full bg-secondary/30 mb-5"></div>
-            <p class="text-slate-600 leading-relaxed text-sm">{{ summary.certification_text }}</p>
-            <div class="absolute bottom-0 left-0 right-0 h-1 bg-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+        <div class="relative h-[260px]">
+            <canvas id="linkedinBar"></canvas>
         </div>
+    </div>
 
-        <!-- LINKEDIN -->
-        <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
-            <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">🔗</div>
-            <div class="w-1 h-7 rounded-full bg-green-600 mb-4"></div>
-            <h3 class="text-lg font-black text-green-600 uppercase tracking-wide mb-1 flex items-center gap-2">
-                <span class="platform-icon inline-block">🔗</span> LinkedIn Learning
-            </h3>
-            <div class="w-10 h-0.5 rounded-full bg-green-600/30 mb-5"></div>
-            <p class="text-slate-600 leading-relaxed text-sm">{{ summary.linkedin_text }}</p>
-            <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+</div>
+
+<!-- ══ 6 SKILL CLUSTERS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Clusters</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Industry Skill Clusters — 2024 NEP
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:20rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">6 clusters · 91 credits · 56.9% of 160 total credits</p>
+</div>
+
+<div class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+    <!-- AI, ML & Data Science -->
+    <div class="cluster-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-purple-50 border-b border-l border-purple-100 flex items-center justify-center text-2xl opacity-80">🧠</div>
+        <div class="w-1 h-7 rounded-full bg-purple-600 mb-4"></div>
+        <h4 class="font-black text-purple-700 uppercase tracking-wide text-sm mb-1">AI, ML & Data Science</h4>
+        <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-black text-purple-600">21</span>
+            <span class="text-xs text-slate-400 font-semibold">credits · 13.1%</span>
+            <span class="badge-full ml-auto">Full</span>
         </div>
-
-        <!-- HACKERRANK -->
-        <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
-            <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">⌨️</div>
-            <div class="w-1 h-7 rounded-full bg-amber-500 mb-4"></div>
-            <h3 class="text-lg font-black text-amber-600 uppercase tracking-wide mb-1 flex items-center gap-2">
-                <span class="platform-icon inline-block">⌨️</span> HackerRank Challenges
-            </h3>
-            <div class="w-10 h-0.5 rounded-full bg-amber-500/30 mb-5"></div>
-            <p class="text-slate-600 leading-relaxed text-sm">{{ summary.hackerrank_text }}</p>
-            <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Mapped Subjects</p>
+        <ul class="space-y-1 text-xs text-slate-600">
+            <li class="flex justify-between"><span>Data Modeling &amp; Visualization</span><span class="font-bold">4 cr</span></li>
+            <li class="flex justify-between"><span>Data Mining &amp; Analytics</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Big Data Analytics + Lab</span><span class="font-bold">4 cr</span></li>
+            <li class="flex justify-between"><span>Artificial Intelligence</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Machine Learning + Lab</span><span class="font-bold">4 cr</span></li>
+            <li class="flex justify-between"><span>Data Science Using Python</span><span class="font-bold">3 cr</span></li>
+        </ul>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mt-3 mb-1">Coverage</p>
+        <div class="flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">AI</span>
+            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">Machine Learning</span>
+            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">Predictive Analytics</span>
+            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">Data Science</span>
+            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">Visualization</span>
         </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
 
+    <!-- Cloud, DevOps & Digital Infrastructure -->
+    <div class="cluster-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-sky-50 border-b border-l border-sky-100 flex items-center justify-center text-2xl opacity-80">☁️</div>
+        <div class="w-1 h-7 rounded-full bg-sky-600 mb-4"></div>
+        <h4 class="font-black text-sky-700 uppercase tracking-wide text-sm mb-1">Cloud, DevOps & Digital Infrastructure</h4>
+        <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-black text-sky-600">11</span>
+            <span class="text-xs text-slate-400 font-semibold">credits · 6.9%</span>
+            <span class="badge-partial ml-auto">Partial</span>
+        </div>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Mapped Subjects</p>
+        <ul class="space-y-1 text-xs text-slate-600">
+            <li class="flex justify-between"><span>Cloud Computing</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Digital Technology Solutions</span><span class="font-bold">2 cr</span></li>
+            <li class="flex justify-between"><span>Basic Computing</span><span class="font-bold">2 cr</span></li>
+            <li class="flex justify-between"><span>Digital Literacy</span><span class="font-bold">2 cr</span></li>
+            <li class="flex justify-between"><span>Cybersecurity Essentials</span><span class="font-bold">2 cr</span></li>
+        </ul>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mt-3 mb-1">Coverage</p>
+        <div class="flex flex-wrap gap-1.5 mb-2">
+            <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 text-xs font-semibold">Cloud fundamentals</span>
+            <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 text-xs font-semibold">Digital transformation</span>
+            <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 text-xs font-semibold">Infrastructure basics</span>
+        </div>
+        <p class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1">Gap</p>
+        <div class="flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">No dedicated DevOps</span>
+            <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">No CI/CD</span>
+            <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">No Kubernetes/SRE</span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- Cybersecurity -->
+    <div class="cluster-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-red-50 border-b border-l border-red-100 flex items-center justify-center text-2xl opacity-80">🔒</div>
+        <div class="w-1 h-7 rounded-full bg-red-600 mb-4"></div>
+        <h4 class="font-black text-red-700 uppercase tracking-wide text-sm mb-1">Cybersecurity & Secure Systems</h4>
+        <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-black text-red-600">11</span>
+            <span class="text-xs text-slate-400 font-semibold">credits · 6.9%</span>
+            <span class="badge-full ml-auto">Full</span>
+        </div>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Mapped Subjects</p>
+        <ul class="space-y-1 text-xs text-slate-600">
+            <li class="flex justify-between"><span>Cybersecurity Essentials</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>IoT Security</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Cloud Computing (partial)</span><span class="font-bold">—</span></li>
+            <li class="flex justify-between"><span>Operating System (partial)</span><span class="font-bold">—</span></li>
+            <li class="flex justify-between"><span>Distributed Database (partial)</span><span class="font-bold">—</span></li>
+        </ul>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mt-3 mb-1">Coverage</p>
+        <div class="flex flex-wrap gap-1.5 mb-2">
+            <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">Security fundamentals</span>
+            <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">Secure IoT</span>
+            <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">Infrastructure security</span>
+        </div>
+        <p class="text-xs font-bold text-amber-500 uppercase tracking-wide mb-1">Gap</p>
+        <div class="flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">No digital forensics</span>
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">No ethical hacking</span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- Software Engineering & Full-Stack -->
+    <div class="cluster-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-blue-50 border-b border-l border-blue-100 flex items-center justify-center text-2xl opacity-80">💻</div>
+        <div class="w-1 h-7 rounded-full bg-primary mb-4"></div>
+        <h4 class="font-black text-primary uppercase tracking-wide text-sm mb-1">Software Engineering & Full-Stack</h4>
+        <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-black text-primary">27</span>
+            <span class="text-xs text-slate-400 font-semibold">credits · 16.9%</span>
+            <span class="badge-full ml-auto">Full</span>
+        </div>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Mapped Subjects</p>
+        <ul class="space-y-1 text-xs text-slate-600">
+            <li class="flex justify-between"><span>Problem Solving &amp; Programming</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Python Programming + Lab</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>OOP + Lab</span><span class="font-bold">4 cr</span></li>
+            <li class="flex justify-between"><span>DBMS + Lab</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Web Technologies</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>PHP &amp; MySQL</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Web Dev Using Python</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Software Testing &amp; QA + Lab</span><span class="font-bold">4 cr</span></li>
+            <li class="flex justify-between"><span>Android Programming + Lab</span><span class="font-bold">3 cr</span></li>
+        </ul>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mt-3 mb-1">Coverage</p>
+        <div class="flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">Programming</span>
+            <span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">Testing</span>
+            <span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">Mobile</span>
+            <span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">Web</span>
+            <span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">Database</span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- Data Engineering & Analytics -->
+    <div class="cluster-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-amber-50 border-b border-l border-amber-100 flex items-center justify-center text-2xl opacity-80">📊</div>
+        <div class="w-1 h-7 rounded-full bg-amber-500 mb-4"></div>
+        <h4 class="font-black text-amber-700 uppercase tracking-wide text-sm mb-1">Data Engineering & Analytics</h4>
+        <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-black text-amber-600">10</span>
+            <span class="text-xs text-slate-400 font-semibold">credits · 6.3%</span>
+            <span class="badge-partial ml-auto">Partial</span>
+        </div>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Mapped Subjects</p>
+        <ul class="space-y-1 text-xs text-slate-600">
+            <li class="flex justify-between"><span>Statistical Methods</span><span class="font-bold">2 cr</span></li>
+            <li class="flex justify-between"><span>DBMS (partial)</span><span class="font-bold">—</span></li>
+            <li class="flex justify-between"><span>Big Data Analytics (partial)</span><span class="font-bold">—</span></li>
+            <li class="flex justify-between"><span>Distributed Database</span><span class="font-bold">3 cr</span></li>
+            <li class="flex justify-between"><span>Data Analytics</span><span class="font-bold">3 cr</span></li>
+        </ul>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mt-3 mb-1">Coverage</p>
+        <div class="flex flex-wrap gap-1.5 mb-2">
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">Data pipelines</span>
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">Analytics</span>
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">Statistics</span>
+        </div>
+        <p class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1">Gap</p>
+        <div class="flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">No dedicated Data Engineering course</span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- Systems, IoT & Emerging -->
+    <div class="cluster-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-[24px] bg-green-50 border-b border-l border-green-100 flex items-center justify-center text-2xl opacity-80">📱</div>
+        <div class="w-1 h-7 rounded-full bg-green-600 mb-4"></div>
+        <h4 class="font-black text-green-700 uppercase tracking-wide text-sm mb-1">Systems, IoT & Emerging Technologies</h4>
+        <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-black text-green-600">11</span>
+            <span class="text-xs text-slate-400 font-semibold">credits · 6.9%</span>
+            <span class="badge-full ml-auto">Full</span>
+        </div>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Mapped Subjects</p>
+        <ul class="space-y-1 text-xs text-slate-600">
+            <li class="flex justify-between"><span>Internet of Things + Lab</span><span class="font-bold">4 cr</span></li>
+            <li class="flex justify-between"><span>IoT Data Acquisition + Lab</span><span class="font-bold">4 cr</span></li>
+            <li class="flex justify-between"><span>IoT Analytics &amp; Visualization</span><span class="font-bold">3 cr</span></li>
+        </ul>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mt-3 mb-1">Coverage</p>
+        <div class="flex flex-wrap gap-1.5 mb-2">
+            <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Embedded IoT</span>
+            <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Device integration</span>
+            <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Industry 4.0</span>
+        </div>
+        <p class="text-xs font-bold text-amber-500 uppercase tracking-wide mb-1">Gap</p>
+        <div class="flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">Embedded not standalone</span>
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">Limited hardware depth</span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+</div>
+
+<!-- ══ CLUSTER SUMMARY TABLE ══ -->
+<div class="mt-10 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Cluster Summary Table</h3>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Skill Cluster</th>
+                <th>Credits</th>
+                <th>% of Curriculum</th>
+                <th>Coverage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>🧠 AI, ML &amp; Data Science</td><td class="font-bold">21</td><td>13.1%</td><td><span class="badge-full">Full</span></td></tr>
+            <tr><td>☁️ Cloud, DevOps &amp; Infrastructure</td><td class="font-bold">11</td><td>6.9%</td><td><span class="badge-partial">Partial</span></td></tr>
+            <tr><td>🔒 Cybersecurity &amp; Secure Systems</td><td class="font-bold">11</td><td>6.9%</td><td><span class="badge-full">Full</span></td></tr>
+            <tr><td>💻 Software Engineering &amp; Full-Stack</td><td class="font-bold">27</td><td>16.9%</td><td><span class="badge-full">Full</span></td></tr>
+            <tr><td>📊 Data Engineering &amp; Analytics</td><td class="font-bold">10</td><td>6.3%</td><td><span class="badge-partial">Partial</span></td></tr>
+            <tr><td>📱 Systems, IoT &amp; Emerging Tech</td><td class="font-bold">11</td><td>6.9%</td><td><span class="badge-full">Full</span></td></tr>
+            <tr style="background:#f8fafc;font-weight:900;font-size:0.82rem;">
+                <td class="text-secondary">Total Industry-aligned Credits</td>
+                <td class="text-primary">91</td>
+                <td class="text-primary">56.9%</td>
+                <td>—</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ ALL-REVISIONS CHARTS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Trends</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Industry Skill Analytics — All Revisions
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:20rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">2018 · 2019 · 2021 · 2023 NEP · 2024 NEP</p>
+</div>
+
+<div class="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- CLUSTER CREDITS ALL REVISIONS BAR -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+            <div>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Industry Skill Cluster Credits — All Revisions</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Credits per cluster across curriculum revisions</p>
+            </div>
+        </div>
+        <div class="relative h-[300px]">
+            <canvas id="allRevClusterBar"></canvas>
+        </div>
+    </div>
+
+    <!-- SKILL % TREND LINE -->
+    <div class="chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl" style="animation-delay:0.12s;">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+            <div>
+                <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Industry Skill % of Curriculum — Trend</h3>
+                <p class="text-xs text-slate-400 mt-0.5">AI/ML · Cloud/DevOps · Full-Stack/SE · Cybersecurity</p>
+            </div>
+        </div>
+        <div class="relative h-[300px]">
+            <canvas id="skillTrendLine"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- INDUSTRY READINESS RADAR ALL REVISIONS -->
+<div class="mt-8 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <div>
+            <h3 class="text-base font-black uppercase tracking-wide text-slate-700">Industry Readiness Radar — All Revisions</h3>
+            <p class="text-xs text-slate-400 mt-0.5">2018 · 2019 · 2021 · 2023 NEP · 2024 NEP — across 6 skill clusters</p>
+        </div>
+    </div>
+    <div class="relative h-[340px]">
+        <canvas id="allRevRadar"></canvas>
     </div>
 </div>
 
-<!-- ══ SKILL ALIGNMENT BARS ══ -->
+<!-- ══ NASSCOM TOP-10 TABLE ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary/60">NASSCOM</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        NASSCOM Top-10 Demanded Skills vs Curriculum
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:22rem;"></div>
+</div>
+
+<div class="mt-6 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>NASSCOM Skill Area</th>
+                <th>Industry Demand</th>
+                <th>VU 2024 Coverage</th>
+                <th>Level</th>
+                <th>Curriculum Evidence</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="font-semibold">AI / ML Engineering</td><td>High</td><td class="font-black text-green-700">88%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">AI, Machine Learning, Research Methodology, Data Mining &amp; Analytics, Big Data Analytics</td></tr>
+            <tr><td class="font-semibold">Cloud Computing</td><td>High</td><td class="font-black text-green-700">82%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Cloud Computing, cloud-oriented deployment concepts, infrastructure exposure</td></tr>
+            <tr><td class="font-semibold">Cybersecurity</td><td>High</td><td class="font-black text-green-700">74%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Cybersecurity Essentials, IoT Security, Security practices</td></tr>
+            <tr><td class="font-semibold">Full-Stack Development</td><td>High</td><td class="font-black text-green-700">76%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Python, OOP, DBMS, Web Technologies, Android Programming, SPM</td></tr>
+            <tr><td class="font-semibold">Data Engineering &amp; Analytics</td><td>High</td><td class="font-black text-green-700">79%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Data Modeling, Visualization, Data Mining, Big Data, Statistical Methods</td></tr>
+            <tr><td class="font-semibold">DevOps / SRE</td><td>Medium-High</td><td class="font-black text-amber-600">48%</td><td><span class="badge-partial">Partial</span></td><td class="text-slate-500">Cloud exposure exists, limited CI/CD, containers, IaC, SRE workflows</td></tr>
+            <tr><td class="font-semibold">Embedded / IoT</td><td>Growing</td><td class="font-black text-amber-600">58%</td><td><span class="badge-moderate">Moderate</span></td><td class="text-slate-500">IoT track, IoT Security, IoT Product Development</td></tr>
+            <tr><td class="font-semibold">Blockchain</td><td>Emerging</td><td class="font-black text-red-600">10%</td><td><span class="badge-gap">Gap</span></td><td class="text-slate-500">No dedicated blockchain course</td></tr>
+            <tr><td class="font-semibold">AR / VR / Spatial Computing</td><td>Emerging</td><td class="font-black text-amber-600">25%</td><td><span class="badge-partial">Partial</span></td><td class="text-slate-500">Gaming using AR-VR available only as specialization track</td></tr>
+            <tr><td class="font-semibold">Quantum Computing</td><td>Emerging</td><td class="font-black text-red-600">0%</td><td><span class="badge-gap">Gap</span></td><td class="text-slate-500">No dedicated subject</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ LINKEDIN ROLE SKILL MATCH TABLE ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">LinkedIn</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        LinkedIn Top Roles — Skill Match %
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:18rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">Vishwakarma University – 2024 NEP Pattern</p>
+</div>
+
+<div class="mt-6 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Hiring Role</th>
+                <th>Skill Match %</th>
+                <th>Coverage</th>
+                <th>Curriculum Evidence</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="font-semibold">Software Development Engineer</td><td class="font-black text-green-700">84%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Python, OOP, DBMS, Data Structures, SPM, Android, Major Projects</td></tr>
+            <tr><td class="font-semibold">Data / ML Engineer</td><td class="font-black text-green-700">82%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Data Modeling, Data Mining, Big Data Analytics, AI, Machine Learning, Research track</td></tr>
+            <tr><td class="font-semibold">Cloud / DevOps Engineer</td><td class="font-black text-amber-600">68%</td><td><span class="badge-moderate">Moderate–Strong</span></td><td class="text-slate-500">Cloud Computing, deployment exposure, infrastructure concepts</td></tr>
+            <tr><td class="font-semibold">Cybersecurity Analyst</td><td class="font-black text-green-700">74%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Cybersecurity Essentials, IoT Security, secure systems</td></tr>
+            <tr><td class="font-semibold">Full-Stack Developer</td><td class="font-black text-green-700">80%</td><td><span class="badge-strong">Strong</span></td><td class="text-slate-500">Web Technologies, DBMS, Python, Software Engineering, Android</td></tr>
+            <tr><td class="font-semibold">Embedded Systems Engineer</td><td class="font-black text-amber-600">58%</td><td><span class="badge-moderate">Moderate</span></td><td class="text-slate-500">IoT specialization, IoT Product Development, IoT Labs</td></tr>
+            <tr><td class="font-semibold">AI Product Manager</td><td class="font-black text-amber-600">62%</td><td><span class="badge-moderate">Moderate</span></td><td class="text-slate-500">AI + Project Management + Industry Project + Innovation</td></tr>
+            <tr><td class="font-semibold">Blockchain Developer</td><td class="font-black text-red-600">12%</td><td><span class="badge-gap">Gap</span></td><td class="text-slate-500">No dedicated blockchain coursework</td></tr>
+            <tr><td class="font-semibold">AR / VR Developer</td><td class="font-black text-red-600">30%</td><td>Limited</td><td class="text-slate-500">Gaming using AR-VR elective track only</td></tr>
+            <tr><td class="font-semibold">Research Engineer (AI/Data/Systems)</td><td class="font-black text-green-700">86%</td><td><span class="badge-full" style="background:#dcfce7;color:#15803d;border-color:#86efac;">Very Strong</span></td><td class="text-slate-500">Research Methodology, Research Internship, Research Projects I–II</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ SKILL PROFICIENCY BARS ══ -->
 <div class="mt-14 fade-in" style="animation-delay:0.1s;">
     <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-8">
         <div class="flex items-center gap-3 mb-8">
             <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-accent"></div>
             <div>
                 <h3 class="text-lg font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">Skill Proficiency Alignment</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Curriculum vs. industry benchmark</p>
+                <p class="text-xs text-slate-400 mt-0.5">Curriculum vs. industry benchmark — 2024 NEP</p>
             </div>
         </div>
-        <div class="space-y-5">
-            {% with bars="Programming,Cloud Computing,AI & Machine Learning,Databases,Web Development,IoT & Embedded,Communication,Problem Solving" %}
-            {% with vals="95,85,90,80,90,85,75,95" %}
-            {% with colors="primary,secondary,green-500,amber-500,primary,secondary,green-500,amber-500" %}
-
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
             <div>
                 <div class="flex justify-between mb-1.5">
-                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Programming</span>
-                    <span class="text-xs font-black text-primary">95%</span>
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">AI / ML Engineering</span>
+                    <span class="text-xs font-black text-purple-600">88%</span>
                 </div>
                 <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div class="stat-bar-fill bg-gradient-to-r from-primary to-primary/60" style="width:95%;"></div>
+                    <div class="stat-bar-fill bg-gradient-to-r from-purple-500 to-purple-300" style="width:88%;"></div>
                 </div>
             </div>
-
             <div>
                 <div class="flex justify-between mb-1.5">
                     <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Cloud Computing</span>
-                    <span class="text-xs font-black text-secondary">85%</span>
+                    <span class="text-xs font-black text-sky-600">82%</span>
                 </div>
                 <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div class="stat-bar-fill bg-gradient-to-r from-secondary to-secondary/60" style="width:85%;"></div>
+                    <div class="stat-bar-fill bg-gradient-to-r from-sky-500 to-sky-300" style="width:82%;"></div>
                 </div>
             </div>
-
             <div>
                 <div class="flex justify-between mb-1.5">
-                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">AI & Machine Learning</span>
-                    <span class="text-xs font-black text-green-600">90%</span>
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Data Engineering &amp; Analytics</span>
+                    <span class="text-xs font-black text-amber-600">79%</span>
                 </div>
                 <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div class="stat-bar-fill bg-gradient-to-r from-green-500 to-green-300" style="width:90%;"></div>
+                    <div class="stat-bar-fill bg-gradient-to-r from-amber-500 to-amber-300" style="width:79%;"></div>
                 </div>
             </div>
-
             <div>
                 <div class="flex justify-between mb-1.5">
-                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Databases</span>
-                    <span class="text-xs font-black text-amber-600">80%</span>
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Full-Stack Development</span>
+                    <span class="text-xs font-black text-primary">76%</span>
                 </div>
                 <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div class="stat-bar-fill bg-gradient-to-r from-amber-500 to-amber-300" style="width:80%;"></div>
+                    <div class="stat-bar-fill bg-gradient-to-r from-primary to-primary/60" style="width:76%;"></div>
                 </div>
             </div>
-
             <div>
                 <div class="flex justify-between mb-1.5">
-                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Web Development</span>
-                    <span class="text-xs font-black text-primary">90%</span>
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Cybersecurity</span>
+                    <span class="text-xs font-black text-red-600">74%</span>
                 </div>
                 <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div class="stat-bar-fill bg-gradient-to-r from-primary to-primary/60" style="width:90%;"></div>
+                    <div class="stat-bar-fill bg-gradient-to-r from-red-500 to-red-300" style="width:74%;"></div>
                 </div>
             </div>
-
             <div>
                 <div class="flex justify-between mb-1.5">
-                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Problem Solving</span>
-                    <span class="text-xs font-black text-secondary">95%</span>
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Embedded / IoT</span>
+                    <span class="text-xs font-black text-green-600">58%</span>
                 </div>
                 <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div class="stat-bar-fill bg-gradient-to-r from-secondary to-secondary/60" style="width:95%;"></div>
+                    <div class="stat-bar-fill bg-gradient-to-r from-green-500 to-green-300" style="width:58%;"></div>
                 </div>
             </div>
-
-            {% endwith %}{% endwith %}{% endwith %}
+            <div>
+                <div class="flex justify-between mb-1.5">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">DevOps / SRE</span>
+                    <span class="text-xs font-black text-amber-600">48%</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div class="stat-bar-fill bg-gradient-to-r from-amber-400 to-amber-200" style="width:48%;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between mb-1.5">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">AR / VR / Spatial Computing</span>
+                    <span class="text-xs font-black text-slate-500">25%</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div class="stat-bar-fill bg-gradient-to-r from-slate-400 to-slate-200" style="width:25%;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between mb-1.5">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Blockchain</span>
+                    <span class="text-xs font-black text-red-500">10%</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div class="stat-bar-fill bg-gradient-to-r from-red-400 to-red-200" style="width:10%;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between mb-1.5">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Quantum Computing</span>
+                    <span class="text-xs font-black text-red-500">0%</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div class="stat-bar-fill bg-red-300" style="width:1%;"></div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-
-<!-- ══ PLATFORM ECOSYSTEM ══ -->
-<div class="mt-14">
-    <div class="section-head mb-8" style="animation-delay:0.07s;">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
-            <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Platforms</span>
-        </div>
-        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-            Platform Ecosystem
-        </h3>
-        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:14rem;"></div>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-        {% for item in platforms %}
-        <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"
-             style="animation-delay: {{ forloop.counter0 }}00ms;">
-            <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div>
-            <div class="platform-icon text-3xl mb-4 inline-block">🚀</div>
-            <h4 class="font-black text-slate-800 text-sm leading-tight">{{ item.title }}</h4>
-            <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div>
-        </div>
-        {% empty %}
-        <p class="text-slate-400 text-sm col-span-4 text-center py-8">No platforms found.</p>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- ══ SKILL DOMAINS ══ -->
-<div class="mt-14">
-    <div class="section-head mb-8" style="animation-delay:0.07s;">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
-            <span class="text-xs font-bold uppercase tracking-widest text-secondary/70">Domains</span>
-        </div>
-        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-            Industry Skill Domains
-        </h3>
-        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:14rem;"></div>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-        {% for item in skills %}
-        <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"
-             style="animation-delay: {{ forloop.counter0 }}00ms;">
-            <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-secondary/6 blur-xl group-hover:bg-secondary/12 transition-all duration-500"></div>
-            <div class="platform-icon text-3xl mb-4 inline-block">💻</div>
-            <h4 class="font-black text-slate-800 text-sm leading-tight">{{ item.title }}</h4>
-            <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div>
-        </div>
-        {% empty %}
-        <p class="text-slate-400 text-sm col-span-4 text-center py-8">No skill domains found.</p>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- ══ LIVE PROJECT DOMAINS ══ -->
-<div class="mt-14">
-    <div class="section-head mb-8" style="animation-delay:0.07s;">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-green-600 to-primary"></div>
-            <span class="text-xs font-bold uppercase tracking-widest text-green-600/70">Projects</span>
-        </div>
-        <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
-            Live Project Domains
-        </h3>
-        <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-green-500 to-primary" style="width:14rem;"></div>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-        {% for item in projects %}
-        <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"
-             style="animation-delay: {{ forloop.counter0 }}00ms;">
-            <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-green-400/6 blur-xl group-hover:bg-green-400/14 transition-all duration-500"></div>
-            <div class="platform-icon text-3xl mb-4 inline-block">🏗️</div>
-            <h4 class="font-black text-slate-800 text-sm leading-tight">{{ item.title }}</h4>
-            <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div>
-        </div>
-        {% empty %}
-        <p class="text-slate-400 text-sm col-span-3 text-center py-8">No project domains found.</p>
-        {% endfor %}
     </div>
 </div>
 
 <!-- ══ INDUSTRY READINESS JOURNEY ══ -->
 <div class="mt-14 fade-in" style="animation-delay:0.1s;">
     <div class="lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-8">
-
         <div class="flex items-center gap-3 mb-8">
             <div class="w-1.5 h-8 rounded-full bg-gradient-to-b from-accent to-primary"></div>
             <div>
@@ -521,104 +739,462 @@
                 <p class="text-xs text-slate-400 mt-0.5">From classroom to career</p>
             </div>
         </div>
-
         <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-
             <div class="journey-step group relative rounded-2xl bg-primary/8 border border-primary/15 p-5 text-center hover:bg-primary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">📚</div>
                 <p class="text-xs font-bold text-primary uppercase tracking-wide leading-tight">Learning</p>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-secondary/8 border border-secondary/15 p-5 text-center hover:bg-secondary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">⌨️</div>
                 <p class="text-xs font-bold text-secondary uppercase tracking-wide leading-tight">Practice</p>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-amber-50 border border-amber-200 p-5 text-center hover:bg-amber-100 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">📜</div>
                 <p class="text-xs font-bold text-amber-700 uppercase tracking-wide leading-tight">Certification</p>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-primary/8 border border-primary/15 p-5 text-center hover:bg-primary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">🏗️</div>
                 <p class="text-xs font-bold text-primary uppercase tracking-wide leading-tight">Projects</p>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-green-50 border border-green-200 p-5 text-center hover:bg-green-100 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">🏭</div>
                 <p class="text-xs font-bold text-green-700 uppercase tracking-wide leading-tight">Industry Exposure</p>
             </div>
-
             <div class="journey-step group relative rounded-2xl bg-secondary/8 border border-secondary/15 p-5 text-center hover:bg-secondary/15 transition-all duration-200 cursor-default">
                 <div class="text-2xl mb-2">🎯</div>
                 <p class="text-xs font-bold text-secondary uppercase tracking-wide leading-tight">Career Ready</p>
             </div>
-
         </div>
     </div>
+</div>
+
+<!-- ══ COURSE MAPPING TABLES — ALL REVISIONS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary/60">Course Maps</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Industry-Aligned Subject Mapping — All Revisions
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:22rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">2018 · 2019 · 2021 · 2023 NEP · 2024 NEP patterns</p>
+</div>
+
+<!-- TAB BUTTONS -->
+<div class="mt-6 flex flex-wrap gap-2" id="rev-tabs">
+    <button onclick="showRev('2018')" class="rev-tab-btn active-tab px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200">2018</button>
+    <button onclick="showRev('2019')" class="rev-tab-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200">2019</button>
+    <button onclick="showRev('2021')" class="rev-tab-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200">2021</button>
+    <button onclick="showRev('2023')" class="rev-tab-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200">2023 NEP</button>
+    <button onclick="showRev('2024')" class="rev-tab-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200">2024 NEP</button>
+</div>
+<style>
+    .rev-tab-btn { background:#f1f5f9; color:#475569; }
+    .rev-tab-btn.active-tab { background:#162850; color:#fff; }
+    .rev-panel { display:none; }
+    .rev-panel.active-panel { display:block; }
+</style>
+
+<!-- 2018 -->
+<div id="rev-2018" class="rev-panel active-panel mt-4 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">2018 Pattern — Industry-Aligned Skills Credit Mapping</p>
+    <table class="data-table">
+        <thead><tr><th>Course Name</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Skill Cluster</th><th>Coverage</th><th>% of Rev.</th><th>Industry Tool / Skill</th></tr></thead>
+        <tbody>
+            <tr><td>Statistical Methods – I</td><td>BSC</td><td>4</td><td>I</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>3.03%</td><td>Statistics, probability, analytics</td></tr>
+            <tr><td>Data Mining &amp; Predictive Modelling</td><td>PC</td><td>4</td><td>III</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>3.03%</td><td>Classification, prediction</td></tr>
+            <tr><td>Computer Network</td><td>PC</td><td>4</td><td>IV</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.03%</td><td>TCP/IP, routing</td></tr>
+            <tr><td>Software Engineering</td><td>PC</td><td>4</td><td>V</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.03%</td><td>SDLC, Agile</td></tr>
+            <tr><td>Cloud Computing</td><td>PC</td><td>4</td><td>V</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>3.03%</td><td>AWS concepts, virtualization</td></tr>
+            <tr><td>Internet of Things</td><td>PC</td><td>4</td><td>V</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>3.03%</td><td>Sensors, IoT architecture</td></tr>
+            <tr><td>Artificial Intelligence</td><td>PC</td><td>4</td><td>V</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>3.03%</td><td>Search, ML basics</td></tr>
+            <tr><td>Major Project</td><td>PRJ</td><td>10</td><td>VI</td><td>Full-Stack / SE</td><td><span class="badge-partial">Partial</span></td><td>7.58%</td><td>End-to-end implementation</td></tr>
+            <tr><td>Internship</td><td>INT</td><td>12</td><td>VI</td><td>Industry Exposure</td><td><span class="badge-full">Full</span></td><td>9.09%</td><td>Workplace tools</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 2019 -->
+<div id="rev-2019" class="rev-panel mt-4 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">2019 Pattern — Industry-Aligned Skills Credit Mapping</p>
+    <table class="data-table">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Skill Cluster</th><th>Coverage</th><th>% of Rev.</th><th>Industry Tool / Skill</th></tr></thead>
+        <tbody>
+            <tr><td>Introduction to Business Analytics</td><td>BSCCS19104</td><td>PC</td><td>3</td><td>I</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>2.26%</td><td>Excel, BI concepts, business analytics</td></tr>
+            <tr><td>Data Mining &amp; Predictive Modeling</td><td>BSCCS19204</td><td>PC</td><td>3</td><td>II</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.26%</td><td>Classification, clustering, predictive analytics</td></tr>
+            <tr><td>Soft Skills</td><td>BSCCS19310</td><td>AECC</td><td>2</td><td>III</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.50%</td><td>Communication, teamwork, interview skills</td></tr>
+            <tr><td>Business Communication</td><td>BSCCS19410</td><td>AECC</td><td>2</td><td>IV</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.50%</td><td>Corporate writing, presentations</td></tr>
+            <tr><td>Big Data Analytics</td><td>BSCCS19404</td><td>PC</td><td>4</td><td>IV</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>Hadoop, MapReduce, analytics pipelines</td></tr>
+            <tr><td>Artificial Intelligence</td><td>BSCCS19502</td><td>PC</td><td>4</td><td>V</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>Search algorithms, ML concepts, intelligent systems</td></tr>
+            <tr><td>Social Media Analytics</td><td>BSCCS19504</td><td>PC</td><td>4</td><td>V</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>Social analytics, sentiment analysis</td></tr>
+            <tr><td>Software Engineering</td><td>BSCCS19505</td><td>PC</td><td>4</td><td>V</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>SDLC, UML, Agile, testing</td></tr>
+            <tr><td>Project Stage – I</td><td>BSCCS19510</td><td>PRJ</td><td>4</td><td>V</td><td>Full-Stack / SE</td><td><span class="badge-partial">Partial</span></td><td>3.01%</td><td>Requirement analysis, implementation</td></tr>
+            <tr><td>Project Stage – II</td><td>BSCCS19510</td><td>PRJ</td><td>5</td><td>VI</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.76%</td><td>Deployment, testing, project execution</td></tr>
+            <tr><td>Database Management System*</td><td>—</td><td>PC</td><td>4</td><td>III</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>SQL, ER modelling, normalization</td></tr>
+            <tr><td>Operating System*</td><td>—</td><td>PC</td><td>4</td><td>IV</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>Linux, process scheduling</td></tr>
+            <tr><td>Computer Networks*</td><td>—</td><td>PC</td><td>4</td><td>IV</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>TCP/IP, routing, networking</td></tr>
+            <tr><td>Cloud Computing*</td><td>—</td><td>PC</td><td>4</td><td>V</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>AWS fundamentals, virtualization</td></tr>
+            <tr><td>Internet of Things*</td><td>—</td><td>PC</td><td>4</td><td>V</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>Sensors, IoT architecture</td></tr>
+            <tr><td>Data Structures*</td><td>—</td><td>PC</td><td>3</td><td>II</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>2.26%</td><td>Arrays, trees, graphs</td></tr>
+            <tr><td>Object Oriented Programming*</td><td>—</td><td>PC</td><td>4</td><td>III</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>Java, OOP, software design</td></tr>
+            <tr><td>Web Technologies*</td><td>—</td><td>PC</td><td>4</td><td>IV</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.01%</td><td>HTML, CSS, JavaScript</td></tr>
+            <tr><td>Python Programming*</td><td>—</td><td>PC</td><td>3</td><td>II</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.26%</td><td>Python, scripting, libraries</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 2021 -->
+<div id="rev-2021" class="rev-panel mt-4 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">2021 Pattern — Industry-Aligned Skills Credit Mapping</p>
+    <table class="data-table">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Skill Cluster</th><th>Coverage</th><th>% of Rev.</th><th>Industry Tool / Skill</th></tr></thead>
+        <tbody>
+            <tr><td>Introduction to Python Programming</td><td>—</td><td>PC</td><td>3</td><td>I</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.13%</td><td>Python, scripting, NumPy basics</td></tr>
+            <tr><td>Data Modelling and Visualization</td><td>BSCCS21204</td><td>PC</td><td>3</td><td>II</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>2.13%</td><td>Data visualization, BI, dashboards</td></tr>
+            <tr><td>English and Soft Skills</td><td>BSCCS21210</td><td>AECC</td><td>2</td><td>II</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.42%</td><td>Communication, presentations</td></tr>
+            <tr><td>Data Structures</td><td>—</td><td>PC</td><td>3</td><td>II</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>2.13%</td><td>Arrays, trees, graph structures</td></tr>
+            <tr><td>Practical Approach to Data Mining</td><td>BSCCS21304</td><td>PC</td><td>3</td><td>III</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.13%</td><td>Data mining, clustering, predictive models</td></tr>
+            <tr><td>Database Management System</td><td>—</td><td>PC</td><td>4</td><td>III</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>SQL, normalization, DB design</td></tr>
+            <tr><td>Web Technologies</td><td>—</td><td>PC</td><td>4</td><td>III</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>HTML, CSS, JavaScript</td></tr>
+            <tr><td>Business Communication</td><td>BSCCS21410</td><td>AECC</td><td>2</td><td>IV</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.42%</td><td>Corporate communication</td></tr>
+            <tr><td>Aptitude &amp; Personality Development</td><td>BSCCS21411</td><td>AECC</td><td>2</td><td>IV</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.42%</td><td>Placement aptitude, soft skills</td></tr>
+            <tr><td>Winter Internship – I</td><td>BSCCS21412</td><td>PRJ</td><td>2</td><td>IV</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>1.42%</td><td>Industry exposure</td></tr>
+            <tr><td>Object Oriented Programming</td><td>—</td><td>PC</td><td>4</td><td>IV</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>Java, OOP principles</td></tr>
+            <tr><td>Big Data Analytics</td><td>—</td><td>PC</td><td>4</td><td>IV</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>Hadoop, distributed analytics</td></tr>
+            <tr><td>Machine Learning for Real World Applications</td><td>BSCCS21504</td><td>PC</td><td>4</td><td>V</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>Scikit-learn, ML pipelines</td></tr>
+            <tr><td>Artificial Intelligence</td><td>—</td><td>PC</td><td>4</td><td>V</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>AI models, intelligent systems</td></tr>
+            <tr><td>Cloud Computing</td><td>—</td><td>PC</td><td>4</td><td>V</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>AWS concepts, virtualization</td></tr>
+            <tr><td>Computer Networks</td><td>—</td><td>PC</td><td>4</td><td>V</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>TCP/IP, networking</td></tr>
+            <tr><td>Internet of Things</td><td>—</td><td>PC</td><td>4</td><td>V</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>Sensors, IoT architecture</td></tr>
+            <tr><td>Project Stage – I</td><td>BSCCS21510</td><td>PRJ</td><td>4</td><td>V</td><td>Full-Stack / SE</td><td><span class="badge-partial">Partial</span></td><td>2.84%</td><td>Project implementation</td></tr>
+            <tr><td>Operating System</td><td>—</td><td>PC</td><td>4</td><td>VI</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>Linux, process management</td></tr>
+            <tr><td>Software Engineering</td><td>—</td><td>PC</td><td>4</td><td>VI</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.84%</td><td>SDLC, Agile, testing</td></tr>
+            <tr><td>Internship</td><td>BSCCS21610</td><td>INT</td><td>12</td><td>VI</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>8.51%</td><td>Industry training, deployment</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 2023 NEP -->
+<div id="rev-2023" class="rev-panel mt-4 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">2023 NEP Pattern — Industry-Aligned Skills Credit Mapping</p>
+    <table class="data-table">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Skill Cluster</th><th>Coverage</th><th>% of Rev.</th><th>Industry Tool / Skill</th></tr></thead>
+        <tbody>
+            <tr><td>Problem Solving and Programming</td><td>CS2301</td><td>DSC</td><td>4</td><td>I</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>3.33%</td><td>C programming, algorithms, debugging</td></tr>
+            <tr><td>Principles of Computers &amp; IT</td><td>MTCS01</td><td>MC</td><td>3</td><td>I</td><td>Full-Stack / SE</td><td><span class="badge-partial">Partial</span></td><td>2.50%</td><td>Computing fundamentals</td></tr>
+            <tr><td>Computer Network</td><td>OECS01</td><td>OE</td><td>3</td><td>I</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>TCP/IP, switching, routing</td></tr>
+            <tr><td>Basic Computing</td><td>SECS01</td><td>SEC</td><td>2</td><td>I</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.67%</td><td>Office tools, digital workflows</td></tr>
+            <tr><td>Digital Technology Solutions</td><td>VECS01</td><td>VEC</td><td>2</td><td>I</td><td>Cloud / DevOps</td><td><span class="badge-partial">Partial</span></td><td>1.67%</td><td>Digital transformation</td></tr>
+            <tr><td>Introduction to Python Programming</td><td>CS2302</td><td>DSC</td><td>2</td><td>II</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Python programming</td></tr>
+            <tr><td>Database Management System</td><td>CS2303</td><td>DSC</td><td>2</td><td>II</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>SQL, schema design</td></tr>
+            <tr><td>Web Technologies</td><td>MT23CS02</td><td>MC</td><td>3</td><td>II</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>HTML, CSS, JavaScript</td></tr>
+            <tr><td>Applications of IoT</td><td>OE23CS02</td><td>OE</td><td>3</td><td>II</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>IoT architecture</td></tr>
+            <tr><td>Digital Literacy</td><td>SE23CS02</td><td>SEC</td><td>2</td><td>II</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Digital workplace skills</td></tr>
+            <tr><td>Environmental Studies</td><td>VE23CS02</td><td>VEC</td><td>4</td><td>II</td><td>Sustainability Tech</td><td><span class="badge-partial">Partial</span></td><td>3.33%</td><td>Sustainable ICT</td></tr>
+            <tr><td>Data Modeling and Visualization</td><td>BSCCS23301</td><td>DSC</td><td>3</td><td>III</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Power BI, visualization</td></tr>
+            <tr><td>Data Structure</td><td>BSCCS23303</td><td>DSC</td><td>2</td><td>III</td><td>Data Engg. &amp; Analytics</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Trees, stacks, algorithms</td></tr>
+            <tr><td>Statistical Methods</td><td>BSCCS23305</td><td>CC</td><td>2</td><td>III</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Probability, analytics</td></tr>
+            <tr><td>Technology Training of Society</td><td>BSCCS23306</td><td>CES</td><td>2</td><td>III</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.67%</td><td>Training &amp; outreach</td></tr>
+            <tr><td>PHP and MySQL</td><td>MT23CS03</td><td>MC</td><td>3</td><td>III</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>PHP, MySQL</td></tr>
+            <tr><td>Green Computing</td><td>OE23CS03</td><td>OE</td><td>4</td><td>III</td><td>Cloud / DevOps</td><td><span class="badge-partial">Partial</span></td><td>3.33%</td><td>Sustainable infrastructure</td></tr>
+            <tr><td>Professional Writing</td><td>SE23CS03</td><td>SEC</td><td>2</td><td>III</td><td>Employability Skills</td><td><span class="badge-partial">Partial</span></td><td>1.67%</td><td>Technical communication</td></tr>
+            <tr><td>Object Oriented Programming</td><td>BSCCS23401</td><td>DSC</td><td>3</td><td>IV</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Java, OOP</td></tr>
+            <tr><td>Data Mining and Analytics</td><td>BSCCS23403</td><td>DSC</td><td>3</td><td>IV</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Predictive analytics</td></tr>
+            <tr><td>Industry Project</td><td>BSCCS23405</td><td>FP</td><td>2</td><td>IV</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Industry execution</td></tr>
+            <tr><td>Data Science Using Python</td><td>BSCCS23406</td><td>VSC</td><td>2</td><td>IV</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Pandas, NumPy</td></tr>
+            <tr><td>Go Programming</td><td>MT23CS04</td><td>MC</td><td>3</td><td>IV</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Go language</td></tr>
+            <tr><td>Big Data Analytics</td><td>BSCCS23501</td><td>DSC</td><td>3</td><td>V</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Hadoop ecosystem</td></tr>
+            <tr><td>Artificial Intelligence</td><td>BSCCS23503</td><td>DSC</td><td>3</td><td>V</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Intelligent systems</td></tr>
+            <tr><td>Internet of Things</td><td>BSCCS23505IOT</td><td>DSE</td><td>3</td><td>V</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>IoT development</td></tr>
+            <tr><td>Software Project Management</td><td>BSCCS23507</td><td>VSC</td><td>3</td><td>V</td><td>Full-Stack / SE</td><td><span class="badge-partial">Partial</span></td><td>2.50%</td><td>Agile, Scrum</td></tr>
+            <tr><td>Web Development Using Python</td><td>MT23CS05</td><td>MC</td><td>3</td><td>V</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Django basics</td></tr>
+            <tr><td>Cloud Computing</td><td>BSCCS23602</td><td>DSC</td><td>3</td><td>VI</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>AWS, cloud deployment</td></tr>
+            <tr><td>Machine Learning</td><td>BSCCS23603</td><td>DSC</td><td>3</td><td>VI</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>ML workflows</td></tr>
+            <tr><td>IoT Data Acquisition System</td><td>BSCCS23605IOT</td><td>DSE</td><td>3</td><td>VI</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Sensors, acquisition</td></tr>
+            <tr><td>Cybersecurity Essentials</td><td>BSCCS23607</td><td>VSC</td><td>3</td><td>VI</td><td>Cybersecurity</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Network security</td></tr>
+            <tr><td>Minor Track Project</td><td>MT23CS06</td><td>MC</td><td>3</td><td>VI</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Project execution</td></tr>
+            <tr><td>Software Testing &amp; Quality Assurance</td><td>BSCCS23H701</td><td>DSC</td><td>3</td><td>VII</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>QA, testing</td></tr>
+            <tr><td>IoT Security</td><td>BSCCS23H707</td><td>DSE</td><td>3</td><td>VII</td><td>Cybersecurity</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Secure IoT</td></tr>
+            <tr><td>Major Project – I</td><td>BSCCS23H708</td><td>PROJ</td><td>6</td><td>VII</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>5.00%</td><td>Product / project development</td></tr>
+            <tr><td>Android Programming</td><td>BSCCS23H801</td><td>DSC</td><td>2</td><td>VIII</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Android Studio</td></tr>
+            <tr><td>IoT Product Development</td><td>BSCCS23H803</td><td>DSE</td><td>2</td><td>VIII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>1.67%</td><td>Embedded product design</td></tr>
+            <tr><td>Internship</td><td>BSCCS23H806</td><td>INT</td><td>8</td><td>VIII</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>6.67%</td><td>Industry immersion</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 2024 NEP -->
+<div id="rev-2024" class="rev-panel mt-4 chart-card lift rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-7 shadow-xl overflow-x-auto">
+    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">2024 NEP Pattern — Industry-Aligned Skills Credit Mapping</p>
+    <table class="data-table">
+        <thead><tr><th>Course Name</th><th>Code</th><th>Cat.</th><th>Cr</th><th>Sem</th><th>Skill Cluster</th><th>Coverage</th><th>% of Rev.</th><th>Industry Tool / Skill</th></tr></thead>
+        <tbody>
+            <tr><td>Software Testing &amp; QA</td><td>BSCCS24H701</td><td>DSC</td><td>3</td><td>VII</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>1.88%</td><td>QA automation, testing lifecycle</td></tr>
+            <tr><td>Software Testing &amp; QA Lab</td><td>BSCCS24H702</td><td>DSC</td><td>1</td><td>VII</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>0.63%</td><td>Selenium basics, testing tools</td></tr>
+            <tr><td>Distributed Database</td><td>BSCCS24H703</td><td>DSC</td><td>2</td><td>VII</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>1.25%</td><td>Distributed DB, replication</td></tr>
+            <tr><td>Distributed Database Lab</td><td>BSCCS24H704</td><td>DSC</td><td>1</td><td>VII</td><td>Cloud / DevOps</td><td><span class="badge-partial">Partial</span></td><td>0.63%</td><td>Distributed database implementation</td></tr>
+            <tr><td>IoT Data Analytics &amp; Visualization</td><td>BSCCS24H705IOT</td><td>DSE</td><td>3</td><td>VII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>1.88%</td><td>IoT analytics dashboards</td></tr>
+            <tr><td>IoT Data Analytics &amp; Visualization Lab</td><td>BSCCS24H706IOT</td><td>DSE</td><td>1</td><td>VII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>0.63%</td><td>Sensor analytics</td></tr>
+            <tr><td>IoT Security</td><td>BSCCS24H707</td><td>DSE</td><td>3</td><td>VII</td><td>Cybersecurity</td><td><span class="badge-full">Full</span></td><td>1.88%</td><td>Secure IoT, authentication</td></tr>
+            <tr><td>Major Project – I</td><td>BSCCS24H708</td><td>PROJ</td><td>6</td><td>VII</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>3.75%</td><td>Product design, deployment</td></tr>
+            <tr><td>Android Programming</td><td>BSCCS24H801</td><td>DSC</td><td>2</td><td>VIII</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>1.25%</td><td>Android Studio, mobile development</td></tr>
+            <tr><td>Android Programming Lab</td><td>BSCCS24H802</td><td>DSC</td><td>1</td><td>VIII</td><td>Full-Stack / SE</td><td><span class="badge-full">Full</span></td><td>0.63%</td><td>Mobile app testing</td></tr>
+            <tr><td>IoT Product Development &amp; Testing</td><td>BSCCS24H803</td><td>DSE</td><td>2</td><td>VIII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>1.25%</td><td>IoT prototyping</td></tr>
+            <tr><td>IoT Product Development Lab</td><td>BSCCS24H804</td><td>DSE</td><td>1</td><td>VIII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>0.63%</td><td>Embedded deployment</td></tr>
+            <tr><td>Major Project – II</td><td>BSCCS24H805</td><td>PROJ</td><td>6</td><td>VIII</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>3.75%</td><td>End-to-end product delivery</td></tr>
+            <tr><td>Internship</td><td>BSCCS24H806</td><td>INT</td><td>8</td><td>VIII</td><td>Employability Skills</td><td><span class="badge-full">Full</span></td><td>5.00%</td><td>Industry immersion</td></tr>
+            <tr><td>IPR &amp; Innovation Management</td><td>BSCCS24R701</td><td>DSC</td><td>4</td><td>VII</td><td>Entrepreneurship / Innovation</td><td><span class="badge-full">Full</span></td><td>2.50%</td><td>Intellectual property, innovation</td></tr>
+            <tr><td>Distributed Database</td><td>BSCCS24R702</td><td>DSC</td><td>2</td><td>VII</td><td>Cloud / DevOps</td><td><span class="badge-full">Full</span></td><td>1.25%</td><td>Distributed systems</td></tr>
+            <tr><td>Distributed Database Lab</td><td>BSCCS24R703</td><td>DSC</td><td>1</td><td>VII</td><td>Cloud / DevOps</td><td><span class="badge-partial">Partial</span></td><td>0.63%</td><td>Cluster deployment</td></tr>
+            <tr><td>IoT Data Analytics &amp; Visualization</td><td>BSCCS24R704</td><td>DSE</td><td>3</td><td>VII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>1.88%</td><td>IoT analytics</td></tr>
+            <tr><td>IoT Data Analytics &amp; Visualization Lab</td><td>BSCCS24R705</td><td>DSE</td><td>1</td><td>VII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>0.63%</td><td>Sensor visualization</td></tr>
+            <tr><td>IoT Security</td><td>BSCCS24R706</td><td>DSE</td><td>3</td><td>VII</td><td>Cybersecurity</td><td><span class="badge-full">Full</span></td><td>1.88%</td><td>IoT security</td></tr>
+            <tr><td>Research Project – I</td><td>BSCCS24R707</td><td>PROJ</td><td>6</td><td>VII</td><td>AI / ML / Data</td><td><span class="badge-partial">Partial</span></td><td>3.75%</td><td>Research implementation</td></tr>
+            <tr><td>Entrepreneurship Development</td><td>BSCCS24R801</td><td>DSC</td><td>2</td><td>VIII</td><td>Entrepreneurship / Innovation</td><td><span class="badge-full">Full</span></td><td>1.25%</td><td>Startup planning</td></tr>
+            <tr><td>IoT Product Development &amp; Testing</td><td>BSCCS24R802</td><td>DSE</td><td>2</td><td>VIII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>1.25%</td><td>Product engineering</td></tr>
+            <tr><td>IoT Product Development Lab</td><td>BSCCS24R803</td><td>DSE</td><td>1</td><td>VIII</td><td>Systems / IoT</td><td><span class="badge-full">Full</span></td><td>0.63%</td><td>Product testing</td></tr>
+            <tr><td>Research Internship</td><td>BSCCS24R804</td><td>INT</td><td>8</td><td>VIII</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>5.00%</td><td>Research execution</td></tr>
+            <tr><td>Research Project – II</td><td>BSCCS24R805</td><td>PROJ</td><td>7</td><td>VIII</td><td>AI / ML / Data</td><td><span class="badge-full">Full</span></td><td>4.38%</td><td>Thesis, publication</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══ SKILL GAPS & RECOMMENDATIONS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-red-500 to-amber-500"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-red-600/70">Gaps</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Industry Skill Gaps & Recommendations
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-red-500 to-amber-500" style="width:20rem;"></div>
+    <p class="mt-2 text-xs text-slate-400">Vishwakarma University — 2024 NEP Pattern</p>
+</div>
+
+<div class="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- Systems / Embedded / IoT -->
+    <div class="gap-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-amber-100 flex items-center justify-center text-xl mb-4">📱</div>
+        <div class="w-1 h-6 rounded-full bg-amber-500 mb-3"></div>
+        <h4 class="font-black text-amber-700 uppercase tracking-wide text-sm mb-3">Systems, Embedded &amp; IoT — Limited Dedicated Coverage</h4>
+        <p class="text-slate-600 text-sm leading-relaxed">Some emerging areas still have limited dedicated coverage, particularly Embedded Systems, DevOps, Generative AI, Data Engineering, and advanced product development. To improve industry readiness, the curriculum can introduce focused courses such as:</p>
+        <ul class="mt-3 space-y-1.5 text-xs text-slate-600">
+            <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">→</span> Embedded Systems &amp; IoT (dedicated)</li>
+            <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">→</span> DevOps &amp; Cloud Engineering</li>
+            <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">→</span> Generative AI Applications</li>
+            <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">→</span> Data Engineering with MLOps</li>
+            <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">→</span> Cybersecurity Labs, Full-Stack Product Development, Research Publication workshops</li>
+        </ul>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- AI/ML — tools absent -->
+    <div class="gap-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-purple-100 flex items-center justify-center text-xl mb-4">🧠</div>
+        <div class="w-1 h-6 rounded-full bg-purple-500 mb-3"></div>
+        <h4 class="font-black text-purple-700 uppercase tracking-wide text-sm mb-3">AI/ML — Theory Present, Tools Absent</h4>
+        <p class="text-slate-600 text-sm leading-relaxed">Dedicated training in modern AI engineering tools such as PyTorch, Hugging Face, MLflow, vector databases, and deployment workflows is limited. Industry increasingly expects hands-on experience with end-to-end AI development and MLOps practices alongside theoretical knowledge.</p>
+        <div class="mt-3 rounded-xl bg-purple-50 border border-purple-200 px-4 py-3">
+            <p class="text-xs font-bold text-purple-700">Recommendation</p>
+            <p class="text-xs text-slate-600 mt-1">Add <strong>MLOps &amp; AI Lab</strong> covering model deployment, experiment tracking, and applied AI workflows (PyTorch, Hugging Face, MLflow, vector databases).</p>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- Cloud/DevOps -->
+    <div class="gap-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-sky-100 flex items-center justify-center text-xl mb-4">☁️</div>
+        <div class="w-1 h-6 rounded-full bg-sky-500 mb-3"></div>
+        <h4 class="font-black text-sky-700 uppercase tracking-wide text-sm mb-3">Cloud/DevOps — Cloud Foundations Present, Advanced DevOps Tools Limited</h4>
+        <p class="text-slate-600 text-sm leading-relaxed">Cloud Computing and cloud-oriented electives build foundational cloud knowledge. However, industry-standard DevOps practices such as Kubernetes orchestration, Terraform infrastructure automation, CI/CD pipelines using GitHub Actions, and observability tools are not explicitly structured. Modern software and cloud roles increasingly expect deployment, monitoring, and automation skills.</p>
+        <div class="mt-3 rounded-xl bg-sky-50 border border-sky-200 px-4 py-3">
+            <p class="text-xs font-bold text-sky-700">Recommendation</p>
+            <p class="text-xs text-slate-600 mt-1">Add <strong>Cloud DevOps &amp; Kubernetes Lab</strong> covering Docker, Kubernetes, Terraform, CI/CD, and monitoring tools.</p>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-sky-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- Full-Stack -->
+    <div class="gap-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="w-10 h-10 rounded-2xl bg-orange-100 flex items-center justify-center text-xl mb-4">💻</div>
+        <div class="w-1 h-6 rounded-full bg-primary mb-3"></div>
+        <h4 class="font-black text-primary uppercase tracking-wide text-sm mb-3">Full-Stack — Strong Software Foundation</h4>
+        <p class="text-slate-600 text-sm leading-relaxed">Modern frontend frameworks, REST API design, backend integration, and full-stack deployment practices are not explicitly structured as dedicated learning outcomes. Current software roles increasingly expect practical skills in component-based UI development, API-first architecture, and database integration.</p>
+        <div class="mt-3 rounded-xl bg-orange-50 border border-orange-200 px-4 py-3">
+            <p class="text-xs font-bold text-primary">Recommendation</p>
+            <p class="text-xs text-slate-600 mt-1">Add <strong>Advanced Full-Stack Development Lab</strong> covering React, REST APIs, backend services, database ORM, and deployment workflows.</p>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
 </div>
 
 <!-- ══ GITHUB + LIVE PROJECTS ══ -->
 <div class="mt-14 grid grid-cols-1 xl:grid-cols-2 gap-8">
-
-    <!-- GITHUB -->
     <div class="spotlight rounded-[28px] bg-gradient-to-br from-secondary to-secondary/80 text-white p-8 shadow-2xl">
         <span class="text-5xl block mb-5">🐙</span>
-        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/75 text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">
-            Collaborative Dev
-        </span>
-        <h3 class="text-2xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
-            GitHub Development
-        </h3>
-        <p class="mt-4 leading-relaxed text-white/85 text-sm">
-            {{ summary.github_text }}
-        </p>
+        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/75 text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">Collaborative Dev</span>
+        <h3 class="text-2xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">GitHub Development</h3>
+        <p class="mt-4 leading-relaxed text-white/85 text-sm">Students engage in version-controlled collaborative development using Git and GitHub, building real-world team workflow skills through open-source collaboration, pull requests, code reviews, and project management.</p>
         <div class="mt-7 bg-white/15 rounded-2xl p-5 border border-white/20">
-            <div class="flex items-center gap-2 mb-2">
-                <span class="text-lg">🔀</span>
-                <h4 class="font-bold text-base">Version Control & Collaboration</h4>
-            </div>
-            <p class="text-sm text-white/75 leading-relaxed">
-                Building real-world collaboration skills through open-source workflows and team projects.
-            </p>
+            <div class="flex items-center gap-2 mb-2"><span class="text-lg">🔀</span><h4 class="font-bold text-base">Version Control &amp; Collaboration</h4></div>
+            <p class="text-sm text-white/75 leading-relaxed">Building real-world collaboration skills through open-source workflows and team projects.</p>
         </div>
     </div>
-
-    <!-- LIVE PROJECTS -->
     <div class="spotlight rounded-[28px] bg-gradient-to-br from-primary via-primary/90 to-secondary text-white p-8 shadow-2xl" style="animation-delay:0.12s;">
         <span class="text-5xl block mb-5">🚀</span>
-        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/75 text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">
-            Applied Learning
-        </span>
-        <h3 class="text-2xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
-            Live Industry Projects
-        </h3>
-        <p class="mt-4 leading-relaxed text-white/85 text-sm">
-            {{ summary.live_projects_text }}
-        </p>
+        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/75 text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">Applied Learning</span>
+        <h3 class="text-2xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">Live Industry Projects</h3>
+        <p class="mt-4 leading-relaxed text-white/85 text-sm">Students work on live industry-grade projects bridging academia and real-world requirements — gaining hands-on experience in project execution, stakeholder communication, and deployment of production-grade solutions.</p>
         <div class="mt-7 bg-white/15 rounded-2xl p-5 border border-white/20">
-            <div class="flex items-center gap-2 mb-2">
-                <span class="text-lg">💼</span>
-                <h4 class="font-bold text-base">Industry Impact</h4>
-            </div>
-            <p class="text-sm text-white/75 leading-relaxed">
-                Students engage in real-world projects bridging academia and industry for tangible outcomes.
-            </p>
+            <div class="flex items-center gap-2 mb-2"><span class="text-lg">💼</span><h4 class="font-bold text-base">Industry Impact</h4></div>
+            <p class="text-sm text-white/75 leading-relaxed">Students engage in real-world projects bridging academia and industry for tangible outcomes.</p>
         </div>
+    </div>
+</div>
+
+<!-- ══ INDUSTRY TIE-UPS & PROGRAMS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.05s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Partnerships</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Industry Tie-Ups & Programs
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:18rem;"></div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+    <!-- TCS -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">🏢</div>
+        <div class="w-1 h-7 rounded-full bg-primary mb-4"></div>
+        <h3 class="text-lg font-black text-primary uppercase tracking-wide mb-1 flex items-center gap-2">
+            <span class="platform-icon inline-block">🏢</span> TCS Initiatives
+        </h3>
+        <div class="w-10 h-0.5 rounded-full bg-primary/30 mb-5"></div>
+        <p class="text-slate-600 leading-relaxed text-sm">TCS iON and TCS National Qualifier Test (NQT) are integrated into the curriculum as industry-recognized assessment benchmarks. Students are prepared for TCS placement processes through targeted programming and aptitude skill development aligned with TCS hiring criteria. The curriculum incorporates TCS-relevant skill areas including data structures, algorithms, and software engineering practices.</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- CERTIFICATIONS & MOOCs -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">📜</div>
+        <div class="w-1 h-7 rounded-full bg-secondary mb-4"></div>
+        <h3 class="text-lg font-black text-secondary uppercase tracking-wide mb-1 flex items-center gap-2">
+            <span class="platform-icon inline-block">📜</span> Certifications & MOOCs
+        </h3>
+        <div class="w-10 h-0.5 rounded-full bg-secondary/30 mb-5"></div>
+        <p class="text-slate-600 leading-relaxed text-sm">The 2024 NEP curriculum formally integrates SWAYAM/MOOC credit transfer, allowing students to earn credits via NPTEL, Coursera, and other certified platforms. VSEC (Value, Skill, Experiential &amp; Community Learning) courses are certification-linked, enabling students to pursue industry-recognized credentials in Cloud Computing, AI/ML, Cybersecurity, and Full-Stack Development alongside their core curriculum.</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- LINKEDIN LEARNING -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">🔗</div>
+        <div class="w-1 h-7 rounded-full bg-green-600 mb-4"></div>
+        <h3 class="text-lg font-black text-green-600 uppercase tracking-wide mb-1 flex items-center gap-2">
+            <span class="platform-icon inline-block">🔗</span> LinkedIn Learning
+        </h3>
+        <div class="w-10 h-0.5 rounded-full bg-green-600/30 mb-5"></div>
+        <p class="text-slate-600 leading-relaxed text-sm">Students are encouraged to supplement curriculum learning with LinkedIn Learning paths in technology and professional development. The curriculum's employability skill components — including Business Communication, Professional Writing, and Aptitude &amp; Personality Development — directly align with LinkedIn's top-hiring-role competency frameworks, preparing students for LinkedIn Jobs on the Rise India 2025 roles.</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
+    </div>
+
+    <!-- HACKERRANK -->
+    <div class="pillar-card lift relative rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/60 p-8 shadow-xl overflow-hidden group">
+        <div class="absolute top-0 right-0 w-20 h-20 opacity-5 text-[5rem] leading-none select-none pointer-events-none">⌨️</div>
+        <div class="w-1 h-7 rounded-full bg-amber-500 mb-4"></div>
+        <h3 class="text-lg font-black text-amber-600 uppercase tracking-wide mb-1 flex items-center gap-2">
+            <span class="platform-icon inline-block">⌨️</span> HackerRank Challenges
+        </h3>
+        <div class="w-10 h-0.5 rounded-full bg-amber-500/30 mb-5"></div>
+        <p class="text-slate-600 leading-relaxed text-sm">Competitive coding and problem-solving skills developed through Problem Solving &amp; Programming, Data Structures, and OOP courses directly align with HackerRank assessment domains. The curriculum's strong programming foundation (Python, Java, C) and algorithmic thinking prepares students for HackerRank skill certifications used by 3,000+ companies globally for technical hiring assessments.</p>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[28px]"></div>
     </div>
 
 </div>
 
+<!-- ══ PLATFORM ECOSYSTEM ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.07s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-primary to-secondary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary/70">Platforms</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Platform Ecosystem
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-primary to-secondary" style="width:14rem;"></div>
+</div>
+
+<div class="mt-6 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-5">
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:0ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">🏢</div><h4 class="font-black text-slate-800 text-sm leading-tight">TCS iON / NQT</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:100ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">📜</div><h4 class="font-black text-slate-800 text-sm leading-tight">NPTEL / SWAYAM</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:200ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">☁️</div><h4 class="font-black text-slate-800 text-sm leading-tight">Coursera</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:300ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">🔗</div><h4 class="font-black text-slate-800 text-sm leading-tight">LinkedIn Learning</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:400ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">⌨️</div><h4 class="font-black text-slate-800 text-sm leading-tight">HackerRank</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:500ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">🐙</div><h4 class="font-black text-slate-800 text-sm leading-tight">GitHub</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:600ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">🔥</div><h4 class="font-black text-slate-800 text-sm leading-tight">LeetCode</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden" style="animation-delay:700ms;"><div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/6 blur-xl group-hover:bg-primary/12 transition-all duration-500"></div><div class="platform-icon text-3xl mb-4 inline-block">🚀</div><h4 class="font-black text-slate-800 text-sm leading-tight">AWS Academy</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+</div>
+
+<!-- ══ INDUSTRY SKILL DOMAINS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.07s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-secondary to-primary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary/70">Domains</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Industry Skill Domains
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-secondary to-primary" style="width:14rem;"></div>
+</div>
+
+<div class="mt-6 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-5">
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🧠</div><h4 class="font-black text-slate-800 text-sm">AI &amp; Machine Learning</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">☁️</div><h4 class="font-black text-slate-800 text-sm">Cloud Computing</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">💻</div><h4 class="font-black text-slate-800 text-sm">Full-Stack Development</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🔒</div><h4 class="font-black text-slate-800 text-sm">Cybersecurity</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">📊</div><h4 class="font-black text-slate-800 text-sm">Data Engineering &amp; Analytics</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">📱</div><h4 class="font-black text-slate-800 text-sm">IoT &amp; Embedded Systems</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🔧</div><h4 class="font-black text-slate-800 text-sm">Software Engineering &amp; QA</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🎯</div><h4 class="font-black text-slate-800 text-sm">Problem Solving &amp; DSA</h4><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-secondary to-secondary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+</div>
+
+<!-- ══ LIVE PROJECT DOMAINS ══ -->
+<div class="mt-14 section-head" style="animation-delay:0.07s;">
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-8 rounded-full bg-gradient-to-b from-green-600 to-primary"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-green-600/70">Projects</span>
+    </div>
+    <h3 class="text-2xl font-black text-secondary uppercase tracking-wide" style="font-family:'DM Serif Display',serif;">
+        Live Project Domains
+    </h3>
+    <div class="mt-2 h-1 rounded-full bg-gradient-to-r from-green-500 to-primary" style="width:14rem;"></div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🏗️</div><h4 class="font-black text-slate-800 text-sm">Major Project I &amp; II</h4><p class="text-xs text-slate-500 mt-1">End-to-end product design &amp; deployment</p><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🏭</div><h4 class="font-black text-slate-800 text-sm">Industry Project</h4><p class="text-xs text-slate-500 mt-1">Live industry execution &amp; deliverables</p><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🔬</div><h4 class="font-black text-slate-800 text-sm">Research Projects I &amp; II</h4><p class="text-xs text-slate-500 mt-1">Research implementation, thesis &amp; publication</p><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">📱</div><h4 class="font-black text-slate-800 text-sm">IoT Product Development</h4><p class="text-xs text-slate-500 mt-1">Embedded product design &amp; testing</p><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">📐</div><h4 class="font-black text-slate-800 text-sm">Minor Track Project</h4><p class="text-xs text-slate-500 mt-1">Multidisciplinary cross-department project</p><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+    <div class="item-card skill-tag lift relative rounded-[24px] bg-white/75 backdrop-blur-xl border border-white/60 shadow-xl p-6 group overflow-hidden"><div class="platform-icon text-3xl mb-4 inline-block">🌐</div><h4 class="font-black text-slate-800 text-sm">Internship / Research Internship</h4><p class="text-xs text-slate-500 mt-1">8-credit industry or research immersion</p><div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-green-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[24px]"></div></div>
+</div>
+
 <!-- ══ VISION BANNER ══ -->
 <div class="vision-banner mt-12 rounded-[32px] bg-gradient-to-r from-primary via-primary/90 to-secondary text-white p-10 shadow-2xl">
-    <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/70 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">
-        Department Vision
-    </span>
+    <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-white/70 text-xs font-bold uppercase tracking-widest mb-5 border border-white/20">Department Vision</span>
     <h3 class="text-3xl md:text-4xl font-black leading-tight" style="font-family:'DM Serif Display',serif;">
         Shaping Career-Ready<br class="hidden md:block"> Industry Leaders
     </h3>
     <p class="mt-5 text-lg leading-relaxed text-white/85 max-w-3xl">
-        {{ summary.vision_statement }}
+        With 91 industry-aligned credits (56.9% of curriculum), strong coverage across AI/ML, Full-Stack, Cloud, Cybersecurity, and IoT clusters, and a skill gap index reduced from 65% to 28%, Vishwakarma University is systematically building graduates who are career-ready for the demands of the modern technology workforce.
     </p>
 </div>
 
@@ -626,65 +1202,153 @@
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.color = "#64748b";
 
+/* ── RADAR ── */
 new Chart(document.getElementById('radarChart'), {
     type: 'radar',
     data: {
-        labels: ['Programming', 'Cloud', 'AI/ML', 'Databases', 'Web Dev', 'IoT', 'Communication', 'Problem Solving'],
+        labels: ['AI/ML Engineering','Cloud Computing','Data Engg.','Full-Stack Dev','Cybersecurity','Embedded/IoT','DevOps/SRE','Blockchain'],
         datasets: [{
-            label: 'Industry Skill Alignment',
-            data: [95, 85, 90, 80, 90, 85, 75, 95],
+            label: 'VU 2024 Coverage %',
+            data: [88, 82, 79, 76, 74, 58, 48, 10],
             backgroundColor: 'rgba(225,77,42,0.15)',
             borderColor: '#E14D2A',
             pointBackgroundColor: '#E14D2A',
             pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: '#E14D2A',
-            borderWidth: 2,
-            pointRadius: 5,
+            borderWidth: 2.5, pointRadius: 5,
         }]
     },
     options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            r: {
-                min: 0, max: 100,
-                ticks: { stepSize: 25, color: '#94a3b8', font: { size: 10 } },
-                grid: { color: 'rgba(22,40,80,0.08)' },
-                pointLabels: { font: { size: 11, weight: '700' }, color: '#475569' }
-            }
-        },
-        plugins: {
-            legend: { display: false }
-        },
-        animation: { duration: 1200, easing: 'easeOutQuart' }
+        responsive: true, maintainAspectRatio: false,
+        scales: { r: { min:0, max:100, ticks:{stepSize:25, font:{size:9}}, grid:{color:'rgba(22,40,80,0.08)'}, pointLabels:{font:{size:10, weight:'700'}, color:'#475569'} }},
+        plugins: { legend:{ display:false } },
+        animation: { duration:1200, easing:'easeOutQuart' }
     }
 });
 
-new Chart(document.getElementById('doughnutChart'), {
+/* ── CLUSTER DOUGHNUT ── */
+new Chart(document.getElementById('clusterDoughnut'), {
     type: 'doughnut',
     data: {
-        labels: ['Platforms', 'Skill Domains', 'Project Domains'],
+        labels: ['AI, ML & Data (21cr)','Cloud/DevOps (11cr)','Cybersecurity (11cr)','Full-Stack/SE (27cr)','Data Engg. (10cr)','Systems/IoT (11cr)'],
         datasets: [{
-            data: [{{ platform_count }}, {{ skill_count }}, {{ project_count }}],
-            backgroundColor: ['#E14D2A', '#162850', '#10B981'],
-            borderWidth: 0,
-            hoverOffset: 12
+            data: [21, 11, 11, 27, 10, 11],
+            backgroundColor: ['#7c3aed','#0ea5e9','#dc2626','#E14D2A','#f59e0b','#10b981'],
+            borderWidth: 0, hoverOffset: 14
         }]
     },
     options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '70%',
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10 }
-            }
-        },
-        animation: { animateRotate: true, duration: 1000, easing: 'easeOutQuart' }
+        responsive: true, maintainAspectRatio: false, cutout: '68%',
+        plugins: { legend:{ position:'bottom', labels:{ padding:14, usePointStyle:true, pointStyleWidth:10, font:{size:10} } } },
+        animation: { animateRotate:true, duration:1000, easing:'easeOutQuart' }
     }
 });
+
+/* ── NASSCOM BAR ── */
+new Chart(document.getElementById('nasscomBar'), {
+    type: 'bar',
+    data: {
+        labels: ['AI/ML','Cloud','Cybersecurity','Full-Stack','Data Engg.','DevOps/SRE','Embedded/IoT','Blockchain','AR/VR','Quantum'],
+        datasets: [{
+            label: 'VU 2024 Coverage %',
+            data: [88, 82, 74, 76, 79, 48, 58, 10, 25, 0],
+            backgroundColor: ['#7c3aed','#0ea5e9','#dc2626','#E14D2A','#f59e0b','#6366F1','#10b981','#94a3b8','#a78bfa','#f87171'],
+            borderRadius: 6, borderSkipped: false,
+        }]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false, indexAxis:'y',
+        scales: { x:{ min:0, max:100, ticks:{stepSize:20} }, y:{ ticks:{font:{size:9}} } },
+        plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.raw}%` } } }
+    }
+});
+
+/* ── LINKEDIN BAR ── */
+new Chart(document.getElementById('linkedinBar'), {
+    type: 'bar',
+    data: {
+        labels: ['Research Engr.','SDE','Data/ML Engr.','Full-Stack Dev','Cybersec Analyst','Cloud/DevOps','AI Prod. Mgr.','Embedded Engr.','AR/VR Dev','Blockchain Dev'],
+        datasets: [{
+            label: 'Skill Match %',
+            data: [86, 84, 82, 80, 74, 68, 62, 58, 30, 12],
+            backgroundColor: ['#10b981','#10b981','#10b981','#10b981','#10b981','#f59e0b','#f59e0b','#f59e0b','#f87171','#dc2626'],
+            borderRadius: 6, borderSkipped: false,
+        }]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false, indexAxis:'y',
+        scales: { x:{ min:0, max:100, ticks:{stepSize:20} }, y:{ ticks:{font:{size:9}} } },
+        plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.raw}%` } } }
+    }
+});
+
+/* ── ALL-REVISIONS CLUSTER BAR ── */
+const revLabels = ['2018','2019','2021','2023 NEP','2024 NEP'];
+new Chart(document.getElementById('allRevClusterBar'), {
+    type: 'bar',
+    data: {
+        labels: revLabels,
+        datasets: [
+            { label:'AI / ML / Data',      data:[8,14,18,18,21], backgroundColor:'rgba(124,58,237,0.82)', borderRadius:4 },
+            { label:'Cloud / DevOps',       data:[4, 8, 8,12,11], backgroundColor:'rgba(14,165,233,0.82)',  borderRadius:4 },
+            { label:'Full-Stack / SE',      data:[18,29,24,32,27], backgroundColor:'rgba(225,77,42,0.82)',  borderRadius:4 },
+            { label:'Cybersecurity',        data:[0,  0,  0, 6,11], backgroundColor:'rgba(220,38,38,0.82)',  borderRadius:4 },
+            { label:'Data Engg./Analytics', data:[4, 10,  6, 5,10], backgroundColor:'rgba(245,158,11,0.82)', borderRadius:4 },
+            { label:'Systems / IoT',        data:[4,  4,  4,11,11], backgroundColor:'rgba(16,185,129,0.82)', borderRadius:4 },
+        ]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        scales: { x:{ stacked:true }, y:{ stacked:true, ticks:{stepSize:20} } },
+        plugins: { legend:{ position:'bottom', labels:{ padding:12, usePointStyle:true, pointStyleWidth:10, font:{size:10} } } }
+    }
+});
+
+/* ── SKILL % TREND LINE ── */
+new Chart(document.getElementById('skillTrendLine'), {
+    type: 'line',
+    data: {
+        labels: revLabels,
+        datasets: [
+            { label:'AI/ML/Data %',      data:[6.1,10.5,12.8,15.0,13.1], borderColor:'#7c3aed', backgroundColor:'rgba(124,58,237,0.08)', pointBackgroundColor:'#7c3aed', borderWidth:2.5, pointRadius:5, fill:true, tension:0.35 },
+            { label:'Cloud/DevOps %',    data:[3.0, 6.0, 5.7,10.0, 6.9], borderColor:'#0ea5e9', backgroundColor:'rgba(14,165,233,0.08)', pointBackgroundColor:'#0ea5e9', borderWidth:2.5, pointRadius:5, fill:true, tension:0.35 },
+            { label:'Full-Stack/SE %',   data:[13.6,21.8,17.0,26.7,16.9], borderColor:'#E14D2A', backgroundColor:'rgba(225,77,42,0.08)', pointBackgroundColor:'#E14D2A', borderWidth:2.5, pointRadius:5, fill:true, tension:0.35 },
+            { label:'Cybersecurity %',   data:[0,   0,   0,  5.0, 6.9], borderColor:'#dc2626', backgroundColor:'rgba(220,38,38,0.08)', pointBackgroundColor:'#dc2626', borderWidth:2.5, pointRadius:5, fill:true, tension:0.35 },
+        ]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        scales: { y:{ min:0, max:30, ticks:{ callback: v => v+'%' } } },
+        plugins: { legend:{ position:'bottom', labels:{ padding:12, usePointStyle:true, pointStyleWidth:10, font:{size:10} } } }
+    }
+});
+
+/* ── INDUSTRY READINESS RADAR ALL REVISIONS ── */
+new Chart(document.getElementById('allRevRadar'), {
+    type: 'radar',
+    data: {
+        labels: ['AI/ML/Data','Cloud/DevOps','Full-Stack/SE','Cybersecurity','Data Engg.','Systems/IoT'],
+        datasets: [
+            { label:'2018',     data:[6,  3, 14,  0,  3,  3], borderColor:'#94a3b8', backgroundColor:'rgba(148,163,184,0.08)', pointBackgroundColor:'#94a3b8', borderWidth:1.5, pointRadius:3 },
+            { label:'2019',     data:[11, 6, 22,  0,  8,  3], borderColor:'#6366F1', backgroundColor:'rgba(99,102,241,0.08)',   pointBackgroundColor:'#6366F1', borderWidth:1.5, pointRadius:3 },
+            { label:'2021',     data:[14, 6, 20,  0,  5,  3], borderColor:'#F59E0B', backgroundColor:'rgba(245,158,11,0.08)',   pointBackgroundColor:'#F59E0B', borderWidth:1.5, pointRadius:3 },
+            { label:'2023 NEP', data:[18,12, 32,  6,  5, 11], borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.08)',   pointBackgroundColor:'#10B981', borderWidth:2,   pointRadius:4 },
+            { label:'2024 NEP', data:[21,11, 27, 11, 10, 11], borderColor:'#E14D2A', backgroundColor:'rgba(225,77,42,0.12)',    pointBackgroundColor:'#E14D2A', borderWidth:2.5, pointRadius:5, fill:true },
+        ]
+    },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        scales: { r:{ min:0, max:35, ticks:{ stepSize:5, font:{size:9} }, pointLabels:{ font:{size:10, weight:'700'}, color:'#475569' } } },
+        plugins: { legend:{ position:'bottom', labels:{ padding:14, usePointStyle:true, pointStyleWidth:10, font:{size:11} } } }
+    }
+});
+
+/* ── REVISION TABS ── */
+function showRev(rev) {
+    document.querySelectorAll('.rev-panel').forEach(p => p.classList.remove('active-panel'));
+    document.querySelectorAll('.rev-tab-btn').forEach(b => b.classList.remove('active-tab'));
+    document.getElementById('rev-' + rev).classList.add('active-panel');
+    event.target.classList.add('active-tab');
+}
 </script>
 
 {% endblock %}
